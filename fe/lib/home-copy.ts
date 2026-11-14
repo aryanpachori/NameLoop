@@ -27,9 +27,17 @@ export type LoopChapter = {
 };
 
 export const homeMeta = {
-  title: "NameLoop. Bring meetings in.",
+  title: "NameLoop",
+  titleTemplate: "%s · NameLoop",
+  absoluteTitle: "NameLoop",
   description:
-    "Paste your product URL. Figure out who to sell to, grow inbound where they hang out, and pull meetings in. Nothing goes live until you say so.",
+    "Inbound GTM that finds who to sell to, grows where they hang out, and pulls meetings in. Paste your product URL. Nothing goes live until you approve.",
+  pricingTitle: "Pricing",
+  pricingDescription:
+    "Simple plans for inbound GTM. Channels, posts, and seats. Ad spend stays on the platforms you already use.",
+  howTitle: "How it works",
+  howDescription:
+    "Paste a URL, pick your model, then run the loop: who to sell to, where to show up, what worked. Inbound first. You approve every draft.",
 };
 
 /** Short outcome headline (Ramp / Mercury / Sunset pattern). */

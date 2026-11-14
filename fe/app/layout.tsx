@@ -16,16 +16,23 @@ const display = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: homeMeta.title,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: {
+    default: homeMeta.absoluteTitle,
+    template: homeMeta.titleTemplate,
+  },
   description: homeMeta.description,
+  applicationName: homeMeta.title,
   openGraph: {
-    title: homeMeta.title,
+    title: homeMeta.absoluteTitle,
     description: homeMeta.description,
+    siteName: homeMeta.title,
     type: "website",
+    locale: "en_US",
   },
   twitter: {
-    card: "summary",
-    title: homeMeta.title,
+    card: "summary_large_image",
+    title: homeMeta.absoluteTitle,
     description: homeMeta.description,
   },
 };

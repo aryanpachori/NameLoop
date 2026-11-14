@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { HowItWorksView } from "@/components/marketing/how-it-works-view";
+import { homeMeta } from "@/lib/home-copy";
 
 export const metadata: Metadata = {
-  title: "How it works. NameLoop",
-  description:
-    "Pick your business model, then run the GTM loop: understand, ICP, channels, run the plan, measure, and amplify winners.",
+  title: homeMeta.howTitle,
+  description: homeMeta.howDescription,
+  openGraph: {
+    title: `${homeMeta.howTitle} · NameLoop`,
+    description: homeMeta.howDescription,
+  },
 };
 
 export default function HowItWorksPage() {

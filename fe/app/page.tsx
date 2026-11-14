@@ -14,8 +14,18 @@ import { WordReveal } from "@/components/marketing/word-reveal";
 import { homeFaq, homeHero, homeMeta } from "@/lib/home-copy";
 
 export const metadata: Metadata = {
-  title: homeMeta.title,
+  title: {
+    absolute: homeMeta.absoluteTitle,
+  },
   description: homeMeta.description,
+  openGraph: {
+    title: homeMeta.absoluteTitle,
+    description: homeMeta.description,
+  },
+  twitter: {
+    title: homeMeta.absoluteTitle,
+    description: homeMeta.description,
+  },
 };
 
 export default function HomePage() {

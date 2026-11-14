@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import { PricingView } from "@/components/marketing/pricing-view";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
+import { homeMeta } from "@/lib/home-copy";
 
 export const metadata: Metadata = {
-  title: "Pricing. NameLoop",
-  description:
-    "Simple plans for inbound GTM. Channels, posts, and seats. Ad spend stays on the platforms you already use.",
+  title: homeMeta.pricingTitle,
+  description: homeMeta.pricingDescription,
+  openGraph: {
+    title: `${homeMeta.pricingTitle} · NameLoop`,
+    description: homeMeta.pricingDescription,
+  },
 };
 
 export default function PricingPage() {
