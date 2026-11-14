@@ -172,12 +172,6 @@ export function HomeWelcome() {
           </motion.p>
         </div>
 
-        <motion.p
-          className="absolute inset-x-0 bottom-0 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] text-center font-mono text-12 text-muted-foreground sm:px-8"
-          animate={{ opacity: fade ? 0 : 0.75 }}
-        >
-          Nothing goes live without you
-        </motion.p>
       </div>
     </div>
   );
