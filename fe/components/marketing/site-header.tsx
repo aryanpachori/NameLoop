@@ -15,7 +15,7 @@ export function SiteHeader() {
   const path = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/90 pt-[env(safe-area-inset-top)] backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 pt-[env(safe-area-inset-top)] backdrop-blur-xl backdrop-saturate-150">
       <div className="marketing-shell flex h-14 items-center justify-between gap-4">
         <Link href="/" className="text-foreground">
           <Logo />

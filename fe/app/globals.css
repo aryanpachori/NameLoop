@@ -597,3 +597,187 @@ html {
     transform: none;
   }
 }
+
+/* ─── Production design utilities ──────────────────────────────────────── */
+
+/*
+ * Gradient atmosphere blobs — position:absolute children placed inside a
+ * position:relative/overflow-hidden container to create Framer-style
+ * cinematic depth.
+ */
+.glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(72px);
+  mix-blend-mode: screen;
+}
+.dark .glow-blob {
+  mix-blend-mode: screen;
+}
+
+/*
+ * Gradient border on a featured card.
+ * Usage: add .card-gradient-border to the card; set --gb-from / --gb-to
+ * to customise the gradient stops.
+ */
+.card-gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+.card-gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    140deg,
+    var(--gb-from, rgba(77, 130, 255, 0.55)) 0%,
+    var(--gb-mid, rgba(130, 100, 255, 0.25)) 50%,
+    var(--gb-to, transparent) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/*
+ * Subtle inset glow at the top of a card — adds depth without shadows.
+ */
+.card-top-glow::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--brand) 50%, transparent) 40%,
+    color-mix(in srgb, var(--brand) 50%, transparent) 60%,
+    transparent
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/*
+ * Score bar — used in LoopChapters channel-score cards.
+ * <div class="score-bar" style="--pct: 74"></div>
+ */
+.score-bar {
+  position: relative;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  flex: 1;
+}
+.score-bar::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: calc(var(--pct, 0) * 1%);
+  border-radius: 999px;
+  background: var(--brand);
+  opacity: 0.9;
+}
+
+/*
+ * Stat strip — inline trust metrics row (Linear / Mercury pattern).
+ */
+.stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+}
+.stat-strip__item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.stat-strip__value {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--heading);
+}
+.stat-strip__label {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--muted-foreground);
+}
+
+/*
+ * Hero radial atmosphere — large brand-tinted radial gradient placed behind
+ * the hero content to replicate Framer's "glow behind the fold" technique.
+ */
+.hero-atmosphere {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 70% 110%, rgba(77, 130, 255, 0.07), transparent),
+    radial-gradient(ellipse 40% 40% at 15% 60%, rgba(130, 100, 255, 0.05), transparent);
+}
+.dark .hero-atmosphere {
+  background:
+    radial-gradient(ellipse 55% 55% at 70% 110%, rgba(77, 130, 255, 0.10), transparent),
+    radial-gradient(ellipse 40% 40% at 15% 60%, rgba(130, 100, 255, 0.06), transparent);
+}
+
+/*
+ * CTA atmosphere — big gradient wash for the CloseBand section.
+ * Cinematic depth inspired by Framer's bottom-of-page gradient panels.
+ */
+.cta-atmosphere {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 130%, rgba(77, 130, 255, 0.11), transparent),
+    radial-gradient(ellipse 40% 50% at 90% -10%, rgba(130, 100, 255, 0.07), transparent);
+}
+.dark .cta-atmosphere {
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 130%, rgba(77, 130, 255, 0.16), transparent),
+    radial-gradient(ellipse 40% 50% at 90% -10%, rgba(130, 100, 255, 0.10), transparent);
+}
+
+/*
+ * Shimmer — a horizontal gradient sweep animation used as a highlight on
+ * the accent VS card or the CTA button.
+ */
+@keyframes shimmer-sweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+.shimmer-once {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-once::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 50%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07) 50%,
+    transparent
+  );
+  animation: shimmer-sweep 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.8s both;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-once::after { animation: none; }
+}

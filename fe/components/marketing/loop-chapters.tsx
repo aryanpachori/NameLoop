@@ -16,15 +16,24 @@ function ChapterCard({
             key={row.id}
             className={
               idx === 0
-                ? "flex items-center justify-between gap-3 pb-3 text-14"
-                : "flex items-center justify-between gap-3 border-t border-border py-3 text-14 last:pb-0"
+                ? "flex flex-col gap-2 pb-3"
+                : "flex flex-col gap-2 border-t border-border py-3 last:pb-0"
             }
           >
-            <span className="inline-flex items-center gap-2.5">
-              <ChannelMark id={row.id} />
-              <span className="font-medium">{channelLabel(row.id)}</span>
-            </span>
-            <span className="font-mono text-muted-foreground">{row.score}</span>
+            <div className="flex items-center justify-between gap-3 text-14">
+              <span className="inline-flex items-center gap-2.5">
+                <ChannelMark id={row.id} />
+                <span className="font-medium">{channelLabel(row.id)}</span>
+              </span>
+              <span className="font-mono text-13 text-muted-foreground">{row.score}</span>
+            </div>
+            {/* Visual score bar */}
+            <div
+              className="score-bar"
+              style={{ ["--pct" as string]: row.score }}
+              role="presentation"
+              aria-hidden="true"
+            />
           </li>
         ))}
       </ul>
@@ -32,7 +41,7 @@ function ChapterCard({
   }
 
   return (
-    <div className="flex h-full flex-col justify-between rounded-[12px] border border-border bg-card p-5">
+    <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-[12px] border border-border bg-card p-5 card-gradient-border card-top-glow">
       <div>
         <p className="section-eyebrow">{card.eyebrow}</p>
         {card.title ? (
@@ -69,8 +78,20 @@ function ChapterCard({
 
 export function LoopChapters() {
   return (
-    <section className="border-t border-border bg-muted/30">
-      <div className="marketing-shell section-pad">
+    <section className="relative border-t border-border bg-muted/30 overflow-hidden">
+      {/* Subtle radial glow anchored to the top-right — adds depth without competing with cards */}
+      <div
+        className="glow-blob"
+        style={{
+          width: "480px",
+          height: "320px",
+          background: "rgba(77, 130, 255, 0.055)",
+          top: "-60px",
+          right: "-80px",
+        }}
+        aria-hidden="true"
+      />
+      <div className="marketing-shell section-pad relative z-[1]">
         <Reveal>
           <div className="max-w-2xl">
             <p className="section-eyebrow">{homeLoop.eyebrow}</p>
