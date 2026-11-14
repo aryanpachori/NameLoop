@@ -21,7 +21,7 @@ function Row() {
       {CHANNELS.map((id) => (
         <span
           key={id}
-          className="inline-flex items-center gap-2.5 whitespace-nowrap text-[13px] font-medium tracking-tight text-muted-foreground"
+          className="inline-flex items-center gap-2.5 whitespace-nowrap text-13 font-medium tracking-tight text-muted-foreground"
         >
           <ChannelMark id={id} className="text-foreground" />
           {channelLabel(id)}

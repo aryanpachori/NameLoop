@@ -38,12 +38,12 @@ export default function HomePage() {
                   accentWords={homeHero.accentWords}
                   stagger={0.05}
                 />
-                <span className="mt-3 block max-w-md font-sans text-[20px] font-medium leading-snug tracking-tight text-muted-foreground sm:text-[22px]">
+                <span className="mt-3 block max-w-md font-sans text-20 font-medium tracking-tight text-muted-foreground sm:text-22">
                   {homeHero.line2}
                 </span>
               </h1>
               <Reveal instant delay={2}>
-                <p className="mt-6 max-w-md text-[16px] font-medium leading-7 text-muted-foreground text-pretty">
+                <p className="mt-6 max-w-md text-16 font-medium text-muted-foreground text-pretty">
                   {homeHero.body}
                 </p>
                 <HeroUrlForm className="mt-8" />
@@ -73,7 +73,7 @@ export default function HomePage() {
             <Reveal>
               <p className="section-eyebrow">{homeFaq.eyebrow}</p>
               <h2 className="heading-1 mt-3">{homeFaq.headline}</h2>
-              <p className="mt-4 max-w-sm text-[15px] leading-6 text-muted-foreground text-pretty">
+              <p className="mt-4 max-w-sm text-15 text-muted-foreground text-pretty">
                 {homeFaq.support}
               </p>
             </Reveal>

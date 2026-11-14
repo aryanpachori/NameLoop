@@ -23,7 +23,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-1 sm:gap-2">
           <nav
             aria-label="Primary"
-            className="flex items-center gap-0.5 text-[14px] font-medium text-muted-foreground"
+            className="flex items-center gap-0.5 text-14 font-medium text-muted-foreground"
           >
             {links.map((link) => (
               <Link

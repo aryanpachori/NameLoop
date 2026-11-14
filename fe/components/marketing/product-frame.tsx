@@ -21,7 +21,7 @@ export function ProductFrame({
         <span className="size-2 rounded-full bg-muted-foreground/40" />
         <span className="size-2 rounded-full bg-muted-foreground/40" />
         {title ? (
-          <span className="ml-2 text-[14px] font-light text-muted-foreground">{title}</span>
+          <span className="ml-2 text-14 font-light text-muted-foreground">{title}</span>
         ) : null}
       </div>
       {children}

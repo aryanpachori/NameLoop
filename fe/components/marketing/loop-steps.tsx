@@ -144,7 +144,7 @@ function MeasureFragment() {
     <Frag>
       <p className="text-muted-foreground">Replies, last 7 days</p>
       <div className="mt-1 flex items-end justify-between gap-2">
-        <p className="font-serif-display text-[32px] leading-none">14</p>
+        <p className="font-serif-display text-32 leading-none">14</p>
         <svg viewBox="0 0 100 30" className="h-8 w-20 text-brand" aria-hidden>
           <path d={path} fill="none" stroke="currentColor" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
         </svg>

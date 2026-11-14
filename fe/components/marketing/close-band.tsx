@@ -13,14 +13,14 @@ export function CloseBand() {
             <div>
               <p className="section-eyebrow">{homeClose.eyebrow}</p>
               <h2 className="heading-1 mt-3 max-w-lg">{homeClose.headline}</h2>
-              <p className="mt-4 max-w-md text-[15px] leading-6 text-muted-foreground text-pretty">
+              <p className="mt-4 max-w-md text-15 text-muted-foreground text-pretty">
                 {homeClose.support}
               </p>
               <ul className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
                 {homeTrust.map((item) => (
                   <li
                     key={item}
-                    className="text-[13px] font-medium tracking-tight text-muted-foreground"
+                    className="text-13 font-medium tracking-tight text-muted-foreground"
                   >
                     {item}
                   </li>
@@ -33,7 +33,7 @@ export function CloseBand() {
               </ButtonLink>
               <Link
                 href="/pricing"
-                className="inline-flex h-11 items-center px-2 text-[14px] font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground"
+                className="inline-flex h-11 items-center px-2 text-14 font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground"
               >
                 {homeClose.secondaryCta}
               </Link>

@@ -56,7 +56,7 @@ function SignupFlow() {
         </Link>
         <div className="max-w-sm">
           <h1 className="heading-1">Start with your site. We build the GTM loop from there.</h1>
-          <p className="mt-4 text-[16px] leading-6 text-muted-foreground text-pretty">
+          <p className="mt-4 text-16 text-muted-foreground text-pretty">
             Give us a workspace name and your website. Next you pick a business model, review the ICP cards, and
             approve the first plan.
           </p>
@@ -149,7 +149,7 @@ function SignupFlow() {
           ) : (
             <div>
               <h2 className="heading-1">{workspace || "Your workspace"} is ready.</h2>
-              <p className="mt-2 text-[15px] leading-6 text-muted-foreground">
+              <p className="mt-2 text-15 text-muted-foreground">
                 {spot
                   ? `You are number ${spot.position} in line for a full seat. You can start onboarding now with the demo workspace, or we will email ${spot.email} when your seat opens.`
                   : "Start onboarding now."}

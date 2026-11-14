@@ -125,7 +125,7 @@ export function ModelTabs() {
         <div className="grid gap-px bg-border md:grid-cols-2">
           <div className="row-in bg-card p-5 md:p-6">
             <p className="text-12 font-medium uppercase tracking-wide text-muted-foreground">ICP · {view.icpKind}</p>
-            <h3 className="mt-2 text-[17px] font-semibold tracking-tight">{view.icpName}</h3>
+            <h3 className="mt-2 text-17 font-semibold tracking-tight">{view.icpName}</h3>
             <p className="mt-1.5 text-14 text-muted-foreground">{view.icpWho}</p>
             <ul className="mt-4 space-y-2 text-13">
               {view.pains.map((pain) => (

@@ -16,14 +16,14 @@ export function SiteFooter() {
         <div className="grid gap-10 sm:grid-cols-2 sm:items-start sm:gap-16">
           <div>
             <Logo stacked />
-            <p className="mt-5 max-w-md text-[15px] leading-6 text-muted-foreground text-pretty">
+            <p className="mt-5 max-w-md text-15 text-muted-foreground text-pretty">
               {homeFooter.blurb}
             </p>
           </div>
           <div className="sm:justify-self-end sm:text-right">
             <nav
               aria-label="Footer"
-              className="flex flex-wrap gap-x-5 gap-y-2 text-[14px] font-medium text-muted-foreground sm:justify-end"
+              className="flex flex-wrap gap-x-5 gap-y-2 text-14 font-medium text-muted-foreground sm:justify-end"
             >
               {links.map((link) => (
                 <Link key={link.href} href={link.href} className="hover:text-foreground">

@@ -70,7 +70,7 @@ export function PricingView() {
           <h1 className="heading-hero mt-4">
             <WordReveal instant text="Simple plans. Start small." accentWords={["small."]} />
           </h1>
-          <p className="mt-5 text-[16px] font-medium leading-7 text-muted-foreground text-pretty">
+          <p className="mt-5 text-16 font-medium text-muted-foreground text-pretty">
             Pay for channels, posts, and seats. Grow inbound. Ad spend stays on the platforms you already use.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -100,18 +100,18 @@ export function PricingView() {
                 )}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <h2 className="text-[16px] font-semibold tracking-tight">{tier.name}</h2>
+                  <h2 className="text-16 font-semibold tracking-tight">{tier.name}</h2>
                   {tier.highlight ? (
                     <span className="rounded-[6px] bg-accent px-2 py-0.5 text-12 font-medium text-accent-foreground">
                       Popular
                     </span>
                   ) : null}
                 </div>
-                <p className="mt-2 min-h-10 text-[14px] leading-5 text-muted-foreground text-pretty">
+                <p className="mt-2 min-h-10 text-14 text-muted-foreground text-pretty">
                   {tier.blurb}
                 </p>
                 <p className="mt-6 flex items-baseline gap-1.5">
-                  <span className="font-serif-display text-[48px] leading-none tracking-tight tabular-nums">
+                  <span className="font-serif-display text-48 tabular-nums">
                     ${price}
                   </span>
                   <span className="text-14 text-muted-foreground">/ mo</span>
@@ -119,7 +119,7 @@ export function PricingView() {
                 <p className="mt-1 text-13 text-muted-foreground">
                   {billing === "annual" ? `$${tier.annual * 12} / year` : "Billed monthly"}
                 </p>
-                <ul className="mt-6 space-y-2.5 border-t border-border pt-5 text-[14px]">
+                <ul className="mt-6 space-y-2.5 border-t border-border pt-5 text-14">
                   {tier.limits.map((limit) => (
                     <li key={limit} className="flex items-center gap-2.5">
                       <Check className="size-4 shrink-0 text-muted-foreground" strokeWidth={2.25} />

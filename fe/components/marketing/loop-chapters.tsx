@@ -36,7 +36,7 @@ function ChapterCard({
       <div>
         <p className="section-eyebrow">{card.eyebrow}</p>
         {card.title ? (
-          <p className="mt-4 text-[15px] font-medium tracking-tight">{card.title}</p>
+          <p className="mt-4 text-15 font-medium tracking-tight">{card.title}</p>
         ) : null}
         {card.detail ? (
           <p className="mt-2 text-13 leading-5 text-muted-foreground">{card.detail}</p>
@@ -45,7 +45,7 @@ function ChapterCard({
       <div className="mt-6 border-t border-border pt-4">
         {card.bigNumber ? (
           <>
-            <p className="font-serif-display text-[28px] leading-none tracking-tight text-heading">
+            <p className="font-serif-display text-28 text-heading">
               {card.bigNumber}
             </p>
             {card.footerRight ? (
@@ -85,10 +85,10 @@ export function LoopChapters() {
                 <p className="section-eyebrow">
                   {ch.n} · {ch.kicker}
                 </p>
-                <h3 className="font-serif-display mt-3 text-[36px] leading-none tracking-tight text-heading lg:text-[40px]">
+                <h3 className="font-serif-display mt-3 text-36 text-heading lg:text-40">
                   {ch.title}
                 </h3>
-                <p className="mt-4 min-h-[4.5rem] text-[15px] leading-6 text-muted-foreground text-pretty">
+                <p className="mt-4 min-h-[4.5rem] text-15 text-muted-foreground text-pretty">
                   {ch.copy}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">

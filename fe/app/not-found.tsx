@@ -8,7 +8,7 @@ export default function NotFound() {
       <SiteHeader />
       <main id="main" tabIndex={-1} className="flex flex-1 flex-col items-center justify-center px-4 py-24 text-center">
         <h1 className="heading-1">This page is not here.</h1>
-        <p className="mt-4 max-w-md text-[16px] text-muted-foreground">
+        <p className="mt-4 max-w-md text-16 text-muted-foreground">
           Try the homepage, pricing, or the waitlist.
         </p>
         <ButtonLink className="mt-8" href="/">

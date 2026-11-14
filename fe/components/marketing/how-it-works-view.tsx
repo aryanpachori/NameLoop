@@ -48,7 +48,7 @@ export function HowItWorksView() {
             />
           </h1>
           <Reveal instant delay={2}>
-            <p className="mt-5 max-w-xl text-[17px] leading-7 text-muted-foreground text-pretty">
+            <p className="mt-5 max-w-xl text-17 leading-7 text-muted-foreground text-pretty">
               First we ask what kind of business you run. That changes who your customer is and where they hang
               out. Everything else follows from that.
             </p>
@@ -61,7 +61,7 @@ export function HowItWorksView() {
         <div className="marketing-shell">
           <Reveal>
             <h2 className="heading-1 max-w-2xl">First up: what kind of business is this?</h2>
-            <p className="mt-3 max-w-2xl text-[16px] leading-6 text-muted-foreground">
+            <p className="mt-3 max-w-2xl text-16 text-muted-foreground">
               B2B and D2C don't get the same questions, ICP card, or channel ranking. Pick yours and we adapt.
             </p>
           </Reveal>
@@ -69,7 +69,7 @@ export function HowItWorksView() {
             {models.map((m, i) => (
               <Reveal key={m.id} delay={(Math.min(i, 4) as 0 | 1 | 2 | 3 | 4)}>
                 <div className="surface flex h-full flex-col p-5">
-                  <p className="text-[15px] font-semibold tracking-tight">{m.label}</p>
+                  <p className="text-15 font-semibold tracking-tight">{m.label}</p>
                   <p className="mt-1 text-13 text-muted-foreground">We ask: {m.asks}.</p>
                   <div className="mt-4 flex flex-1 flex-wrap content-end gap-1.5">
                     {m.picks.map((id) => (
@@ -95,8 +95,8 @@ export function HowItWorksView() {
                 <Reveal className="grid gap-6 py-8 md:grid-cols-[1fr_320px] md:items-start md:gap-12">
                   <div>
                     <p className="font-mono text-12 text-muted-foreground">Step {step.n}</p>
-                    <h3 className="mt-1 font-serif-display text-[28px] leading-8 tracking-tight">{step.title}</h3>
-                    <p className="mt-3 max-w-xl text-[16px] leading-6 text-muted-foreground">{step.long}</p>
+                    <h3 className="mt-1 font-serif-display text-28 leading-8 tracking-tight">{step.title}</h3>
+                    <p className="mt-3 max-w-xl text-16 text-muted-foreground">{step.long}</p>
                   </div>
                   <div>{step.fragment}</div>
                 </Reveal>
@@ -110,7 +110,7 @@ export function HowItWorksView() {
         <div className="marketing-shell">
           <Reveal>
             <h2 className="heading-1 max-w-2xl">Each cycle should feel a bit easier.</h2>
-            <p className="mt-3 max-w-2xl text-[16px] leading-6 text-muted-foreground">
+            <p className="mt-3 max-w-2xl text-16 text-muted-foreground">
               Some loops are a week. Some are longer. Either way you leave with a clearer customer, fewer
               channels that matter, and proof of what to push next.
             </p>
@@ -120,8 +120,8 @@ export function HowItWorksView() {
               <Reveal key={w.label} delay={(i + 1) as 1 | 2 | 3}>
                 <div className="surface h-full p-5">
                   <p className="font-mono text-12 text-muted-foreground">{w.label}</p>
-                  <h3 className="mt-1 text-[16px] font-semibold tracking-tight">{w.title}</h3>
-                  <p className="mt-2 text-14 leading-5 text-muted-foreground">{w.copy}</p>
+                  <h3 className="mt-1 text-16 font-semibold tracking-tight">{w.title}</h3>
+                  <p className="mt-2 text-14 text-muted-foreground">{w.copy}</p>
                 </div>
               </Reveal>
             ))}
@@ -134,7 +134,7 @@ export function HowItWorksView() {
         <div className="marketing-shell grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <Reveal>
             <h2 className="heading-1 max-w-2xl">Nothing goes out unless you say so.</h2>
-            <p className="mt-3 max-w-xl text-[16px] leading-6 text-muted-foreground">
+            <p className="mt-3 max-w-xl text-16 text-muted-foreground">
               Approvals stay on until you flip a channel to autopilot. Ad spend hits the ad platform directly.
               We never launch spend without you.
             </p>
