@@ -5,6 +5,7 @@ import { CloseBand } from "@/components/marketing/close-band";
 import { Faq } from "@/components/marketing/faq";
 import { HeroField } from "@/components/marketing/hero-field";
 import { HeroUrlForm } from "@/components/marketing/hero-url-form";
+import { HomeWelcome } from "@/components/marketing/home-welcome";
 import { LoopChapters } from "@/components/marketing/loop-chapters";
 import { Reveal } from "@/components/marketing/reveal";
 import { SiteFooter } from "@/components/marketing/site-footer";
@@ -33,6 +34,7 @@ export default function HomePage() {
     <div className="relative flex min-h-dvh flex-col bg-background text-foreground">
       {/* Page-level ambient glow — consistent across all sections */}
       <div className="hero-atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden="true" />
+      <HomeWelcome />
       <SiteHeader />
       <main id="main" tabIndex={-1} className="relative z-[1] flex-1">
         <section className="relative overflow-hidden">
