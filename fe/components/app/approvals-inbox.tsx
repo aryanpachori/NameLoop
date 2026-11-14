@@ -204,7 +204,7 @@ export function ApprovalsInbox() {
                       <ChannelMark id={draft.channel} />
                       {KIND_LABELS[draft.kind]}
                       {draft.flaggedClaims.length > 0 ? (
-                        <span className="rounded-[6px] bg-[#FEECEC] px-1 text-12 text-[#B42318] dark:bg-[#3A1512] dark:text-[#F97066]">
+                        <span className="rounded-[6px] bg-destructive/[0.12] px-1 text-12 text-destructive">
                           flagged
                         </span>
                       ) : null}

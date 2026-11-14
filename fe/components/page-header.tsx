@@ -19,7 +19,7 @@ export function PageHeader({
         ) : null}
         <h1 className="heading-page">{title}</h1>
         {description ? (
-          <p className="max-w-2xl text-[15px] text-muted-foreground">{description}</p>
+          <p className="max-w-2xl text-15 text-muted-foreground">{description}</p>
         ) : null}
       </div>
       {actions ? <div className="flex flex-wrap gap-4">{actions}</div> : null}

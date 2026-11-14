@@ -19,6 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useWorkspace } from "@/lib/store";
 import type { AdCampaign, AdPlatform, ChannelId } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const PLATFORM: Record<AdPlatform, { channel: ChannelId; label: string }> = {
@@ -86,7 +87,7 @@ export default function AdsPage() {
             const high = Math.floor(cur.budget / ad.costPerResult.low);
             const platform = PLATFORM[ad.platform];
             return (
-              <article key={ad.id} className={`surface space-y-4 p-4 sm:p-5 ${locked ? "opacity-70" : ""}`}>
+              <article key={ad.id} className={cn("surface space-y-4 p-4 sm:p-5", locked && "opacity-70")}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-13 text-muted-foreground">

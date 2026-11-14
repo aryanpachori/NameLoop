@@ -27,7 +27,7 @@ function ConnStatus({ status }: { status: ChannelConnection["status"] }) {
         "rounded-[8px] text-12 font-medium",
         status === "connected" && "border-transparent bg-success text-success-foreground",
         status === "needs_reauth" &&
-          "border-transparent bg-[#FEECEC] text-[#B42318] dark:bg-[#3A1512] dark:text-[#F97066]",
+          "border-transparent bg-destructive/[0.12] text-destructive",
         status === "disconnected" && "border-transparent bg-muted text-muted-foreground"
       )}
     >

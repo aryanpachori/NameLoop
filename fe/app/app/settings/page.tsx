@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { MODEL_LABELS } from "@/lib/labels";
 import { useWorkspace } from "@/lib/store";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 function Section({
@@ -42,7 +43,7 @@ function Meter({ label, used, cap }: { label: string; used: number; cap: number 
         </span>
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-        <div className={pct > 85 ? "h-full bg-[#B42318]" : "h-full bg-foreground"} style={{ width: `${pct}%` }} />
+        <div className={cn("h-full", pct > 85 ? "bg-destructive" : "bg-foreground")} style={{ width: `${pct}%` }} />
       </div>
     </div>
   );

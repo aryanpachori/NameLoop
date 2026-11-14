@@ -41,8 +41,8 @@ export default function OutreachPage() {
       />
 
       {needsHuman.length > 0 ? (
-        <div className="rounded-[12px] border border-[#B42318]/30 bg-[#FEECEC]/50 p-4 dark:bg-[#3A1512]/50">
-          <p className="text-14 font-medium text-[#B42318] dark:text-[#F97066]">
+        <div className="rounded-[12px] border border-destructive/30 bg-destructive/[0.08] p-4">
+          <p className="text-14 font-medium text-destructive">
             {needsHuman.length} {creator ? "creator needs" : "reply needs"} you
           </p>
           <ul className="mt-1 text-14">
