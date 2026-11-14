@@ -140,8 +140,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Button>
             <p className="text-[14px] text-muted-foreground">
               <span className="font-medium text-foreground">{state.tenant.name}</span>
-              {state.sprint.sprintProgress ? (
-                <> · <span className="tabular-nums">{state.sprint.sprintProgress}</span></>
+              {state.brief.sprintProgress ? (
+                <> · <span className="tabular-nums">{state.brief.sprintProgress}</span></>
               ) : null}
             </p>
           </div>
