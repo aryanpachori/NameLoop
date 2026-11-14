@@ -51,12 +51,12 @@ export function Stat({
   const negative = delta?.startsWith("-");
 
   return (
-    <div className={cn("surface flex flex-col gap-2 p-4", className)}>
-      <p className="text-12 text-muted-foreground">{label}</p>
+    <div className={cn("surface flex flex-col gap-2.5 p-4", className)}>
+      <p className="text-12 font-medium uppercase tracking-[0.1em] text-muted-foreground">{label}</p>
       <div className="flex items-end justify-between gap-3">
         <p
           className={cn(
-            "tabular-nums tracking-tight text-foreground",
+            "leading-none tabular-nums tracking-tight text-heading",
             serif ? "font-serif-display text-40" : "font-[family-name:var(--font-geist-mono)] text-28 font-medium"
           )}
         >
@@ -67,7 +67,7 @@ export function Stat({
       {delta ? (
         <p
           className={cn(
-            "font-[family-name:var(--font-geist-mono)] text-12",
+            "font-[family-name:var(--font-geist-mono)] text-12 tabular-nums",
             positive && "text-success-foreground",
             negative && "text-destructive",
             !positive && !negative && "text-muted-foreground"

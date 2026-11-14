@@ -120,7 +120,6 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { state } = useWorkspace();
   const [open, setOpen] = useState(false);
-  const oldestHours = 4;
 
   return (
     <div className="flex min-h-dvh bg-background">
@@ -140,16 +139,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Menu />
             </Button>
             <p className="text-[14px] text-muted-foreground">
-              {state.tenant.name} · queue age <span className="tabular-nums text-foreground">{oldestHours}h</span>
+              <span className="font-medium text-foreground">{state.tenant.name}</span>
+              {state.sprint.sprintProgress ? (
+                <> · <span className="tabular-nums">{state.sprint.sprintProgress}</span></>
+              ) : null}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <span
-              className={`rounded-[8px] px-2 py-1 text-13 ${
+              className={cn(
+                "rounded-[8px] px-2 py-1 text-13",
                 state.tenant.domainHealth === "healthy"
                   ? "bg-muted text-foreground"
-                  : "bg-destructive text-primary-foreground"
-              }`}
+                  : "bg-destructive text-destructive-foreground"
+              )}
             >
               Domain {state.tenant.domainHealth}
             </span>
