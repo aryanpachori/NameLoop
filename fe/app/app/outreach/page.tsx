@@ -58,7 +58,7 @@ export default function OutreachPage() {
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="surface p-4">
           <p className="text-12 text-muted-foreground">Daily cap</p>
-          <p className="mt-1 font-[family-name:var(--font-geist-mono)] text-28 font-medium tabular-nums">
+          <p className="mt-1 font-mono text-28 font-medium tabular-nums">
             {seq.usedToday}/{seq.dailyCap}
           </p>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
@@ -67,13 +67,13 @@ export default function OutreachPage() {
         </div>
         <div className="surface p-4">
           <p className="text-12 text-muted-foreground">{creator ? "Creators in sequence" : "Prospects"}</p>
-          <p className="mt-1 font-[family-name:var(--font-geist-mono)] text-28 font-medium tabular-nums">
+          <p className="mt-1 font-mono text-28 font-medium tabular-nums">
             {seq.prospects.length}
           </p>
         </div>
         <div className="surface p-4">
           <p className="text-12 text-muted-foreground">Steps</p>
-          <p className="mt-1 font-[family-name:var(--font-geist-mono)] text-28 font-medium tabular-nums">
+          <p className="mt-1 font-mono text-28 font-medium tabular-nums">
             {seq.steps.length}
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function OutreachPage() {
         <ol className="surface divide-y divide-border">
           {seq.steps.map((step) => (
             <li key={step.id} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center">
-              <p className="w-20 shrink-0 font-[family-name:var(--font-geist-mono)] text-13 tabular-nums">
+              <p className="w-20 shrink-0 font-mono text-13 tabular-nums">
                 Day {step.day}
               </p>
               <ChannelChip id={step.channelId} className="w-fit" />

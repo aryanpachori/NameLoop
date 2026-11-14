@@ -205,7 +205,7 @@ export default function OnboardingPage() {
             );
           })}
         </ol>
-        <p className="mt-auto font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+        <p className="mt-auto font-mono text-12 text-muted-foreground">
           Enter next · ← back
         </p>
       </aside>
@@ -213,7 +213,7 @@ export default function OnboardingPage() {
       <div className="flex min-w-0 flex-col">
         <header className="flex items-center justify-between gap-4 border-b border-border px-4 py-3 lg:hidden">
           <Logo />
-          <p className="font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+          <p className="font-mono text-12 text-muted-foreground">
             Step {step + 1} of {STEPS.length}
           </p>
         </header>
@@ -225,7 +225,7 @@ export default function OnboardingPage() {
         </div>
 
         <main id="main" tabIndex={-1} className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:px-8 lg:py-16">
-          <p className="font-[family-name:var(--font-geist-mono)] text-12 uppercase tracking-wide text-muted-foreground">
+          <p className="font-mono text-12 uppercase tracking-wide text-muted-foreground">
             {current.label}
           </p>
           <h1 className="heading-1 mt-2">{current.title}</h1>

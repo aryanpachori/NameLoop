@@ -13,7 +13,7 @@ export function PageHeader({
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="space-y-1">
         {eyebrow ? (
-          <p className="font-[family-name:var(--font-geist-mono)] text-12 uppercase tracking-wide text-muted-foreground">
+          <p className="font-mono text-12 uppercase tracking-wide text-muted-foreground">
             {eyebrow}
           </p>
         ) : null}

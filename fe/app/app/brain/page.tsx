@@ -264,7 +264,7 @@ function BrainEditor({ brain }: { brain: BusinessBrain }) {
         <ol className="divide-y divide-border">
           <li className="flex items-center justify-between gap-3 py-2 text-14">
             <span>
-              <span className="font-[family-name:var(--font-geist-mono)] text-13">v{brain.version}</span>{" "}
+              <span className="font-mono text-13">v{brain.version}</span>{" "}
               Current
             </span>
             <span className="text-12 text-muted-foreground">{formatDue(brain.updatedAt)}</span>
@@ -275,7 +275,7 @@ function BrainEditor({ brain }: { brain: BusinessBrain }) {
               className="flex items-center justify-between gap-3 py-2 text-14"
             >
               <span>
-                <span className="font-[family-name:var(--font-geist-mono)] text-13">v{entry.version}</span>{" "}
+                <span className="font-mono text-13">v{entry.version}</span>{" "}
                 {entry.note}
               </span>
               <span className="text-12 text-muted-foreground">{formatDue(entry.at)}</span>

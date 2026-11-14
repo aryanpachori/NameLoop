@@ -38,7 +38,7 @@ function Meter({ label, used, cap }: { label: string; used: number; cap: number 
     <div className="space-y-1.5">
       <div className="flex items-baseline justify-between">
         <span className="text-13">{label}</span>
-        <span className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums">
+        <span className="font-mono text-13 tabular-nums">
           {used}/{cap}
         </span>
       </div>
@@ -73,7 +73,7 @@ export default function SettingsPage() {
           </div>
           <div className="space-y-1.5">
             <Label>Website</Label>
-            <p className="flex h-8 items-center font-[family-name:var(--font-geist-mono)] text-13">
+            <p className="flex h-8 items-center font-mono text-13">
               {tenant.productUrl}
             </p>
           </div>
@@ -159,7 +159,7 @@ export default function SettingsPage() {
           <dl className="grid gap-4 sm:grid-cols-3">
             <div>
               <dt className="text-12 text-muted-foreground">Domain</dt>
-              <dd className="font-[family-name:var(--font-geist-mono)] text-14">
+              <dd className="font-mono text-14">
                 {emailConn.sendingDomain ?? "Not set"}
               </dd>
             </div>

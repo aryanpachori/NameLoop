@@ -32,7 +32,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-2 rounded-[8px] px-2 py-1.5 text-[14px] transition-colors duration-150 ease-out",
+              "flex items-center gap-2 rounded-[8px] px-2 py-1.5 text-14 transition-colors duration-150 ease-out",
               active
                 ? "bg-sidebar-accent text-sidebar-foreground"
                 : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
@@ -41,7 +41,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             <Icon className="size-4" />
             <span className="flex-1">{item.label}</span>
             {count > 0 ? (
-              <span className="rounded-[8px] bg-primary px-1.5 font-[family-name:var(--font-geist-mono)] text-12 tabular-nums text-primary-foreground">
+              <span className="rounded-[8px] bg-primary px-1.5 font-mono text-12 tabular-nums text-primary-foreground">
                 {count}
               </span>
             ) : null}

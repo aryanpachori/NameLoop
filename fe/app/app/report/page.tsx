@@ -70,15 +70,15 @@ export default function ReportPage() {
                     <td className="px-4 py-3">
                       <ChannelChip id={row.channel} />
                     </td>
-                    <td className="px-4 py-3 text-right font-[family-name:var(--font-geist-mono)] tabular-nums">
+                    <td className="px-4 py-3 text-right font-mono tabular-nums">
                       {n(row.reach)}
                     </td>
-                    <td className="px-4 py-3 text-right font-[family-name:var(--font-geist-mono)] tabular-nums">
+                    <td className="px-4 py-3 text-right font-mono tabular-nums">
                       {n(row.replies)}
                     </td>
                     <td
                       className={cn(
-                        "px-4 py-3 text-right font-[family-name:var(--font-geist-mono)] tabular-nums",
+                        "px-4 py-3 text-right font-mono tabular-nums",
                         row.delta.startsWith("+") && "text-success-foreground",
                         row.delta.startsWith("-") && "text-destructive"
                       )}
@@ -102,7 +102,7 @@ export default function ReportPage() {
             {best.map((post, index) => (
               <li key={post.id} className="flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex gap-4">
-                  <span className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums text-muted-foreground">
+                  <span className="font-mono text-13 tabular-nums text-muted-foreground">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div className="space-y-1">
@@ -112,7 +112,7 @@ export default function ReportPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <ChannelChip id={post.channel} />
-                  <span className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums">
+                  <span className="font-mono text-13 tabular-nums">
                     {post.metric}
                   </span>
                 </div>

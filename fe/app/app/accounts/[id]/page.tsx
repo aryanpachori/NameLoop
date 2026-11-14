@@ -50,7 +50,7 @@ export default function AccountPage({
             <OwnerBadge owner={account.owner} />
             <StateBadge state={account.state} />
             <span className="text-13 text-muted-foreground">{STAGE_LABELS[account.stage]}</span>
-            <span className="font-[family-name:var(--font-geist-mono)] text-12 tabular-nums text-muted-foreground">Score {account.score}</span>
+            <span className="font-mono text-12 tabular-nums text-muted-foreground">Score {account.score}</span>
           </div>
           <p className="text-14 text-muted-foreground">
             {buyer ? `${buyer.name} · ${buyer.title}` : "No buyer yet"} · Next: {account.nextAction} · Due{" "}
@@ -112,7 +112,7 @@ export default function AccountPage({
               <div key={touch.id} className="rounded-md bg-muted p-4">
                 <div className="flex items-center justify-between gap-2">
                   <OwnerBadge owner={touch.actor} />
-                  <span className="font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground tabular-nums">
+                  <span className="font-mono text-12 text-muted-foreground tabular-nums">
                     {formatDue(touch.at)}
                   </span>
                 </div>
@@ -129,7 +129,7 @@ export default function AccountPage({
                 <p className="text-14 font-medium">
                   {contact.name}
                   {contact.isBuyer ? (
-                    <span className="ml-1.5 font-[family-name:var(--font-geist-mono)] text-12 text-success-foreground">chosen</span>
+                    <span className="ml-1.5 font-mono text-12 text-success-foreground">chosen</span>
                   ) : null}
                 </p>
                 <p className="text-13 text-muted-foreground">{contact.title}</p>
@@ -156,7 +156,7 @@ export default function AccountPage({
         <div className="surface p-5">
           <h2 className="text-15 font-semibold tracking-tight">
             Discovery ·{" "}
-            <span className="font-[family-name:var(--font-geist-mono)] text-13 font-normal text-muted-foreground">
+            <span className="font-mono text-13 font-normal text-muted-foreground">
               {Math.round(discovery.confidence * 100)}% confidence
             </span>
           </h2>
@@ -169,7 +169,7 @@ export default function AccountPage({
               ["Budget owner", discovery.budgetOwner],
             ].map(([label, value]) => (
               <div key={label}>
-                <p className="text-12 text-muted-foreground uppercase tracking-wide font-[family-name:var(--font-geist-mono)]">{label}</p>
+                <p className="text-12 text-muted-foreground uppercase tracking-wide font-mono">{label}</p>
                 <p className="mt-1 text-14">{value}</p>
               </div>
             ))}
@@ -181,7 +181,7 @@ export default function AccountPage({
         <div className="surface p-5 space-y-3">
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-15 font-semibold tracking-tight">Meeting brief</h2>
-            <span className="font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground tabular-nums shrink-0">
+            <span className="font-mono text-12 text-muted-foreground tabular-nums shrink-0">
               {formatDue(meeting.at)}
             </span>
           </div>

@@ -159,7 +159,7 @@ export function ApprovalsInbox() {
             { value: "ads", label: "Ads" },
           ]}
         />
-        <p className="font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+        <p className="font-mono text-12 text-muted-foreground">
           J/K move · A approve · R reject
         </p>
       </div>

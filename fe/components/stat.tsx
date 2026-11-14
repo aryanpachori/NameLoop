@@ -57,7 +57,7 @@ export function Stat({
         <p
           className={cn(
             "leading-none tabular-nums tracking-tight text-heading",
-            serif ? "font-serif-display text-40" : "font-[family-name:var(--font-geist-mono)] text-28 font-medium"
+            serif ? "font-serif-display text-40" : "font-mono text-28 font-medium"
           )}
         >
           {value}
@@ -67,7 +67,7 @@ export function Stat({
       {delta ? (
         <p
           className={cn(
-            "font-[family-name:var(--font-geist-mono)] text-12 tabular-nums",
+            "font-mono text-12 tabular-nums",
             positive && "text-success-foreground",
             negative && "text-destructive",
             !positive && !negative && "text-muted-foreground"

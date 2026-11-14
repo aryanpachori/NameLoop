@@ -66,7 +66,7 @@ export function CommandMenu({ className }: { className?: string }) {
             </Command.Item>
           ))}
         </Command.List>
-        <div className="border-t border-border px-4 py-2 font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+        <div className="border-t border-border px-4 py-2 font-mono text-12 text-muted-foreground">
           ⌘K
         </div>
       </Command>
@@ -76,7 +76,7 @@ export function CommandMenu({ className }: { className?: string }) {
 
 export function CommandMenuHint() {
   return (
-    <p className="font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+    <p className="font-mono text-12 text-muted-foreground">
       Press ⌘K to open the command menu
     </p>
   );

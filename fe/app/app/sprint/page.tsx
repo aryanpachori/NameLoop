@@ -91,7 +91,7 @@ function SortableRow({
         <GripVertical className="size-4" />
       </button>
       <div className="w-16 shrink-0">
-        <p className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums">Day {post.day}</p>
+        <p className="font-mono text-13 tabular-nums">Day {post.day}</p>
         <p className="text-12 text-muted-foreground">{dayLabel(startDate, post.day)}</p>
       </div>
       <ChannelMark id={post.channelId} />
@@ -197,7 +197,7 @@ export default function SprintPage() {
           day < sprint.dayOf21 && "text-muted-foreground"
         )}
       >
-        <p className="font-[family-name:var(--font-geist-mono)] text-12 tabular-nums">
+        <p className="font-mono text-12 tabular-nums">
           {compact ? day : `Day ${day} · ${dayLabel(sprint.startDate, day)}`}
         </p>
         {dayPosts.map((p) => (
@@ -248,7 +248,7 @@ export default function SprintPage() {
             style={{ width: `${(sprint.dayOf21 / 21) * 100}%` }}
           />
         </div>
-        <p className="mt-1 font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+        <p className="mt-1 font-mono text-12 text-muted-foreground">
           Started {dayLabel(sprint.startDate, 1)} · ends {dayLabel(sprint.startDate, 21)}
         </p>
       </div>

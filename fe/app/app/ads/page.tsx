@@ -107,13 +107,13 @@ export default function AdsPage() {
                   </div>
                   <div>
                     <dt className="text-12 text-muted-foreground">Budget</dt>
-                    <dd className="font-[family-name:var(--font-geist-mono)] tabular-nums">
+                    <dd className="font-mono tabular-nums">
                       ${cur.budget.toLocaleString()}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-12 text-muted-foreground">Duration</dt>
-                    <dd className="font-[family-name:var(--font-geist-mono)] tabular-nums">
+                    <dd className="font-mono tabular-nums">
                       {cur.durationDays} days
                     </dd>
                   </div>
@@ -122,7 +122,7 @@ export default function AdsPage() {
                       Cost per {ad.costPerResult.unit}
                       <span className="rounded-[6px] border border-border px-1 uppercase">Estimate</span>
                     </dt>
-                    <dd className="font-[family-name:var(--font-geist-mono)] text-14 tabular-nums">
+                    <dd className="font-mono text-14 tabular-nums">
                       ${ad.costPerResult.low}–${ad.costPerResult.high}
                       <span className="ml-2 font-sans text-12 text-muted-foreground">
                         about {low}–{high} {ad.costPerResult.unit}s. Not a forecast.

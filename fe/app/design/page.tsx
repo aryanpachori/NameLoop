@@ -122,7 +122,7 @@ export default function DesignPage() {
         <p className="font-serif-display text-40 text-heading">Design system</p>
         <p className="mt-3 max-w-2xl text-16 text-muted-foreground">
           Tokens and components for NameLoop. Editorial, calm, hairline borders. See{" "}
-          <code className="font-[family-name:var(--font-geist-mono)] text-13">DESIGN.md</code>.
+          <code className="font-mono text-13">DESIGN.md</code>.
         </p>
         <CommandMenuHint />
 
@@ -156,7 +156,7 @@ export default function DesignPage() {
             <p className="text-14">Sans 14 UI body</p>
             <p className="text-13 text-muted-foreground">Sans 13 secondary</p>
             <p className="text-12 text-muted-foreground">Sans 12 meta</p>
-            <p className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums">
+            <p className="font-mono text-13 tabular-nums">
               Mono 13 · 1,284 · 09:41
             </p>
           </div>
@@ -167,7 +167,7 @@ export default function DesignPage() {
             {colors.map(([name, cls]) => (
               <div key={name} className="space-y-2">
                 <div className={`h-16 rounded-[8px] ${cls}`} />
-                <p className="font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+                <p className="font-mono text-12 text-muted-foreground">
                   {name}
                 </p>
               </div>
@@ -286,7 +286,7 @@ export default function DesignPage() {
                       <TableCell>
                         <StateBadge state={state as RecordState} />
                       </TableCell>
-                      <TableCell className="text-right font-[family-name:var(--font-geist-mono)] tabular-nums">
+                      <TableCell className="text-right font-mono tabular-nums">
                         {score}
                       </TableCell>
                     </TableRow>

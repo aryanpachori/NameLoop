@@ -25,8 +25,8 @@ function KillSwitch() {
   return (
     <div className="flex items-center justify-between gap-4 rounded-[12px] border border-sidebar-border bg-sidebar-accent px-3 py-2">
       <div>
-        <p className="text-[14px] font-medium text-sidebar-foreground">Kill switch</p>
-        <p className="text-[14px] text-muted-foreground">Pause all automation</p>
+        <p className="text-14 font-medium text-sidebar-foreground">Kill switch</p>
+        <p className="text-14 text-muted-foreground">Pause all automation</p>
       </div>
       <Switch
         checked={state.tenant.paused}
@@ -57,7 +57,7 @@ function TenantSwitcher() {
           <span className="block truncate text-14 font-medium text-sidebar-foreground">
             {active?.name}
           </span>
-          <span className="block font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+          <span className="block font-mono text-12 text-muted-foreground">
             {active ? MODEL_LABELS[active.businessModel] : ""}
           </span>
         </span>
@@ -85,7 +85,7 @@ function TenantSwitcher() {
               >
                 <span className="min-w-0">
                   <span className="block truncate text-14">{tenant.name}</span>
-                  <span className="block font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+                  <span className="block font-mono text-12 text-muted-foreground">
                     {MODEL_LABELS[tenant.businessModel]}
                   </span>
                 </span>
@@ -102,7 +102,7 @@ function TenantSwitcher() {
 function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
-      <Link href="/" className="px-1 text-[14px] text-sidebar-foreground" onClick={onNavigate}>
+      <Link href="/" className="px-1 text-14 text-sidebar-foreground" onClick={onNavigate}>
         <Logo />
       </Link>
       <TenantSwitcher />
@@ -110,7 +110,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
       <div className="mt-auto space-y-4">
         <KillSwitch />
         <p className="px-1 text-13 leading-relaxed text-muted-foreground text-pretty">
-          Approvals are required until you trust autopilot. <span className="font-[family-name:var(--font-geist-mono)]">⌘K</span> to jump anywhere.
+          Approvals are required until you trust autopilot. <span className="font-mono">⌘K</span> to jump anywhere.
         </p>
       </div>
     </>
@@ -138,7 +138,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               <Menu />
             </Button>
-            <p className="text-[14px] text-muted-foreground">
+            <p className="text-14 text-muted-foreground">
               <span className="font-medium text-foreground">{state.tenant.name}</span>
               {state.brief.sprintProgress ? (
                 <> · <span className="tabular-nums">{state.brief.sprintProgress}</span></>
@@ -156,13 +156,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               Domain {state.tenant.domainHealth}
             </span>
-            <span className="hidden rounded-[8px] bg-card px-2 py-1 font-[family-name:var(--font-geist-mono)] text-12 tabular-nums ring-1 ring-border sm:inline">
+            <span className="hidden rounded-[8px] bg-card px-2 py-1 font-mono text-12 tabular-nums ring-1 ring-border sm:inline">
               {state.tenant.usedSends}/{state.tenant.sendingCap} drafts
             </span>
           </div>
         </header>
         {state.tenant.paused ? (
-          <div className="border-b border-border bg-destructive/15 px-4 py-2 text-[14px] text-destructive">
+          <div className="border-b border-border bg-destructive/15 px-4 py-2 text-14 text-destructive">
             Kill switch is on. AI will not draft or enqueue anything until you release it.
           </div>
         ) : null}

@@ -75,7 +75,7 @@ export function AdBudgetSlider({
     <div className="space-y-2">
       <div className="flex items-baseline justify-between">
         <Label htmlFor="ad-budget">Monthly ad budget (optional)</Label>
-        <span className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums">
+        <span className="font-mono text-13 tabular-nums">
           {value === 0 ? "No ads" : `$${value.toLocaleString()}`}
         </span>
       </div>
@@ -325,7 +325,7 @@ export function IcpCardEditor({
         <div className="space-y-1">
           <div className="flex items-start justify-between gap-2">
             <h3 className="text-16 font-semibold">{icp.name}</h3>
-            <span className="font-[family-name:var(--font-geist-mono)] text-12 tabular-nums text-muted-foreground">
+            <span className="font-mono text-12 tabular-nums text-muted-foreground">
               {Math.round(icp.confidence * 100)}%
             </span>
           </div>
@@ -359,7 +359,7 @@ export function IcpCardEditor({
           {icp.whyNow}
         </p>
       ) : null}
-      <p className="font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+      <p className="font-mono text-12 text-muted-foreground">
         {icp.reachableSize}
       </p>
       <div className="flex flex-wrap gap-1">

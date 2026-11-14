@@ -83,7 +83,7 @@ export default function ChannelsPage() {
               <li key={rec.channelId} className="surface p-4 sm:p-5">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex gap-4">
-                    <span className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums text-muted-foreground">
+                    <span className="font-mono text-13 tabular-nums text-muted-foreground">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <div className="space-y-2">
@@ -99,7 +99,7 @@ export default function ChannelsPage() {
                     <div>
                       <div className="flex items-baseline justify-between">
                         <span className="text-12 text-muted-foreground">Fit</span>
-                        <span className="font-[family-name:var(--font-geist-mono)] text-13 tabular-nums">
+                        <span className="font-mono text-13 tabular-nums">
                           {rec.fitScore}/100
                         </span>
                       </div>
@@ -110,7 +110,7 @@ export default function ChannelsPage() {
                     <dl className="grid grid-cols-2 gap-3 text-13">
                       <div>
                         <dt className="text-12 text-muted-foreground">Effort</dt>
-                        <dd className="font-[family-name:var(--font-geist-mono)]">{rec.effortPerWeek}/wk</dd>
+                        <dd className="font-mono">{rec.effortPerWeek}/wk</dd>
                       </div>
                       <div>
                         <dt className="text-12 text-muted-foreground">Expected</dt>
@@ -182,7 +182,7 @@ export default function ChannelsPage() {
           <dl className="surface grid gap-4 p-4 sm:grid-cols-4">
             <div>
               <dt className="text-12 text-muted-foreground">Sending domain</dt>
-              <dd className="font-[family-name:var(--font-geist-mono)] text-14">
+              <dd className="font-mono text-14">
                 {email.sendingDomain ?? "Not set"}
               </dd>
             </div>
@@ -196,7 +196,7 @@ export default function ChannelsPage() {
             </div>
             <div>
               <dt className="text-12 text-muted-foreground">Bounce / spam</dt>
-              <dd className="font-[family-name:var(--font-geist-mono)] text-14 tabular-nums">
+              <dd className="font-mono text-14 tabular-nums">
                 {(state.tenant.bounceRate * 100).toFixed(1)}% / {(state.tenant.spamRate * 100).toFixed(2)}%
               </dd>
             </div>

@@ -54,7 +54,7 @@ export default function TodayPage() {
             style={{ width: `${(sprint.dayOf21 / 21) * 100}%` }}
           />
         </div>
-        <p className="mt-1 font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+        <p className="mt-1 font-mono text-12 text-muted-foreground">
           Day {sprint.dayOf21} of 21
         </p>
       </div>
@@ -106,13 +106,13 @@ export default function TodayPage() {
               >
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-[family-name:var(--font-geist-mono)] text-12 uppercase text-muted-foreground">
+                    <span className="font-mono text-12 uppercase text-muted-foreground">
                       {urgencyCopy[item.urgency]}
                     </span>
                     <p className="text-14 font-medium">{item.title}</p>
                   </div>
                   <p className="text-13 text-muted-foreground text-pretty">{item.reason}</p>
-                  <p className="font-[family-name:var(--font-geist-mono)] text-12 tabular-nums text-muted-foreground">
+                  <p className="font-mono text-12 tabular-nums text-muted-foreground">
                     Due {formatDue(item.dueAt)}
                   </p>
                 </div>
