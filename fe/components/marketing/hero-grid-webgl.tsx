@@ -118,27 +118,31 @@ export function HeroGridWebgl({ className }: { className?: string }) {
         canvas,
         antialias: true,
         alpha: true,
+        premultipliedAlpha: true,
         powerPreference: "low-power",
       });
+      // Fully transparent — page bg + atmosphere show through (same as copy column)
       renderer.setClearColor(0x000000, 0);
+      renderer.setClearAlpha(0);
 
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-      // Slightly higher + pulled back so floor and lower icons aren't cropped
-      camera.position.set(0, 1.1, 10.2);
-      camera.lookAt(0, -0.35, 0);
+      scene.background = null;
+      const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+      // Pulled back so the full globe + orbits fit the right column (not cut)
+      camera.position.set(0.35, 0.85, 12.4);
+      camera.lookAt(0.35, -0.2, 0);
 
       const isDark = document.documentElement.classList.contains("dark");
       const ink = isDark ? 0xc8c8c0 : 0x2a2a26;
       const soft = isDark ? 0x6a6a62 : 0x9a9a92;
       const accent = isDark ? 0x4d82ff : 0x1a5cff;
       const iconFill = isDark ? "#f5f5f0" : "#111110";
-      const iconDisc = isDark ? "rgba(77,130,255,0.35)" : "rgba(26,92,255,0.22)";
+      const iconDisc = isDark ? "rgba(77,130,255,0.18)" : "rgba(26,92,255,0.12)";
 
       const root = new THREE.Group();
       scene.add(root);
 
-      const shell = new THREE.IcosahedronGeometry(2.6, 1);
+      const shell = new THREE.IcosahedronGeometry(2.35, 1);
       const shellEdges = new THREE.EdgesGeometry(shell);
       const shellMat = new THREE.LineBasicMaterial({
         color: ink,
@@ -148,7 +152,7 @@ export function HeroGridWebgl({ className }: { className?: string }) {
       const shellLines = new THREE.LineSegments(shellEdges, shellMat);
       root.add(shellLines);
 
-      const ring = new THREE.TorusGeometry(1.55, 0.012, 8, 64);
+      const ring = new THREE.TorusGeometry(1.4, 0.012, 8, 64);
       const ringEdges = new THREE.EdgesGeometry(ring);
       const ringMat = new THREE.LineBasicMaterial({
         color: soft,
@@ -159,7 +163,7 @@ export function HeroGridWebgl({ className }: { className?: string }) {
       ringLines.rotation.x = Math.PI / 2.4;
       root.add(ringLines);
 
-      const ring2Geom = new THREE.TorusGeometry(2.1, 0.01, 8, 64);
+      const ring2Geom = new THREE.TorusGeometry(1.9, 0.01, 8, 64);
       const ring2Edges = new THREE.EdgesGeometry(ring2Geom);
       const ring2Mat = new THREE.LineBasicMaterial({
         color: soft,
@@ -220,46 +224,37 @@ export function HeroGridWebgl({ className }: { className?: string }) {
         icons.push({
           sprite,
           orbit: (i / CHANNEL_PATHS.length) * Math.PI * 2,
-          radius: 3.4 + (i % 4) * 0.55,
-          height: ((i % 5) - 1.5) * 0.45,
+          radius: 2.7 + (i % 4) * 0.35,
+          height: ((i % 5) - 1.5) * 0.38,
           speed: 0.12 + (i % 3) * 0.03,
           phase: i * 0.7,
-          bob: 0.18 + (i % 2) * 0.08,
+          bob: 0.14 + (i % 2) * 0.06,
           baseScale: scale,
           baseOpacity,
           flashUntil: 0,
         });
       });
 
-      const rainCount = 48;
+      // Sparse dust — keep light so the column doesn't read as a different surface
+      const rainCount = 12;
       const rainArr = new Float32Array(rainCount * 3);
       for (let i = 0; i < rainCount; i++) {
-        rainArr[i * 3] = (Math.random() - 0.5) * 16;
-        rainArr[i * 3 + 1] = (Math.random() - 0.5) * 10;
-        rainArr[i * 3 + 2] = (Math.random() - 0.5) * 12;
+        rainArr[i * 3] = (Math.random() - 0.5) * 8;
+        rainArr[i * 3 + 1] = (Math.random() - 0.5) * 6;
+        rainArr[i * 3 + 2] = (Math.random() - 0.5) * 8;
       }
       const rainGeom = new THREE.BufferGeometry();
       rainGeom.setAttribute("position", new THREE.BufferAttribute(rainArr, 3));
       const rainMat = new THREE.PointsMaterial({
         color: soft,
-        size: 0.016,
+        size: 0.01,
         transparent: true,
-        opacity: isDark ? 0.22 : 0.18,
+        opacity: isDark ? 0.05 : 0.04,
         depthWrite: false,
         sizeAttenuation: true,
       });
       const rain = new THREE.Points(rainGeom, rainMat);
       scene.add(rain);
-
-      const grid = new THREE.GridHelper(22, 22, soft, soft);
-      grid.position.y = -2.4;
-      const gridMats = Array.isArray(grid.material) ? grid.material : [grid.material];
-      gridMats.forEach((m) => {
-        m.transparent = true;
-        m.opacity = isDark ? 0.14 : 0.12;
-        m.depthWrite = false;
-      });
-      scene.add(grid);
 
       const placeIcons = (elapsed: number, nowMs: number) => {
         icons.forEach((icon) => {
@@ -361,9 +356,9 @@ export function HeroGridWebgl({ className }: { className?: string }) {
 
           pointerX += (targetX - pointerX) * 0.04;
           pointerY += (targetY - pointerY) * 0.04;
-          camera.position.x = pointerX;
-          camera.position.y = 1.1 - pointerY;
-          camera.lookAt(pointerX * 0.25, -0.35, 0);
+          camera.position.x = 0.35 + pointerX;
+          camera.position.y = 0.85 - pointerY;
+          camera.lookAt(0.35 + pointerX * 0.25, -0.2, 0);
 
           for (let i = 0; i < rainCount; i++) {
             let y = rainAttr.getY(i) - 0.012;
@@ -407,8 +402,6 @@ export function HeroGridWebgl({ className }: { className?: string }) {
         shell.dispose();
         ring.dispose();
         ring2Geom.dispose();
-        grid.geometry.dispose();
-        gridMats.forEach((m) => m.dispose());
         renderer.dispose();
       };
     })();
@@ -421,17 +414,19 @@ export function HeroGridWebgl({ className }: { className?: string }) {
 
   return (
     <div
-      className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}
+      className={cn(
+        "pointer-events-none absolute inset-0 overflow-hidden",
+        // Soft alpha fade only — does not paint a different bg (keeps seamlessness)
+        "[mask-image:linear-gradient(90deg,transparent_0%,black_10%,black_100%)]",
+        "[-webkit-mask-image:linear-gradient(90deg,transparent_0%,black_10%,black_100%)]",
+        className
+      )}
       aria-hidden="true"
     >
       <canvas
         ref={canvasRef}
-        className="pointer-events-auto h-full w-full cursor-pointer opacity-95"
+        className="pointer-events-auto h-full w-full cursor-pointer bg-transparent"
       />
-      {/* Soft edge washes so the field sits in its column */}
-      <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent" />
-      <div className="absolute inset-x-0 top-0 h-12 bg-background/50" />
-      <div className="absolute inset-x-0 bottom-0 h-12 bg-background/55" />
     </div>
   );
 }

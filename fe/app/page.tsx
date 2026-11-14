@@ -36,9 +36,10 @@ export default function HomePage() {
       <SiteHeader />
       <main id="main" tabIndex={-1} className="relative z-[1] flex-1">
         <section className="relative overflow-hidden">
-          <div className="paper-grain-overlay" aria-hidden="true" />
+          {/* Grain behind both columns so left/right share the same surface */}
+          <div className="paper-grain-overlay !z-0" aria-hidden="true" />
           <div className="marketing-shell relative z-[1] grid lg:grid-cols-2 lg:items-stretch">
-            <div className="flex flex-col justify-center py-20 lg:py-24 lg:pr-10">
+            <div className="relative z-[1] flex flex-col justify-center bg-transparent py-20 lg:py-24 lg:pr-10">
               <Reveal instant>
                 <p className="section-eyebrow">{homeHero.eyebrow}</p>
               </Reveal>
@@ -66,7 +67,6 @@ export default function HomePage() {
                   </Link>
                 </p>
 
-                {/* Inline stat strip — trust metrics below the CTA (Linear/Mercury pattern) */}
                 <div className="mt-8 stat-strip" aria-label="Why NameLoop">
                   {homeTrust.map((item) => (
                     <span key={item} className="stat-strip__item">
