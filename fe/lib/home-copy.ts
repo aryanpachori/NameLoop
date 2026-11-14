@@ -86,7 +86,7 @@ export const homeVs = {
 };
 
 export const homeLoop = {
-  eyebrow: "How it runs",
+  eyebrow: "How it works",
   headline: "Three moves. Each pass pulls harder.",
   chapters: [
     {
@@ -138,9 +138,9 @@ export const homeLoop = {
 };
 
 export const homeFaq = {
-  eyebrow: "FAQ",
-  headline: "Quick answers.",
-  support: "Still figuring it out? Start with a URL.",
+  eyebrow: "Before you start",
+  headline: "Common questions.",
+  support: "Have more? Start with a URL — we'll ask the rest inside.",
   items: [
     {
       q: "Is this mostly cold outbound?",
@@ -163,8 +163,8 @@ export const homeFaq = {
 
 export const homeClose = {
   eyebrow: "Early access",
-  headline: "Paste a URL. Hop in.",
-  support: "We sketch who, where, and what to say. You approve. Meetings are the goal.",
+  headline: "One URL. That's the entry point.",
+  support: "Paste it. We sketch who to reach, where they hang out, and what to say. You approve everything. Meetings are the only goal.",
   primaryCta: "Get started",
   secondaryCta: "See pricing",
 };

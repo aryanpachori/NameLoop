@@ -114,9 +114,7 @@ export default function HomePage() {
                 {homeFaq.support}
               </p>
             </Reveal>
-            <Reveal delay={1}>
-              <Faq items={homeFaq.items} />
-            </Reveal>
+            <Faq items={homeFaq.items} />
           </div>
         </section>
 

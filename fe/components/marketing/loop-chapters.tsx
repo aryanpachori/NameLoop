@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import { ChannelMark, channelLabel } from "@/components/channel-mark";
 import { Reveal } from "@/components/marketing/reveal";
 import { homeLoop } from "@/lib/home-copy";
@@ -27,10 +30,14 @@ function ChapterCard({
               </span>
               <span className="font-mono text-13 text-muted-foreground">{row.score}</span>
             </div>
-            {/* Visual score bar */}
-            <div
+            {/* Animated score bar — fills on scroll-into-view */}
+            <motion.div
               className="score-bar"
-              style={{ ["--pct" as string]: row.score }}
+              initial={{ ["--pct" as string]: 0 }}
+              whileInView={{ ["--pct" as string]: row.score }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: idx * 0.12 }}
+              style={{ ["--pct" as string]: 0 }}
               role="presentation"
               aria-hidden="true"
             />
@@ -79,7 +86,7 @@ function ChapterCard({
 export function LoopChapters() {
   return (
     <section className="relative border-t border-border bg-muted/30 overflow-hidden">
-      {/* Subtle radial glow anchored to the top-right — adds depth without competing with cards */}
+      {/* Subtle radial glow anchored to the top-right */}
       <div
         className="glow-blob"
         style={{
@@ -101,32 +108,41 @@ export function LoopChapters() {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-3 lg:gap-8">
           {homeLoop.chapters.map((ch, i) => (
-            <Reveal key={ch.n} delay={(i === 0 ? 1 : i === 1 ? 2 : 3) as 1 | 2 | 3}>
-              <article className="flex h-full flex-col">
-                <p className="section-eyebrow">
-                  {ch.n} · {ch.kicker}
-                </p>
-                <h3 className="font-serif-display mt-3 text-36 text-heading lg:text-40">
-                  {ch.title}
-                </h3>
-                <p className="mt-4 min-h-[4.5rem] text-15 text-muted-foreground text-pretty">
-                  {ch.copy}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {ch.channels.map((id) => (
-                    <span
-                      key={id}
-                      className="inline-flex size-8 items-center justify-center rounded-[8px] border border-border bg-background text-foreground"
-                    >
-                      <ChannelMark id={id as ChannelId} />
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-6 flex-1 [&_>_*]:h-full [&_>_*]:min-h-[10.5rem]">
-                  <ChapterCard card={ch.card} />
-                </div>
-              </article>
-            </Reveal>
+            <motion.article
+              key={ch.n}
+              className="flex h-full flex-col"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-5%" }}
+              transition={{
+                duration: 0.5,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: i * 0.12,
+              }}
+            >
+              <p className="section-eyebrow">
+                {ch.n} · {ch.kicker}
+              </p>
+              <h3 className="font-serif-display mt-3 text-36 text-heading lg:text-40">
+                {ch.title}
+              </h3>
+              <p className="mt-4 min-h-[4.5rem] text-15 text-muted-foreground text-pretty">
+                {ch.copy}
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {ch.channels.map((id) => (
+                  <span
+                    key={id}
+                    className="inline-flex size-8 items-center justify-center rounded-[8px] border border-border bg-background text-foreground"
+                  >
+                    <ChannelMark id={id as ChannelId} />
+                  </span>
+                ))}
+              </div>
+              <div className="mt-6 flex-1 [&_>_*]:h-full [&_>_*]:min-h-[10.5rem]">
+                <ChapterCard card={ch.card} />
+              </div>
+            </motion.article>
           ))}
         </div>
       </div>
