@@ -15,19 +15,19 @@ const models: { id: BusinessModel; label: string; asks: string; picks: ChannelId
 
 const phases = [
   {
-    label: "Open the loop",
-    title: "ICP and channels locked",
-    copy: "Brain confirmed, ICP picked, channels connected. First posts and outreach land in your approval inbox — not a spray across every surface.",
+    label: "Get set",
+    title: "Pick ICP and channels",
+    copy: "Confirm the customer guess, connect a couple channels. First drafts land in your approval inbox, not out in the wild.",
   },
   {
-    label: "Run and learn",
+    label: "Run it",
     title: "Show up where they are",
-    copy: "Sequences stay on the same thread. Content compounds on the channels you switched on. Replies that need judgment come to you.",
+    copy: "Keep sequences on the same thread. Post on the channels you turned on. Weird replies come back to you.",
   },
   {
-    label: "Concentrate",
+    label: "Lean in",
     title: "Double down on winners",
-    copy: "Results by channel, best posts ranked with a reason, and amplify suggestions — including ads when the signal is real. Then the next cycle starts smarter.",
+    copy: "See what worked by channel. Boost the good stuff when it feels real. Next cycle starts a bit smarter.",
   },
 ];
 
@@ -35,34 +35,34 @@ export function HowItWorksView() {
   return (
     <main id="main" tabIndex={-1} className="flex-1">
       {/* Intro */}
-      <section className="px-4 pb-14 pt-14 sm:pt-20">
-        <div className="mx-auto w-full max-w-6xl">
+      <section className="section-pad">
+        <div className="marketing-shell">
           <Reveal instant>
-            <p className="font-mono text-12 uppercase tracking-[0.14em] text-muted-foreground">How it works</p>
+            <p className="section-eyebrow">How it works</p>
           </Reveal>
           <h1 className="heading-hero mt-4 max-w-3xl">
             <WordReveal
               instant
-              text="One question first. Then six steps, in a loop."
-              accentWords={["six", "steps,", "loop."]}
+              text="Tell us what you sell. We walk the rest with you."
+              accentWords={["sell."]}
             />
           </h1>
           <Reveal instant delay={2}>
             <p className="mt-5 max-w-xl text-[17px] leading-7 text-muted-foreground text-pretty">
-              NameLoop asks what kind of business you run, because that decides who your customer is and where they
-              are. Everything after that follows from the answer.
+              First we ask what kind of business you run. That changes who your customer is and where they hang
+              out. Everything else follows from that.
             </p>
           </Reveal>
         </div>
       </section>
 
       {/* Model first */}
-      <section className="border-t border-border bg-muted/40 px-4 py-16 lg:py-20">
-        <div className="mx-auto w-full max-w-6xl">
+      <section className="border-t border-border bg-muted/40 section-pad">
+        <div className="marketing-shell">
           <Reveal>
-            <h2 className="heading-1 max-w-2xl">Step zero: pick your business model.</h2>
+            <h2 className="heading-1 max-w-2xl">First up: what kind of business is this?</h2>
             <p className="mt-3 max-w-2xl text-[16px] leading-6 text-muted-foreground">
-              Each model gets different follow-up questions, a different ICP card and a different channel ranking.
+              B2B and D2C don't get the same questions, ICP card, or channel ranking. Pick yours and we adapt.
             </p>
           </Reveal>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-5">
@@ -84,10 +84,10 @@ export function HowItWorksView() {
       </section>
 
       {/* Six steps */}
-      <section id="steps" className="scroll-mt-28 border-t border-border px-4 py-16 lg:py-24">
-        <div className="mx-auto w-full max-w-6xl">
+      <section id="steps" className="scroll-mt-28 border-t border-border section-pad">
+        <div className="marketing-shell">
           <Reveal>
-            <h2 className="heading-1 max-w-2xl">The loop, step by step.</h2>
+            <h2 className="heading-1 max-w-2xl">Then six steps, on repeat.</h2>
           </Reveal>
           <ol className="mt-10 divide-y divide-border border-y border-border">
             {LOOP_STEPS.map((step) => (
@@ -106,13 +106,13 @@ export function HowItWorksView() {
         </div>
       </section>
 
-      <section className="border-t border-border bg-muted/40 px-4 py-16 lg:py-20">
-        <div className="mx-auto w-full max-w-6xl">
+      <section className="border-t border-border bg-muted/40 section-pad">
+        <div className="marketing-shell">
           <Reveal>
-            <h2 className="heading-1 max-w-2xl">How a cycle compounds.</h2>
+            <h2 className="heading-1 max-w-2xl">Each cycle should feel a bit easier.</h2>
             <p className="mt-3 max-w-2xl text-[16px] leading-6 text-muted-foreground">
-              Cycle time can be short or longer. What matters is that each pass leaves you with a sharper ICP,
-              fewer channels, and clearer proof of what to amplify next.
+              Some loops are a week. Some are longer. Either way you leave with a clearer customer, fewer
+              channels that matter, and proof of what to push next.
             </p>
           </Reveal>
           <div className="mt-8 grid gap-5 md:grid-cols-3 md:gap-6">
@@ -130,13 +130,13 @@ export function HowItWorksView() {
       </section>
 
       {/* Control + CTA */}
-      <section className="border-t border-border px-4 py-16 lg:py-24">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+      <section className="border-t border-border section-pad">
+        <div className="marketing-shell grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <Reveal>
-            <h2 className="heading-1 max-w-2xl">You stay in control of every send.</h2>
+            <h2 className="heading-1 max-w-2xl">Nothing goes out unless you say so.</h2>
             <p className="mt-3 max-w-xl text-[16px] leading-6 text-muted-foreground">
-              Approvals are on until you turn a channel to autopilot. Ad spend is billed by the ad platform, and
-              nothing launches without your approval.
+              Approvals stay on until you flip a channel to autopilot. Ad spend hits the ad platform directly.
+              We never launch spend without you.
             </p>
           </Reveal>
           <Reveal delay={1} className="flex flex-wrap gap-2">

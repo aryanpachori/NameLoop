@@ -367,10 +367,10 @@ export function HeroGridWebgl({ className }: { className?: string }) {
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="h-full w-full opacity-95" />
-      {/* Light washes only — keep the lower field visible */}
-      <div className="absolute inset-0 bg-background/15" />
-      <div className="absolute inset-x-0 top-0 h-16 bg-background/40" />
-      <div className="absolute inset-x-0 bottom-0 h-16 bg-background/45" />
+      {/* Soft edge washes so the field sits in its column */}
+      <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-12 bg-background/50" />
+      <div className="absolute inset-x-0 bottom-0 h-12 bg-background/55" />
     </div>
   );
 }

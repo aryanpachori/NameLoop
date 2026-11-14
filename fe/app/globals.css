@@ -366,9 +366,33 @@ html {
   }
 }
 
-/* Editorial section rhythm */
-.section-pad {
-  padding-block: clamp(4rem, 10vw, 7.5rem);
+/* Editorial section rhythm — compiled as Tailwind utilities so HMR cannot drop them */
+@utility marketing-shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1rem;
+}
+@media (width >= 40rem) {
+  .marketing-shell {
+    padding-inline: 1.5rem;
+  }
+}
+@utility section-pad {
+  padding-block: 5rem;
+}
+@media (width >= 64rem) {
+  .section-pad {
+    padding-block: 6rem;
+  }
+}
+.section-eyebrow {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
 }
 .rule-hair {
   height: 1px;

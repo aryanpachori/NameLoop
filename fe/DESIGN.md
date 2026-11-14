@@ -4,7 +4,7 @@ Batch 1 foundation. Editorial product UI. Calm, dense where it matters. Not an A
 
 ## Principles
 
-1. **Ink on paper.** Light marketing default. Dark is an in-app choice, not a mood.
+1. **Ink on paper.** Dark is the product and marketing default. Light remains available in-app.
 2. **One accent.** Used for focus, active nav, and rare emphasis. Never gradients, orbs, or glow.
 3. **Hairlines over shadows.** 1px borders. Elevation is rare and quiet.
 4. **Type does the work.** Geist for UI. Instrument Serif for marketing headlines and big numbers.
@@ -90,6 +90,14 @@ Living catalog: **`/design`**.
 
 No single Dribbble shot is cloned. These are interaction and density references only.
 
+## Marketing shell
+
+- Width: `marketing-shell` → `max-w-6xl` (72rem), centered, `px-4` / `sm:px-6`
+- Vertical rhythm: `section-pad` → `py-20` / `lg:py-24`
+- Eyebrows: mono 12 / 0.16em uppercase, muted
+- Hero: copy left, WebGL right (desktop only) — never overlay icons on headline
+- Equal columns for comparison strips and loop chapters
+
 ## Review
 
-Open `/design` at 1440px and 390px in light and dark before Batch 2.
+Open `/` and `/design` at 1440px and 390px in **dark** (default) and light before shipping.

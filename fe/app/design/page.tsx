@@ -100,7 +100,7 @@ export default function DesignPage() {
             {mounted ? (
               <Segmented
                 aria-label="Theme"
-                value={(theme === "dark" ? "dark" : "light") as "light" | "dark"}
+                value={(theme === "light" ? "light" : "dark") as "light" | "dark"}
                 onChange={(value) => setTheme(value)}
                 options={[
                   { value: "light", label: "Light" },

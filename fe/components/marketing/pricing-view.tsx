@@ -14,7 +14,7 @@ const tiers = [
   {
     id: "starter",
     name: "Starter",
-    blurb: "One ICP, a few channels. Enough to run your first full sprint.",
+    blurb: "One customer focus, a few channels. Enough to run your first real cycle.",
     monthly: 49,
     annual: 39,
     limits: ["3 channels", "30 posts / mo", "300 outreach sends / mo", "1 seat"],
@@ -23,7 +23,7 @@ const tiers = [
   {
     id: "growth",
     name: "Growth",
-    blurb: "Two ICPs in parallel, with ad suggestions on two platforms.",
+    blurb: "Two customer focuses at once, plus ad ideas on two platforms.",
     monthly: 149,
     annual: 119,
     limits: ["6 channels", "120 posts / mo", "1,500 outreach sends / mo", "3 seats"],
@@ -32,7 +32,7 @@ const tiers = [
   {
     id: "scale",
     name: "Scale",
-    blurb: "Every channel, several brands or markets, a team in the loop.",
+    blurb: "All channels, a few brands or markets, room for the team.",
     monthly: 449,
     annual: 359,
     limits: ["All 11 channels", "400 posts / mo", "6,000 outreach sends / mo", "10 seats"],
@@ -102,14 +102,14 @@ export function PricingView() {
 
   return (
     <main id="main" tabIndex={-1} className="flex-1">
-      <section className="px-4 pb-10 pt-14 sm:pt-20">
-        <div className="mx-auto w-full max-w-6xl">
-          <p className="font-mono text-12 uppercase tracking-[0.14em] text-muted-foreground">Pricing</p>
+      <section className="section-pad pb-10">
+        <div className="marketing-shell">
+          <p className="section-eyebrow">Pricing</p>
           <h1 className="heading-hero mt-4 max-w-3xl">
-            <WordReveal instant text="Pay for the loop you run." accentWords={["loop"]} />
+            <WordReveal instant text="Simple plans. Pay for what you actually run." accentWords={["run."]} />
           </h1>
           <p className="mt-5 max-w-xl text-[17px] leading-7 text-muted-foreground text-pretty">
-            Plans scale with channels, posts, outreach sends and seats. Ad spend is billed by the ad platform.
+            Channels, posts, outreach sends, seats. Ad spend stays on the ad platforms you already use.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Segmented
@@ -126,8 +126,8 @@ export function PricingView() {
         </div>
       </section>
 
-      <section className="px-4 pb-6">
-        <div className="mx-auto grid w-full max-w-6xl gap-5 md:grid-cols-3 md:gap-6">
+      <section className="pb-6">
+        <div className="marketing-shell grid gap-5 md:grid-cols-3 md:gap-6">
           {tiers.map((tier) => {
             const price = billing === "monthly" ? tier.monthly : tier.annual;
             return (
@@ -175,13 +175,13 @@ export function PricingView() {
             );
           })}
         </div>
-        <p className="mx-auto mt-5 w-full max-w-6xl text-13 text-muted-foreground">
+        <p className="marketing-shell mt-5 text-13 text-muted-foreground">
           Ad spend billed by the ad platform. Not included in any plan.
         </p>
       </section>
 
-      <section className="px-4 py-16">
-        <div className="mx-auto w-full max-w-6xl">
+      <section className="section-pad">
+        <div className="marketing-shell">
           <h2 className="heading-1">Compare plans</h2>
           <div className="mt-8 overflow-x-auto rounded-[12px] border border-border bg-card">
             <table className="w-full min-w-[640px] border-collapse text-left text-14">
@@ -210,8 +210,8 @@ export function PricingView() {
         </div>
       </section>
 
-      <section className="border-t border-border px-4 py-16 lg:py-20">
-        <div className="mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
+      <section className="border-t border-border section-pad">
+        <div className="marketing-shell grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
           <h2 className="heading-1">Pricing questions.</h2>
           <Faq items={faq} />
         </div>

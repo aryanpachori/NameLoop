@@ -21,12 +21,12 @@ function Row() {
       {CHANNELS.map((id) => (
         <span
           key={id}
-          className="inline-flex items-center gap-2.5 text-[13px] font-medium tracking-tight text-muted-foreground"
+          className="inline-flex items-center gap-2.5 whitespace-nowrap text-[13px] font-medium tracking-tight text-muted-foreground"
         >
           <ChannelMark id={id} className="text-foreground" />
           {channelLabel(id)}
-          <span aria-hidden className="mx-1 text-border">
-            ·
+          <span aria-hidden className="text-border">
+            /
           </span>
         </span>
       ))}
@@ -34,12 +34,11 @@ function Row() {
   );
 }
 
-/** Full-bleed channel signal strip — keeps scroll energy after the hero field. */
 export function ChannelMarquee() {
   return (
-    <div className="border-y border-border bg-background py-4" aria-hidden="true">
+    <div className="border-y border-border bg-card/40 py-3.5" aria-hidden="true">
       <div className="marquee">
-        <div className="marquee__track px-4">
+        <div className="marquee__track gap-8 px-4">
           <Row />
           <Row />
         </div>
