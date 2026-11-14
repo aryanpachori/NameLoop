@@ -30,12 +30,13 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-dvh flex-col bg-background text-foreground">
+    <div className="relative flex min-h-dvh flex-col bg-background text-foreground">
+      {/* Page-level ambient glow — consistent across all sections */}
+      <div className="hero-atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden="true" />
       <SiteHeader />
-      <main id="main" tabIndex={-1} className="flex-1">
+      <main id="main" tabIndex={-1} className="relative z-[1] flex-1">
         <section className="relative overflow-hidden">
           <div className="paper-grain-overlay" aria-hidden="true" />
-          <div className="hero-atmosphere" aria-hidden="true" />
           <div className="marketing-shell relative z-[1] grid lg:grid-cols-2 lg:items-stretch">
             <div className="flex flex-col justify-center py-20 lg:py-24 lg:pr-10">
               <Reveal instant>

@@ -719,18 +719,23 @@ html {
  * Hero radial atmosphere — large brand-tinted radial gradient placed behind
  * the hero content to replicate Framer's "glow behind the fold" technique.
  */
+/*
+ * Page-level ambient glow — fixed to the viewport so every section shares
+ * the same atmospheric tint. Keeps dark brand accent presence consistent
+ * from hero all the way down to the footer.
+ */
 .hero-atmosphere {
   pointer-events: none;
-  position: absolute;
-  inset: 0;
   background:
-    radial-gradient(ellipse 55% 55% at 70% 110%, rgba(77, 130, 255, 0.07), transparent),
-    radial-gradient(ellipse 40% 40% at 15% 60%, rgba(130, 100, 255, 0.05), transparent);
+    radial-gradient(ellipse 60% 50% at 75% 5%, rgba(77, 130, 255, 0.06), transparent),
+    radial-gradient(ellipse 45% 60% at 10% 40%, rgba(130, 100, 255, 0.04), transparent),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(77, 130, 255, 0.05), transparent);
 }
 .dark .hero-atmosphere {
   background:
-    radial-gradient(ellipse 55% 55% at 70% 110%, rgba(77, 130, 255, 0.10), transparent),
-    radial-gradient(ellipse 40% 40% at 15% 60%, rgba(130, 100, 255, 0.06), transparent);
+    radial-gradient(ellipse 60% 50% at 75% 5%, rgba(77, 130, 255, 0.09), transparent),
+    radial-gradient(ellipse 45% 60% at 10% 40%, rgba(130, 100, 255, 0.05), transparent),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(77, 130, 255, 0.07), transparent);
 }
 
 /*
