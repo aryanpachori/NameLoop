@@ -7,33 +7,54 @@ import {
   useReducer,
   type ReactNode,
 } from "react";
-import { createSeedState } from "@/lib/mock/seed";
+import { createAllWorkspaces } from "@/lib/mock/seed";
 import type {
   BusinessBrain,
+  BusinessModel,
   Contact,
+  MultiWorkspaceState,
   Owner,
   PipelineStage,
   RecordState,
   SignupDraft,
+  SprintPost,
   WorkspaceState,
 } from "@/lib/types";
 
 type Action =
+  | { type: "switchTenant"; tenantId: string }
   | { type: "approve"; draftId: string }
   | { type: "reject"; draftId: string; reason: string }
   | { type: "updateDraft"; draftId: string; body: string; subject?: string }
-  | { type: "setOwner"; accountId: string; owner: Owner; state: RecordState; reason: string; nextAction: string }
+  | { type: "bulkApprove"; draftIds: string[] }
+  | {
+      type: "setOwner";
+      accountId: string;
+      owner: Owner;
+      state: RecordState;
+      reason: string;
+      nextAction: string;
+    }
   | { type: "wrongBuyer"; accountId: string; contactId: string }
   | { type: "moveStage"; accountId: string; stage: PipelineStage }
   | { type: "togglePauseTenant" }
   | { type: "updateBrain"; brain: Partial<BusinessBrain> }
+  | { type: "setBusinessModel"; model: BusinessModel }
+  | { type: "selectIcps"; ids: string[] }
   | { type: "addSuppression"; value: string; reason: string }
   | { type: "setConnector"; id: string; status: "connected" | "error" | "disconnected" }
-  | { type: "applySignup"; signup: SignupDraft };
+  | { type: "setConnection"; id: string; status: "connected" | "needs_reauth" | "disconnected" }
+  | { type: "updateSprintPost"; postId: string; patch: Partial<SprintPost> }
+  | { type: "reorderSprint"; orderedIds: string[] }
+  | { type: "toggleAutopilot" }
+  | { type: "setAdStatus"; id: string; status: "approved" | "launched" | "dismissed" }
+  | { type: "startNextLoop" }
+  | { type: "applySignup"; signup: SignupDraft }
+  | { type: "completeOnboarding"; brain: Partial<BusinessBrain>; model: BusinessModel };
 
 function stamp(actor: "ai" | "human", action: string, detail: string) {
   return {
-    id: `au-${Date.now()}`,
+    id: `au-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     at: new Date().toISOString(),
     actor,
     action,
@@ -41,59 +62,95 @@ function stamp(actor: "ai" | "human", action: string, detail: string) {
   };
 }
 
-function reducer(state: WorkspaceState, action: Action): WorkspaceState {
+function withActive(
+  state: MultiWorkspaceState,
+  updater: (ws: WorkspaceState) => WorkspaceState
+): MultiWorkspaceState {
+  const id = state.activeTenantId;
+  return {
+    ...state,
+    workspaces: {
+      ...state.workspaces,
+      [id]: updater(state.workspaces[id]),
+    },
+  };
+}
+
+function reducer(state: MultiWorkspaceState, action: Action): MultiWorkspaceState {
   switch (action.type) {
+    case "switchTenant":
+      if (!state.workspaces[action.tenantId]) return state;
+      return { ...state, activeTenantId: action.tenantId };
     case "approve":
-      return {
-        ...state,
-        drafts: state.drafts.map((draft) =>
+      return withActive(state, (ws) => ({
+        ...ws,
+        drafts: ws.drafts.map((draft) =>
           draft.id === action.draftId
             ? { ...draft, status: "approved" as const, flaggedClaims: [] }
             : draft
         ),
-        queue: state.queue.filter((item) => item.draftId !== action.draftId),
-        accounts: state.accounts.map((account) => {
-          const draft = state.drafts.find((item) => item.id === action.draftId);
-          if (!draft || draft.accountId !== account.id) return account;
-          return {
-            ...account,
-            state: "ai_working" as const,
-            reason: "Draft approved. Waiting for you to send.",
-            nextAction: "Send from Gmail or social",
-          };
-        }),
-        audit: [
-          stamp("human", "draft_approved", action.draftId),
-          ...state.audit,
-        ],
-      };
+        sprint: {
+          ...ws.sprint,
+          posts: ws.sprint.posts.map((post) =>
+            post.id === action.draftId || post.status === "waiting_approval"
+              ? post.id === action.draftId ||
+                ws.drafts.find((d) => d.id === action.draftId)?.body === post.body
+                ? { ...post, status: "scheduled" as const }
+                : post
+              : post
+          ),
+        },
+        queue: ws.queue.filter((item) => item.draftId !== action.draftId),
+        audit: [stamp("human", "draft_approved", action.draftId), ...ws.audit],
+      }));
+    case "bulkApprove":
+      return withActive(state, (ws) => ({
+        ...ws,
+        drafts: ws.drafts.map((draft) =>
+          action.draftIds.includes(draft.id)
+            ? { ...draft, status: "approved" as const, flaggedClaims: [] }
+            : draft
+        ),
+        sprint: {
+          ...ws.sprint,
+          posts: ws.sprint.posts.map((post) =>
+            post.status === "waiting_approval"
+              ? { ...post, status: "scheduled" as const }
+              : post
+          ),
+        },
+        queue: ws.queue.filter(
+          (item) => !item.draftId || !action.draftIds.includes(item.draftId)
+        ),
+        audit: [stamp("human", "bulk_approve", action.draftIds.join(",")), ...ws.audit],
+      }));
     case "reject":
-      return {
-        ...state,
-        drafts: state.drafts.map((draft) =>
+      return withActive(state, (ws) => ({
+        ...ws,
+        drafts: ws.drafts.map((draft) =>
           draft.id === action.draftId
             ? { ...draft, status: "rejected" as const, rejectReason: action.reason }
             : draft
         ),
-        queue: state.queue.filter((item) => item.draftId !== action.draftId),
+        queue: ws.queue.filter((item) => item.draftId !== action.draftId),
         audit: [
           stamp("human", "draft_rejected", `${action.draftId}: ${action.reason}`),
-          ...state.audit,
+          ...ws.audit,
         ],
-      };
+      }));
     case "updateDraft":
-      return {
-        ...state,
-        drafts: state.drafts.map((draft) =>
+      return withActive(state, (ws) => ({
+        ...ws,
+        drafts: ws.drafts.map((draft) =>
           draft.id === action.draftId
             ? { ...draft, body: action.body, subject: action.subject ?? draft.subject }
             : draft
         ),
-      };
+      }));
     case "setOwner":
-      return {
-        ...state,
-        accounts: state.accounts.map((account) =>
+      return withActive(state, (ws) => ({
+        ...ws,
+        accounts: ws.accounts.map((account) =>
           account.id === action.accountId
             ? {
                 ...account,
@@ -106,17 +163,17 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
         ),
         audit: [
           stamp("human", "owner_changed", `${action.accountId} → ${action.owner}`),
-          ...state.audit,
+          ...ws.audit,
         ],
-      };
+      }));
     case "wrongBuyer":
-      return {
-        ...state,
-        contacts: state.contacts.map((contact) => {
+      return withActive(state, (ws) => ({
+        ...ws,
+        contacts: ws.contacts.map((contact) => {
           if (contact.accountId !== action.accountId) return contact;
           return { ...contact, isBuyer: contact.id === action.contactId };
         }),
-        accounts: state.accounts.map((account) =>
+        accounts: ws.accounts.map((account) =>
           account.id === action.accountId
             ? {
                 ...account,
@@ -128,84 +185,181 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
         ),
         audit: [
           stamp("human", "wrong_buyer", `${action.accountId} → ${action.contactId}`),
-          ...state.audit,
+          ...ws.audit,
         ],
-      };
+      }));
     case "moveStage":
-      return {
-        ...state,
-        accounts: state.accounts.map((account) =>
-          account.id === action.accountId
-            ? { ...account, stage: action.stage }
-            : account
+      return withActive(state, (ws) => ({
+        ...ws,
+        accounts: ws.accounts.map((account) =>
+          account.id === action.accountId ? { ...account, stage: action.stage } : account
         ),
-      };
+      }));
     case "togglePauseTenant":
-      return {
-        ...state,
-        tenant: { ...state.tenant, paused: !state.tenant.paused },
+      return withActive(state, (ws) => ({
+        ...ws,
+        tenant: { ...ws.tenant, paused: !ws.tenant.paused },
         audit: [
           stamp(
             "human",
-            state.tenant.paused ? "kill_switch_off" : "kill_switch_on",
+            ws.tenant.paused ? "kill_switch_off" : "kill_switch_on",
             "Tenant automation"
           ),
-          ...state.audit,
+          ...ws.audit,
         ],
-      };
+      }));
     case "updateBrain":
-      return {
-        ...state,
+      return withActive(state, (ws) => ({
+        ...ws,
         brain: {
-          ...state.brain,
+          ...ws.brain,
           ...action.brain,
-          version: state.brain.version + 1,
+          version: ws.brain.version + 1,
+          updatedAt: new Date().toISOString(),
+          history: [
+            {
+              version: ws.brain.version + 1,
+              at: new Date().toISOString(),
+              note: "Edited in Business Brain",
+            },
+            ...ws.brain.history,
+          ],
+        },
+      }));
+    case "setBusinessModel":
+      return withActive(state, (ws) => ({
+        ...ws,
+        tenant: { ...ws.tenant, businessModel: action.model },
+        brain: {
+          ...ws.brain,
+          businessModel: action.model,
+          version: ws.brain.version + 1,
           updatedAt: new Date().toISOString(),
         },
-      };
+      }));
+    case "selectIcps":
+      return withActive(state, (ws) => ({
+        ...ws,
+        brain: { ...ws.brain, selectedIcpIds: action.ids },
+      }));
     case "addSuppression":
-      return {
-        ...state,
+      return withActive(state, (ws) => ({
+        ...ws,
         suppressions: [
-          {
-            id: `sup-${Date.now()}`,
-            value: action.value,
-            reason: action.reason,
-          },
-          ...state.suppressions,
+          { id: `sup-${Date.now()}`, value: action.value, reason: action.reason },
+          ...ws.suppressions,
         ],
-      };
+      }));
     case "setConnector":
-      return {
-        ...state,
-        connectors: state.connectors.map((connector) =>
+      return withActive(state, (ws) => ({
+        ...ws,
+        connectors: ws.connectors.map((connector) =>
           connector.id === action.id
             ? { ...connector, status: action.status, lastError: undefined }
             : connector
         ),
-      };
+      }));
+    case "setConnection":
+      return withActive(state, (ws) => ({
+        ...ws,
+        connections: ws.connections.map((conn) =>
+          conn.id === action.id ? { ...conn, status: action.status } : conn
+        ),
+      }));
+    case "updateSprintPost":
+      return withActive(state, (ws) => ({
+        ...ws,
+        sprint: {
+          ...ws.sprint,
+          posts: ws.sprint.posts.map((post) =>
+            post.id === action.postId ? { ...post, ...action.patch } : post
+          ),
+        },
+      }));
+    case "reorderSprint":
+      return withActive(state, (ws) => {
+        const byId = Object.fromEntries(ws.sprint.posts.map((p) => [p.id, p]));
+        // Keep the existing day slots; reassign them in the new order.
+        const slots = ws.sprint.posts.map((p) => p.day).sort((a, b) => a - b);
+        const posts = action.orderedIds
+          .map((id, index) => {
+            const post = byId[id];
+            return post ? { ...post, day: slots[index] ?? index + 1 } : null;
+          })
+          .filter(Boolean) as SprintPost[];
+        return { ...ws, sprint: { ...ws.sprint, posts } };
+      });
+    case "toggleAutopilot":
+      return withActive(state, (ws) => ({
+        ...ws,
+        sprint: { ...ws.sprint, autopilot: !ws.sprint.autopilot },
+      }));
+    case "setAdStatus":
+      return withActive(state, (ws) => ({
+        ...ws,
+        ads: ws.ads.map((ad) =>
+          ad.id === action.id ? { ...ad, status: action.status, locked: false } : ad
+        ),
+      }));
+    case "startNextLoop":
+      return withActive(state, (ws) => ({
+        ...ws,
+        sprint: {
+          ...ws.sprint,
+          dayOf21: 1,
+          startDate: new Date().toISOString().slice(0, 10),
+          posts: ws.sprint.posts.map((post, i) => ({
+            ...post,
+            day: i + 1,
+            status: i === 0 ? ("draft" as const) : post.status,
+          })),
+        },
+        audit: [stamp("human", "loop_started", "Next 3-week sprint"), ...ws.audit],
+      }));
     case "applySignup":
-      return {
-        ...state,
+      return withActive(state, (ws) => ({
+        ...ws,
         onboarded: false,
         tenant: {
-          ...state.tenant,
-          productUrl: action.signup.url || state.tenant.productUrl,
+          ...ws.tenant,
+          name: action.signup.workspaceName || ws.tenant.name,
+          productUrl: action.signup.url || ws.tenant.productUrl,
         },
         brain: {
-          ...state.brain,
+          ...ws.brain,
           offer: {
-            ...state.brain.offer,
-            value: action.signup.offer || state.brain.offer.value,
+            ...ws.brain.offer,
+            value: action.signup.offer || ws.brain.offer.value,
             source: { label: "Signup", field: "offer" },
           },
           icp: {
-            ...state.brain.icp,
-            value: action.signup.audience || state.brain.icp.value,
+            ...ws.brain.icp,
+            value: action.signup.audience || ws.brain.icp.value,
             source: { label: "Signup", field: "icp" },
           },
         },
-      };
+      }));
+    case "completeOnboarding":
+      return withActive(state, (ws) => ({
+        ...ws,
+        onboarded: true,
+        tenant: { ...ws.tenant, businessModel: action.model },
+        brain: {
+          ...ws.brain,
+          ...action.brain,
+          businessModel: action.model,
+          version: ws.brain.version + 1,
+          updatedAt: new Date().toISOString(),
+          history: [
+            {
+              version: ws.brain.version + 1,
+              at: new Date().toISOString(),
+              note: "Onboarding complete",
+            },
+            ...ws.brain.history,
+          ],
+        },
+      }));
     default:
       return state;
   }
@@ -213,9 +367,13 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
 
 type Store = {
   state: WorkspaceState;
+  activeTenantId: string;
+  tenantList: { id: string; name: string; businessModel: BusinessModel }[];
+  switchTenant: (tenantId: string) => void;
   approveDraft: (draftId: string) => void;
   rejectDraft: (draftId: string, reason: string) => void;
   updateDraft: (draftId: string, body: string, subject?: string) => void;
+  bulkApprove: (draftIds: string[]) => void;
   takeOver: (accountId: string, note?: string) => void;
   handBack: (accountId: string, note?: string) => void;
   pauseAccount: (accountId: string) => void;
@@ -225,24 +383,46 @@ type Store = {
   moveStage: (accountId: string, stage: PipelineStage) => void;
   toggleKillSwitch: () => void;
   updateBrain: (brain: Partial<BusinessBrain>) => void;
+  setBusinessModel: (model: BusinessModel) => void;
+  selectIcps: (ids: string[]) => void;
   addSuppression: (value: string, reason: string) => void;
   reconnect: (id: string) => void;
+  setConnection: (id: string, status: "connected" | "needs_reauth" | "disconnected") => void;
+  updateSprintPost: (postId: string, patch: Partial<SprintPost>) => void;
+  reorderSprint: (orderedIds: string[]) => void;
+  toggleAutopilot: () => void;
+  setAdStatus: (id: string, status: "approved" | "launched" | "dismissed") => void;
+  startNextLoop: () => void;
   applySignup: (signup: SignupDraft) => void;
+  completeOnboarding: (brain: Partial<BusinessBrain>, model: BusinessModel) => void;
 };
 
 const StoreContext = createContext<Store | null>(null);
 
+function initialMulti(): MultiWorkspaceState {
+  const workspaces = createAllWorkspaces();
+  return { activeTenantId: "ledgerline", workspaces };
+}
+
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, createSeedState);
+  const [multi, dispatch] = useReducer(reducer, undefined, initialMulti);
+  const active = multi.workspaces[multi.activeTenantId];
 
   const store = useMemo<Store>(
     () => ({
-      state,
+      state: active,
+      activeTenantId: multi.activeTenantId,
+      tenantList: Object.values(multi.workspaces).map((ws) => ({
+        id: ws.tenant.id,
+        name: ws.tenant.name,
+        businessModel: ws.tenant.businessModel,
+      })),
+      switchTenant: (tenantId) => dispatch({ type: "switchTenant", tenantId }),
       approveDraft: (draftId) => dispatch({ type: "approve", draftId }),
-      rejectDraft: (draftId, reason) =>
-        dispatch({ type: "reject", draftId, reason }),
+      rejectDraft: (draftId, reason) => dispatch({ type: "reject", draftId, reason }),
       updateDraft: (draftId, body, subject) =>
         dispatch({ type: "updateDraft", draftId, body, subject }),
+      bulkApprove: (draftIds) => dispatch({ type: "bulkApprove", draftIds }),
       takeOver: (accountId) =>
         dispatch({
           type: "setOwner",
@@ -271,7 +451,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
           nextAction: "Nobody acts until released",
         }),
       doNotContact: (accountId) => {
-        const account = state.accounts.find((item) => item.id === accountId);
+        const account = active.accounts.find((item) => item.id === accountId);
         dispatch({
           type: "setOwner",
           accountId,
@@ -291,17 +471,25 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       wrongBuyer: (accountId, contactId) =>
         dispatch({ type: "wrongBuyer", accountId, contactId }),
       addContact: () => undefined,
-      moveStage: (accountId, stage) =>
-        dispatch({ type: "moveStage", accountId, stage }),
+      moveStage: (accountId, stage) => dispatch({ type: "moveStage", accountId, stage }),
       toggleKillSwitch: () => dispatch({ type: "togglePauseTenant" }),
       updateBrain: (brain) => dispatch({ type: "updateBrain", brain }),
-      addSuppression: (value, reason) =>
-        dispatch({ type: "addSuppression", value, reason }),
-      reconnect: (id) =>
-        dispatch({ type: "setConnector", id, status: "connected" }),
+      setBusinessModel: (model) => dispatch({ type: "setBusinessModel", model }),
+      selectIcps: (ids) => dispatch({ type: "selectIcps", ids }),
+      addSuppression: (value, reason) => dispatch({ type: "addSuppression", value, reason }),
+      reconnect: (id) => dispatch({ type: "setConnector", id, status: "connected" }),
+      setConnection: (id, status) => dispatch({ type: "setConnection", id, status }),
+      updateSprintPost: (postId, patch) =>
+        dispatch({ type: "updateSprintPost", postId, patch }),
+      reorderSprint: (orderedIds) => dispatch({ type: "reorderSprint", orderedIds }),
+      toggleAutopilot: () => dispatch({ type: "toggleAutopilot" }),
+      setAdStatus: (id, status) => dispatch({ type: "setAdStatus", id, status }),
+      startNextLoop: () => dispatch({ type: "startNextLoop" }),
       applySignup: (signup) => dispatch({ type: "applySignup", signup }),
+      completeOnboarding: (brain, model) =>
+        dispatch({ type: "completeOnboarding", brain, model }),
     }),
-    [state]
+    [active, multi.activeTenantId, multi.workspaces]
   );
 
   return (

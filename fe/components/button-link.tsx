@@ -7,11 +7,12 @@ type Props = VariantProps<typeof buttonVariants> & {
   href: string;
   children: React.ReactNode;
   className?: string;
+  "aria-label"?: string;
 };
 
-export function ButtonLink({ href, children, className, variant, size }: Props) {
+export function ButtonLink({ href, children, className, variant, size, "aria-label": ariaLabel }: Props) {
   return (
-    <Link href={href} className={cn(buttonVariants({ variant, size, className }))}>
+    <Link href={href} aria-label={ariaLabel} className={cn(buttonVariants({ variant, size, className }))}>
       {children}
     </Link>
   );

@@ -17,9 +17,10 @@ export function Logo({
           src="/logo-mark.png"
           alt=""
           width={72}
-          height={72}
-          className="h-9 w-auto"
+          height={40}
+          className="h-9 w-auto object-contain"
           priority
+          unoptimized
         />
         <span>
           Name<span className="text-brand">Loop</span>
@@ -34,9 +35,10 @@ export function Logo({
         src="/logo-mark.png"
         alt=""
         width={48}
-        height={26}
-        className="h-6 w-auto"
+        height={28}
+        className="h-6 w-auto object-contain"
         priority
+        unoptimized
       />
       {markOnly ? (
         <span className="sr-only">NameLoop</span>

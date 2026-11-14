@@ -13,7 +13,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const dueNow = state.queue.filter((item) => item.urgency === "now").length;
 
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col gap-0.5">
       {navItems.map((item) => {
         const active =
           item.href === "/app"
@@ -32,7 +32,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex items-center gap-2 rounded-[14px] px-2 py-2 text-[14px] motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out",
+              "flex items-center gap-2 rounded-[8px] px-2 py-1.5 text-[14px] transition-colors duration-150 ease-out",
               active
                 ? "bg-sidebar-accent text-sidebar-foreground"
                 : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
@@ -41,7 +41,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             <Icon className="size-4" />
             <span className="flex-1">{item.label}</span>
             {count > 0 ? (
-              <span className="rounded-[22px] bg-primary px-2 text-[13px] tabular-nums text-primary-foreground">
+              <span className="rounded-[8px] bg-primary px-1.5 font-[family-name:var(--font-geist-mono)] text-12 tabular-nums text-primary-foreground">
                 {count}
               </span>
             ) : null}

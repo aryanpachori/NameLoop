@@ -7,10 +7,8 @@ export function OwnerBadge({ owner, className }: { owner: Owner; className?: str
     <Badge
       variant="outline"
       className={cn(
-        "rounded-[22px] border-transparent font-medium",
-        owner === "ai"
-          ? "bg-ai text-ai-foreground"
-          : "bg-human text-human-foreground",
+        "rounded-[8px] border-transparent text-12 font-medium",
+        owner === "ai" ? "bg-ai text-ai-foreground" : "bg-human text-human-foreground",
         className
       )}
     >

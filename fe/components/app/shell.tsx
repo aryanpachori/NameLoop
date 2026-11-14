@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { MODEL_LABELS } from "@/lib/labels";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Logo } from "@/components/logo";
@@ -20,7 +23,7 @@ import { toast } from "sonner";
 function KillSwitch() {
   const { state, toggleKillSwitch } = useWorkspace();
   return (
-    <div className="flex items-center justify-between gap-4 rounded-[14px] border border-sidebar-border bg-sidebar-accent px-4 py-2">
+    <div className="flex items-center justify-between gap-4 rounded-[12px] border border-sidebar-border bg-sidebar-accent px-3 py-2">
       <div>
         <p className="text-[14px] font-medium text-sidebar-foreground">Kill switch</p>
         <p className="text-[14px] text-muted-foreground">Pause all automation</p>
@@ -37,21 +40,77 @@ function KillSwitch() {
   );
 }
 
+function TenantSwitcher() {
+  const { tenantList, activeTenantId, switchTenant } = useWorkspace();
+  const [open, setOpen] = useState(false);
+  const active = tenantList.find((tenant) => tenant.id === activeTenantId) ?? tenantList[0];
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        onClick={() => setOpen((value) => !value)}
+        className="flex w-full items-center justify-between gap-2 rounded-[8px] border border-sidebar-border bg-card px-2.5 py-2 text-left transition-colors duration-150 ease-out hover:bg-sidebar-accent"
+      >
+        <span className="min-w-0">
+          <span className="block truncate text-14 font-medium text-sidebar-foreground">
+            {active?.name}
+          </span>
+          <span className="block font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+            {active ? MODEL_LABELS[active.businessModel] : ""}
+          </span>
+        </span>
+        <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
+      </button>
+      {open ? (
+        <ul
+          role="listbox"
+          className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-[8px] border border-border bg-popover p-1"
+        >
+          {tenantList.map((tenant) => (
+            <li key={tenant.id}>
+              <button
+                type="button"
+                role="option"
+                aria-selected={tenant.id === activeTenantId}
+                onClick={() => {
+                  switchTenant(tenant.id);
+                  setOpen(false);
+                  toast.message(`Switched to ${tenant.name}`);
+                }}
+                className={cn(
+                  "flex w-full items-center justify-between gap-2 rounded-[6px] px-2 py-1.5 text-left hover:bg-muted"
+                )}
+              >
+                <span className="min-w-0">
+                  <span className="block truncate text-14">{tenant.name}</span>
+                  <span className="block font-[family-name:var(--font-geist-mono)] text-12 text-muted-foreground">
+                    {MODEL_LABELS[tenant.businessModel]}
+                  </span>
+                </span>
+                {tenant.id === activeTenantId ? <Check className="size-4" /> : null}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
 function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
-  const { state } = useWorkspace();
   return (
     <>
       <Link href="/" className="px-1 text-[14px] text-sidebar-foreground" onClick={onNavigate}>
         <Logo />
       </Link>
-      <p className="px-1 text-[14px] text-muted-foreground">
-        {state.tenant.name}
-      </p>
+      <TenantSwitcher />
       <NavLinks onNavigate={onNavigate} />
       <div className="mt-auto space-y-4">
         <KillSwitch />
-        <p className="px-1 text-[14px] leading-relaxed text-muted-foreground text-pretty">
-          Draft-only. Nothing sends until you approve it.
+        <p className="px-1 text-13 leading-relaxed text-muted-foreground text-pretty">
+          Approvals are required until you trust autopilot. <span className="font-[family-name:var(--font-geist-mono)]">⌘K</span> to jump anywhere.
         </p>
       </div>
     </>
@@ -81,12 +140,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Menu />
             </Button>
             <p className="text-[14px] text-muted-foreground">
-              Queue age <span className="tabular-nums text-foreground">{oldestHours}h</span>
+              {state.tenant.name} · queue age <span className="tabular-nums text-foreground">{oldestHours}h</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
             <span
-              className={`rounded-[14px] px-2 py-1 text-[14px] ${
+              className={`rounded-[8px] px-2 py-1 text-13 ${
                 state.tenant.domainHealth === "healthy"
                   ? "bg-muted text-foreground"
                   : "bg-destructive text-primary-foreground"
@@ -94,7 +153,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               Domain {state.tenant.domainHealth}
             </span>
-            <span className="hidden rounded-[14px] bg-card px-2 py-1 text-[14px] tabular-nums ring-1 ring-border sm:inline">
+            <span className="hidden rounded-[8px] bg-card px-2 py-1 font-[family-name:var(--font-geist-mono)] text-12 tabular-nums ring-1 ring-border sm:inline">
               {state.tenant.usedSends}/{state.tenant.sendingCap} drafts
             </span>
           </div>
@@ -105,7 +164,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         ) : null}
         <Separator className="sr-only" />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
+        <main id="main" tabIndex={-1} className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
       </div>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-72 bg-sidebar text-sidebar-foreground">

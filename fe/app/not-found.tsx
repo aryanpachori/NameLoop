@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
-      <main className="flex flex-1 flex-col items-center justify-center px-4 py-24 text-center">
+      <main id="main" tabIndex={-1} className="flex flex-1 flex-col items-center justify-center px-4 py-24 text-center">
         <h1 className="heading-1">This page is not here.</h1>
         <p className="mt-4 max-w-md text-[16px] text-muted-foreground">
           Try the homepage, pricing, or the waitlist.
