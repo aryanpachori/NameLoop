@@ -27,42 +27,50 @@ export type LoopChapter = {
 };
 
 export const homeMeta = {
-  title: "NameLoop. GTM that gets smarter each cycle",
+  title: "NameLoop. Bring meetings in.",
   description:
-    "Paste your product URL. We help figure out who to sell to, where they hang out, and what to say. Nothing sends until you approve.",
+    "Paste your product URL. Figure out who to sell to, grow inbound where they hang out, and pull meetings in. Nothing goes live until you say so.",
 };
 
+/** Short outcome headline (Ramp / Mercury / Sunset pattern). */
 export const homeHero = {
-  eyebrow: "GTM help · not another spammy AI SDR",
-  line1: "Stop guessing who to sell to.",
-  accentWords: ["who"],
-  line2: "We find them. You approve every send.",
-  body: "Drop your product URL. We sketch who might buy, where to show up, and what to say. Then we wait. You fill in the rest once you're inside.",
-  micro: "Early access · takes about a minute.",
+  eyebrow: "Early access",
+  line1: "Bring meetings in.",
+  accentWords: ["meetings"],
+  line2: "Without the spammy AI SDR.",
+  body: "Paste your product URL. We sketch who might buy, where to grow organically, and what to post. You approve every draft. Outreach is optional.",
+  micro: "About a minute to start.",
   pricingLink: "See pricing",
 };
 
+/** Thin proof strip — real product facts, no fake logo wall. */
+export const homeTrust = [
+  "Nothing goes live without you",
+  "Inbound and organic first",
+  "Meetings are the point",
+] as const;
+
 export const homeVs = {
-  eyebrow: "Why this isn't another AI SDR",
-  headline: "Most tools just send more. We start earlier.",
+  eyebrow: "Not another AI SDR",
+  headline: "Most tools spray outbound. We build inbound.",
   support:
-    "Figure out who's worth talking to, where they actually are, and what to say. You stay in the loop until you trust it.",
+    "Sharp customer first. Show up where they already are. Book the meeting. Cold send when you want it, not by default.",
   rows: [
     {
       label: "AI SDRs",
-      copy: "They blast the inbox first and ask questions later. Volume over judgment.",
+      copy: "Inbox first, questions later. Volume over judgment.",
       tag: "Skip",
       accent: false,
     },
     {
       label: "Sequencers",
-      copy: "Fine if you already have the list and the channel. They just run the cadence.",
+      copy: "Fine if you already have the list. They just run the cadence.",
       tag: "Skip",
       accent: false,
     },
     {
       label: "NameLoop",
-      copy: "We find who and where. You approve every draft. What works feeds the next round.",
+      copy: "Who → where they hang out → posts that pull people in. You approve. Meetings show up.",
       tag: "This",
       accent: true,
     },
@@ -71,13 +79,13 @@ export const homeVs = {
 
 export const homeLoop = {
   eyebrow: "How it runs",
-  headline: "Three moves. Each pass gets a little sharper.",
+  headline: "Three moves. Each pass pulls harder.",
   chapters: [
     {
       n: "01",
       title: "Who",
       kicker: "Your customer",
-      copy: "We read your site and sketch who might buy. Real traits, real pains, a reason to talk now. Not a vague persona slide.",
+      copy: "We read your site and sketch who might buy. Niche over vague. A real reason to talk now.",
       channels: ["linkedin", "email"],
       card: {
         eyebrow: "ICP · draft",
@@ -90,32 +98,32 @@ export const homeLoop = {
     {
       n: "02",
       title: "Where",
-      kicker: "Channels",
-      copy: "Places ranked for that customer and how you sell. Drafts land in one inbox. Nothing posts until you say go.",
-      channels: ["email", "linkedin", "reddit", "x"],
+      kicker: "Inbound first",
+      copy: "Organic and social ranked for that customer. Drafts wait in one inbox. Cold outbound is optional.",
+      channels: ["linkedin", "x", "reddit", "email"],
       card: {
         eyebrow: "Ranked for you",
         title: "",
         detail: "",
         scores: [
-          { id: "email", score: 88 },
-          { id: "linkedin", score: 81 },
-          { id: "reddit", score: 46 },
+          { id: "linkedin", score: 91 },
+          { id: "reddit", score: 74 },
+          { id: "email", score: 52 },
         ],
       },
     },
     {
       n: "03",
-      title: "What worked",
-      kicker: "Next cycle",
-      copy: "Replies and posts tell you what stuck. Keep doing that. Put a little budget behind winners when it feels real.",
+      title: "Meetings",
+      kicker: "What worked",
+      copy: "See what pulled people in. Keep that. Book the meetings. Boost winners when it feels real.",
       channels: ["linkedin", "meta_ads", "google_ads"],
       card: {
-        eyebrow: "Boost · estimate",
+        eyebrow: "From a post",
         title: "Month-end close checklist",
-        detail: "Top organic · LinkedIn",
-        bigNumber: "$420–680",
-        footerRight: "You approve before it runs.",
+        detail: "Top organic · LinkedIn → 3 meetings booked",
+        bigNumber: "3 meets",
+        footerRight: "You approve before anything boosts.",
       },
     },
   ] satisfies LoopChapter[],
@@ -124,36 +132,36 @@ export const homeLoop = {
 export const homeFaq = {
   eyebrow: "FAQ",
   headline: "Quick answers.",
-  support: "Still figuring it out? Start with a URL. We'll ask what we need after you're in.",
+  support: "Still figuring it out? Start with a URL.",
   items: [
     {
+      q: "Is this mostly cold outbound?",
+      a: "Nope. Inbound first: organic social and content that bring people to you, then meetings. Outreach exists if you need it.",
+    },
+    {
       q: "How is this different from an AI SDR?",
-      a: "Those tools optimize for sending a lot, on their own. We start earlier: who's worth selling to, which channels fit, and drafts you approve. Autopilot is optional, after you trust a channel.",
+      a: "Those tools optimize for sending a lot alone. We start with who and where, draft what you post, and nothing goes live until you say so.",
     },
     {
       q: "What does the AI actually do?",
-      a: "It reads your site, proposes ICPs, ranks channels, and drafts posts and outreach. Nothing sends until you say so.",
+      a: "Reads your site, proposes ICPs, ranks channels, drafts posts and outreach. You stay in the loop.",
     },
     {
-      q: "Do I need a finished GTM plan first?",
-      a: "Nope. Paste a URL and start. Business model and the rest get asked inside the product.",
-    },
-    {
-      q: "Is this only for B2B?",
-      a: "Nope. B2B, B2C, D2C, marketplace. The ICP and channels shift with the model you pick.",
+      q: "Do I need a GTM plan first?",
+      a: "Nope. Paste a URL and start. We ask the rest inside.",
     },
   ] satisfies FaqItem[],
 };
 
 export const homeClose = {
   eyebrow: "Early access",
-  headline: "Paste a URL and hop in. We'll ask the rest inside.",
-  support: "We draft who to sell to and where to show up. You approve every send until you trust the channel.",
+  headline: "Paste a URL. Hop in.",
+  support: "We sketch who, where, and what to say. You approve. Meetings are the goal.",
   primaryCta: "Get started",
   secondaryCta: "See pricing",
 };
 
 export const homeFooter = {
   blurb:
-    "Help figuring out who to sell to, where they are, and what to do next. Not another AI that emails people without you.",
+    "Inbound GTM that brings meetings in. Not another AI that cold-emails people without you.",
 };

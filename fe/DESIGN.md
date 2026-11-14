@@ -7,7 +7,7 @@ Batch 1 foundation. Editorial product UI. Calm, dense where it matters. Not an A
 1. **Ink on paper.** Dark is the product and marketing default. Light remains available in-app.
 2. **One accent.** Used for focus, active nav, and rare emphasis. Never gradients, orbs, or glow.
 3. **Hairlines over shadows.** 1px borders. Elevation is rare and quiet.
-4. **Type does the work.** Geist for UI. Instrument Serif for marketing headlines and big numbers.
+4. **Type does the work.** Geist for UI. Source Serif 4 (600) for marketing headlines and big numbers. Avoid hairline display faces on dark.
 5. **States are semantic.** Color means status, not decoration.
 6. **Channels are marks.** Monochrome glyphs. No colorful brand kits in product chrome.
 
@@ -33,9 +33,9 @@ Batch 1 foundation. Editorial product UI. Calm, dense where it matters. Not an A
 | `text-40` | 40 | 44 | -0.03em | Marketing H2 / big stats |
 | `text-64` | 64 | 68 | -0.04em | Marketing H1 |
 
-- **Geist Sans** — product UI and marketing body
+- **Geist Sans** — product UI and marketing body (500 for marketing ledes where set)
 - **Geist Mono** — numbers, IDs, timestamps, caps, sparkline labels
-- **Instrument Serif** — marketing H1/H2 and large display numbers (italic for accent)
+- **Source Serif 4** — marketing H1/H2 and large display numbers at weight 600 (italic for accent). Prefer real medium/semibold cuts over thin 400 display faces.
 
 ## Color
 

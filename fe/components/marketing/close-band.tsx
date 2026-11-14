@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/button-link";
 import { Reveal } from "@/components/marketing/reveal";
-import { homeClose } from "@/lib/home-copy";
+import { homeClose, homeTrust } from "@/lib/home-copy";
 
 export function CloseBand() {
   return (
@@ -16,6 +16,16 @@ export function CloseBand() {
               <p className="mt-4 max-w-md text-[15px] leading-6 text-muted-foreground text-pretty">
                 {homeClose.support}
               </p>
+              <ul className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
+                {homeTrust.map((item) => (
+                  <li
+                    key={item}
+                    className="text-[13px] font-medium tracking-tight text-muted-foreground"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="flex flex-wrap items-center gap-3 lg:justify-end">
               <ButtonLink href="/signup" size="lg" className="h-11 px-5">

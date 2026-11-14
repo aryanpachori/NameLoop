@@ -38,16 +38,12 @@ export default function HomePage() {
                   accentWords={homeHero.accentWords}
                   stagger={0.05}
                 />
-                <WordReveal
-                  instant
-                  className="mt-2 block text-[0.7em] leading-[1.12] tracking-[-0.03em] text-muted-foreground"
-                  text={homeHero.line2}
-                  baseDelay={0.28}
-                  stagger={0.045}
-                />
+                <span className="mt-3 block max-w-md font-sans text-[20px] font-medium leading-snug tracking-tight text-muted-foreground sm:text-[22px]">
+                  {homeHero.line2}
+                </span>
               </h1>
               <Reveal instant delay={2}>
-                <p className="mt-6 max-w-md text-[16px] leading-7 text-muted-foreground text-pretty">
+                <p className="mt-6 max-w-md text-[16px] font-medium leading-7 text-muted-foreground text-pretty">
                   {homeHero.body}
                 </p>
                 <HeroUrlForm className="mt-8" />

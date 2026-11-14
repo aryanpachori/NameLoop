@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/marketing/site-header";
 export const metadata: Metadata = {
   title: "Pricing. NameLoop",
   description:
-    "Starter, Growth and Scale. Limits by channels, posts, outreach sends and seats. Ad spend is billed by the ad platform.",
+    "Simple plans for inbound GTM. Channels, posts, and seats. Ad spend stays on the platforms you already use.",
 };
 
 export default function PricingPage() {
