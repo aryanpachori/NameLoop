@@ -89,6 +89,9 @@ type IconSprite = {
   speed: number;
   phase: number;
   bob: number;
+  baseScale: number;
+  baseOpacity: number;
+  flashUntil: number;
 };
 
 /**
@@ -199,26 +202,32 @@ export function HeroGridWebgl({ className }: { className?: string }) {
       CHANNEL_PATHS.forEach((ch, i) => {
         const tex = makeChannelTexture(THREE.CanvasTexture, ch.d, iconFill, iconDisc);
         iconTextures.push(tex);
+        const baseOpacity = isDark ? 0.92 : 0.78;
         const mat = new THREE.SpriteMaterial({
           map: tex,
           transparent: true,
-          opacity: isDark ? 0.92 : 0.78,
+          opacity: baseOpacity,
           depthWrite: false,
           depthTest: true,
+          color: 0xffffff,
         });
         iconMats.push(mat);
         const sprite = new THREE.Sprite(mat);
         const scale = 0.55 + (i % 3) * 0.08;
         sprite.scale.set(scale, scale, 1);
+        sprite.userData.channelId = ch.id;
         iconGroup.add(sprite);
         icons.push({
           sprite,
           orbit: (i / CHANNEL_PATHS.length) * Math.PI * 2,
           radius: 3.4 + (i % 4) * 0.55,
-            height: ((i % 5) - 1.5) * 0.45,
+          height: ((i % 5) - 1.5) * 0.45,
           speed: 0.12 + (i % 3) * 0.03,
           phase: i * 0.7,
           bob: 0.18 + (i % 2) * 0.08,
+          baseScale: scale,
+          baseOpacity,
+          flashUntil: 0,
         });
       });
 
@@ -252,7 +261,7 @@ export function HeroGridWebgl({ className }: { className?: string }) {
       });
       scene.add(grid);
 
-      const placeIcons = (elapsed: number) => {
+      const placeIcons = (elapsed: number, nowMs: number) => {
         icons.forEach((icon) => {
           const a = icon.orbit + elapsed * icon.speed;
           icon.sprite.position.set(
@@ -260,19 +269,64 @@ export function HeroGridWebgl({ className }: { className?: string }) {
             icon.height + Math.sin(elapsed * 0.7 + icon.phase) * icon.bob,
             Math.sin(a) * icon.radius
           );
+
+          const mat = icon.sprite.material as SpriteMaterial;
+          const flashing = icon.flashUntil > nowMs;
+          if (flashing) {
+            const t = 1 - (icon.flashUntil - nowMs) / 900;
+            const pulse = 1 + Math.sin(t * Math.PI) * 0.28;
+            mat.color.setHex(accent);
+            mat.opacity = 1;
+            icon.sprite.scale.set(icon.baseScale * pulse, icon.baseScale * pulse, 1);
+          } else if (icon.flashUntil !== 0) {
+            icon.flashUntil = 0;
+            mat.color.setHex(0xffffff);
+            mat.opacity = icon.baseOpacity;
+            icon.sprite.scale.set(icon.baseScale, icon.baseScale, 1);
+          }
         });
       };
-      placeIcons(0);
+      placeIcons(0, performance.now());
 
       let pointerX = 0;
       let pointerY = 0;
       let targetX = 0;
       let targetY = 0;
 
+      const raycaster = new THREE.Raycaster();
+      const pointerNdc = new THREE.Vector2();
+
       const onPointer = (event: PointerEvent) => {
         const rect = canvas.getBoundingClientRect();
         targetX = ((event.clientX - rect.left) / rect.width - 0.5) * 0.55;
         targetY = ((event.clientY - rect.top) / rect.height - 0.5) * 0.35;
+      };
+
+      const onPointerDown = (event: PointerEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        pointerNdc.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        pointerNdc.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(pointerNdc, camera);
+        const hits = raycaster.intersectObjects(
+          icons.map((icon) => icon.sprite),
+          false
+        );
+        if (!hits.length) return;
+        const hit = hits[0].object;
+        const icon = icons.find((row) => row.sprite === hit);
+        if (!icon) return;
+        icon.flashUntil = performance.now() + 900;
+        if (reduce) {
+          const flashLoop = (t: number) => {
+            if (disposed) return;
+            placeIcons(0, t);
+            renderer.render(scene, camera);
+            if (icons.some((row) => row.flashUntil > t)) {
+              requestAnimationFrame(flashLoop);
+            }
+          };
+          requestAnimationFrame(flashLoop);
+        }
       };
 
       const resize = () => {
@@ -288,6 +342,7 @@ export function HeroGridWebgl({ className }: { className?: string }) {
 
       resize();
       window.addEventListener("resize", resize);
+      canvas.addEventListener("pointerdown", onPointerDown);
       if (!reduce) canvas.addEventListener("pointermove", onPointer, { passive: true });
 
       const start = performance.now();
@@ -302,7 +357,7 @@ export function HeroGridWebgl({ className }: { className?: string }) {
           root.rotation.x = Math.sin(elapsed * 0.2) * 0.08;
           ringLines.rotation.z = elapsed * 0.15;
           ring2.rotation.z = -elapsed * 0.1;
-          placeIcons(elapsed);
+          placeIcons(elapsed, t);
 
           pointerX += (targetX - pointerX) * 0.04;
           pointerY += (targetY - pointerY) * 0.04;
@@ -316,6 +371,8 @@ export function HeroGridWebgl({ className }: { className?: string }) {
             rainAttr.setY(i, y);
           }
           rainAttr.needsUpdate = true;
+        } else {
+          placeIcons(0, t);
         }
 
         renderer.render(scene, camera);
@@ -338,6 +395,7 @@ export function HeroGridWebgl({ className }: { className?: string }) {
         cancelAnimationFrame(raf);
         window.removeEventListener("resize", resize);
         canvas.removeEventListener("pointermove", onPointer);
+        canvas.removeEventListener("pointerdown", onPointerDown);
         disposeObj(shellLines);
         disposeObj(ringLines);
         disposeObj(ring2);
@@ -366,7 +424,10 @@ export function HeroGridWebgl({ className }: { className?: string }) {
       className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}
       aria-hidden="true"
     >
-      <canvas ref={canvasRef} className="h-full w-full opacity-95" />
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-auto h-full w-full cursor-pointer opacity-95"
+      />
       {/* Soft edge washes so the field sits in its column */}
       <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent" />
       <div className="absolute inset-x-0 top-0 h-12 bg-background/50" />

@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 /**
  * Animated infinity mark for NameLoop.
  * Continuous stroke flow — calm, no glow. Static under reduced motion.
- * Styles are local so they aren't dropped by CSS bundling.
  */
 export function LoopMark({
   className,
