@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { LoopMark } from "@/components/loop-mark";
 import { cn } from "@/lib/utils";
 
 export function Logo({
@@ -12,16 +12,13 @@ export function Logo({
 }) {
   if (stacked) {
     return (
-      <span className={cn("inline-flex items-center gap-2.5 text-[22px] font-semibold tracking-tight text-current", className)}>
-        <Image
-          src="/logo-mark.png"
-          alt=""
-          width={72}
-          height={40}
-          className="h-9 w-auto object-contain"
-          priority
-          unoptimized
-        />
+      <span
+        className={cn(
+          "inline-flex items-center gap-2.5 text-[22px] font-semibold tracking-tight text-current",
+          className
+        )}
+      >
+        <LoopMark size={40} />
         <span>
           Name<span className="text-brand">Loop</span>
         </span>
@@ -30,16 +27,13 @@ export function Logo({
   }
 
   return (
-    <span className={cn("inline-flex items-center gap-2 text-[15px] font-semibold tracking-tight text-current", className)}>
-      <Image
-        src="/logo-mark.png"
-        alt=""
-        width={48}
-        height={28}
-        className="h-6 w-auto object-contain"
-        priority
-        unoptimized
-      />
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 text-[15px] font-semibold tracking-tight text-current",
+        className
+      )}
+    >
+      <LoopMark size={28} />
       {markOnly ? (
         <span className="sr-only">NameLoop</span>
       ) : (
