@@ -15,8 +15,18 @@ cp .env.example .env   # or use existing .env
 Apply schema (optional — app also `create_all` on boot):
 
 ```bash
-python -m scripts.init_db
+python scripts/init_db.py
 ```
+
+### Render + Supabase
+
+Render cannot reach Supabase **direct** DB (`db.*.supabase.co`) over IPv6.
+On Render, set `DATABASE_URL` to the **Session pooler** string from
+Supabase → **Connect** → **Session pooler** (host like `aws-0-….pooler.supabase.com`,
+user `postgres.<project-ref>`, port `5432`, add `?sslmode=require`).
+
+Primary URL after deploy: `https://nameloop-a58q.onrender.com`  
+Health: `/health` · Docs: `/docs`
 
 Run:
 

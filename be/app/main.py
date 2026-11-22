@@ -40,3 +40,12 @@ app.include_router(brain.router, prefix=settings.api_prefix)
 app.include_router(accounts.router, prefix=settings.api_prefix)
 app.include_router(drafts.router, prefix=settings.api_prefix)
 app.include_router(approvals.router, prefix=settings.api_prefix)
+
+
+@app.get("/")
+def root() -> dict[str, str]:
+    return {
+        "service": "nameloop",
+        "docs": "/docs",
+        "health": "/health",
+    }
