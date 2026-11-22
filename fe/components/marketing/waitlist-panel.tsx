@@ -33,9 +33,7 @@ export function WaitlistPanel({ initialEmail = "", onBack }: Props) {
         <p className="text-14 text-muted-foreground text-pretty">
           We’ll email{" "}
           <span className="font-mono text-foreground">{spot.email}</span> when a
-          spot opens. You’re roughly{" "}
-          <span className="tabular-nums text-foreground">#{spot.position}</span> in
-          line.
+          spot opens.
         </p>
         {onBack ? (
           <button
