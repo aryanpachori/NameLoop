@@ -20,7 +20,7 @@ export function AuthBrandPanel({
   headline,
   accentWords = ["meetings"],
   body,
-  footer = "Nothing goes live until you approve.",
+  footer = "You approve what goes out.",
   pathway = DEFAULT_PATHWAY,
 }: {
   headline: string;

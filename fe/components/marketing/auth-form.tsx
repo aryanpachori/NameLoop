@@ -57,7 +57,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [resendIn, setResendIn] = useState(0);
 
-  const productUrl = params.get("url") ?? "";
+  const productUrl = params.get("url");
   const authError = params.get("error");
 
   useEffect(() => {
@@ -166,10 +166,8 @@ export function AuthForm({ mode, onModeChange }: Props) {
 
       {sentTo ? (
         <div className="surface space-y-3 p-5">
-          <p className="text-14 font-medium">Check your inbox</p>
           <p className="text-14 text-muted-foreground">
-            We sent a link to{" "}
-            <span className="font-mono text-foreground">{sentTo}</span>. Open it on this device.
+            Link sent to <span className="font-mono text-foreground">{sentTo}</span>
           </p>
           <Button
             type="button"
@@ -178,14 +176,14 @@ export function AuthForm({ mode, onModeChange }: Props) {
             disabled={resendIn > 0 || busy === "magic"}
             onClick={() => sendMagicLink()}
           >
-            {resendIn > 0 ? `Resend in ${resendIn}s` : busy === "magic" ? "Sending…" : "Resend link"}
+            {resendIn > 0 ? `Resend in ${resendIn}s` : busy === "magic" ? "Sending…" : "Resend"}
           </Button>
           <button
             type="button"
             className="text-13 text-muted-foreground underline underline-offset-4"
             onClick={() => setSentTo(null)}
           >
-            Use a different email
+            Different email
           </button>
         </div>
       ) : (
@@ -199,7 +197,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
             onClick={continueGoogle}
           >
             <GoogleMark />
-            {busy === "google" ? "Redirecting…" : "Continue with Google"}
+            {busy === "google" ? "Opening Google…" : "Google"}
           </Button>
 
           <div className="flex items-center gap-3 text-12 text-muted-foreground">
@@ -210,7 +208,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
 
           <form className="space-y-3" onSubmit={sendMagicLink}>
             <div className="space-y-2">
-              <Label htmlFor="email">Work email</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 ref={emailRef}
                 id="email"
@@ -224,12 +222,9 @@ export function AuthForm({ mode, onModeChange }: Props) {
                 onChange={(ev) => setEmail(ev.target.value)}
                 required
               />
-              <p className="text-12 text-muted-foreground">
-                We’ll email a magic link. No password to remember.
-              </p>
             </div>
             <Button type="submit" size="lg" className="w-full" disabled={busy !== null}>
-              {busy === "magic" ? "Sending…" : "Email me a link"}
+              {busy === "magic" ? "Sending…" : "Email link"}
             </Button>
           </form>
         </div>
@@ -238,18 +233,18 @@ export function AuthForm({ mode, onModeChange }: Props) {
       <p className="text-13 text-muted-foreground">
         {mode === "signin" ? (
           <>
-            New here?{" "}
+            No account?{" "}
             <button
               type="button"
               className="text-foreground underline underline-offset-4"
               onClick={() => onModeChange("signup")}
             >
-              Create an account
+              Create one
             </button>
           </>
         ) : (
           <>
-            Already have an account?{" "}
+            Have an account?{" "}
             <button
               type="button"
               className="text-foreground underline underline-offset-4"
@@ -264,13 +259,6 @@ export function AuthForm({ mode, onModeChange }: Props) {
           Home
         </Link>
       </p>
-
-      {productUrl ? (
-        <p className="text-12 text-muted-foreground">
-          After sign-in we’ll open onboarding with{" "}
-          <span className="font-mono text-foreground">{productUrl}</span>.
-        </p>
-      ) : null}
     </div>
   );
 }

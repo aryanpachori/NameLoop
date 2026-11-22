@@ -48,7 +48,7 @@ export const homeMeta = {
     "How NameLoop works: paste your URL, choose who you sell to, approve outreach and posts, then see what booked meetings and what to run next week.",
   loginTitle: "Sign in",
   loginDescription:
-    "Sign in to NameLoop with Google or a magic link. Run outbound that books and inbound that compounds — without a GTM team.",
+    "Sign in to NameLoop. Outbound that books. Inbound that compounds.",
 };
 
 export const homeHero = {

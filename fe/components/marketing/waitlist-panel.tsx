@@ -57,7 +57,7 @@ export function WaitlistPanel({ initialEmail = "", onBack }: Props) {
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="waitlist-email">Work email</Label>
+        <Label htmlFor="waitlist-email">Email</Label>
         <Input
           id="waitlist-email"
           type="email"

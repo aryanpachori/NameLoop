@@ -16,15 +16,13 @@ function LoginInner() {
     <div className="grid min-h-dvh bg-background text-foreground lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
       <AuthBrandPanel
         headline={
-          mode === "signup"
-            ? "Grow your product. Start with a URL."
-            : "Welcome back. Pick up the growth loop."
+          mode === "signup" ? "Grow your product." : "Welcome back."
         }
-        accentWords={mode === "signup" ? ["product."] : ["loop."]}
+        accentWords={mode === "signup" ? ["product."] : ["back."]}
         body={
           mode === "signup"
-            ? "Continue with Google or a magic link. Then paste your site — we sketch who to sell to."
-            : "Outbound that books. Inbound that compounds. No GTM team required."
+            ? "Outbound that books. Inbound that compounds."
+            : "Pick up where you left off."
         }
       />
 
@@ -39,15 +37,9 @@ function LoginInner() {
           </Link>
 
           <div className="auth-form-fade" style={{ animationDelay: "0.05s" }}>
-            <p className="text-13 font-medium text-brand">
-              {mode === "signup" ? "Get started" : "Welcome back"}
-            </p>
-            <h2 className="heading-1 mt-2">
-              {mode === "signup" ? "Create your account" : "Sign in to NameLoop"}
+            <h2 className="heading-1">
+              {mode === "signup" ? "Create account" : "Sign in"}
             </h2>
-            <p className="mt-2 text-14 text-muted-foreground">
-              Google first. Or email a magic link — no password.
-            </p>
           </div>
 
           <div className="mt-8 auth-form-fade" style={{ animationDelay: "0.15s" }}>
