@@ -119,7 +119,19 @@ export function AuthForm({ mode, onModeChange }: Props) {
       setSentTo(value);
       setResendIn(30);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not send link");
+      const raw = err instanceof Error ? err.message : "Could not send link";
+      const lower = raw.toLowerCase();
+      if (lower.includes("rate limit") || lower.includes("over_email")) {
+        setError(
+          "Email limit hit on Supabase’s free mailer (2/hour). Wait ~30–60 min, or use Google for now."
+        );
+      } else if (lower.includes("not authorized")) {
+        setError(
+          "That address can’t get mail from Supabase’s free sender. Use Google, or add custom SMTP."
+        );
+      } else {
+        setError(raw);
+      }
     } finally {
       setBusy(null);
     }
