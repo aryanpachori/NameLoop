@@ -295,6 +295,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
               spellCheck={false}
               placeholder="you@company.com"
               value={email}
+              className="h-11 px-3.5"
               aria-invalid={emailInvalid || undefined}
               aria-describedby={emailInvalid ? "email-error" : undefined}
               onChange={(ev) => {
@@ -326,6 +327,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
               autoComplete={mode === "signup" ? "new-password" : "current-password"}
               placeholder="••••••••"
               value={password}
+              className="h-11 px-3.5"
               aria-invalid={passwordInvalid || undefined}
               aria-describedby={passwordInvalid ? "password-error" : undefined}
               onChange={(ev) => {
@@ -368,6 +370,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
                 autoComplete="new-password"
                 placeholder="••••••••"
                 value={confirm}
+                className="h-11 px-3.5"
                 aria-invalid={confirmInvalid || undefined}
                 aria-describedby={confirmInvalid ? "confirm-error" : undefined}
                 onChange={(ev) => {

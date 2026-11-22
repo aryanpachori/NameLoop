@@ -33,7 +33,7 @@ export function HeroUrlForm({ className }: { className?: string }) {
         placeholder="yourproduct.com…"
         value={url}
         onChange={(event) => setUrl(event.target.value)}
-        className="h-11 flex-1 bg-card px-3.5 text-16 md:text-15"
+        className="h-11 w-full bg-card px-3.5 text-16 sm:flex-1 md:text-15"
       />
       <Button type="submit" size="lg" className="h-11 w-full px-5 sm:w-auto">
         Get started

@@ -127,34 +127,37 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <SidebarBody />
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b border-border bg-background px-4 pt-[env(safe-area-inset-top)]">
-          <div className="flex items-center gap-2">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border bg-background px-4 pt-[env(safe-area-inset-top)] sm:gap-4">
+          <div className="flex min-w-0 items-center gap-2">
             <Button
               variant="ghost"
               size="icon-sm"
-              className="lg:hidden"
+              className="shrink-0 lg:hidden"
               aria-label="Open menu"
               onClick={() => setOpen(true)}
             >
               <Menu />
             </Button>
-            <p className="text-14 text-muted-foreground">
+            <p className="truncate text-14 text-muted-foreground">
               <span className="font-medium text-foreground">{state.tenant.name}</span>
               {state.brief.sprintProgress ? (
                 <> · <span className="tabular-nums">{state.brief.sprintProgress}</span></>
               ) : null}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <span
               className={cn(
-                "rounded-[8px] px-2 py-1 text-13",
+                "rounded-[8px] px-2 py-1 text-12 sm:text-13",
                 state.tenant.domainHealth === "healthy"
                   ? "bg-muted text-foreground"
                   : "bg-destructive text-destructive-foreground"
               )}
             >
-              Domain {state.tenant.domainHealth}
+              <span className="sm:hidden">
+                {state.tenant.domainHealth === "healthy" ? "OK" : "Risk"}
+              </span>
+              <span className="hidden sm:inline">Domain {state.tenant.domainHealth}</span>
             </span>
             <span className="hidden rounded-[8px] bg-card px-2 py-1 font-mono text-12 tabular-nums ring-1 ring-border sm:inline">
               {state.gtm.usedToday}/{state.gtm.hardDailyCap} sends

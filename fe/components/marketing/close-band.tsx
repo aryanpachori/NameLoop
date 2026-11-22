@@ -10,7 +10,7 @@ export function CloseBand() {
       <div className="paper-grain-overlay" aria-hidden="true" />
       <div className="cta-atmosphere" aria-hidden="true" />
 
-      <div className="marketing-shell relative z-[1] py-20 lg:py-28">
+      <div className="marketing-shell relative z-[1] py-14 sm:py-20 lg:py-28">
         <Reveal>
           {/* Eyebrow */}
           <p className="section-eyebrow">{homeClose.eyebrow}</p>

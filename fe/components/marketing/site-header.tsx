@@ -29,7 +29,7 @@ export function SiteHeader() {
               href={link.href}
               aria-current={path === link.href ? "page" : undefined}
               className={cn(
-                "rounded-[8px] px-2.5 py-1.5 transition-colors duration-150 hover:bg-muted hover:text-foreground sm:px-3",
+                "inline-flex min-h-10 items-center rounded-[8px] px-3 py-2 transition-colors duration-150 hover:bg-muted hover:text-foreground sm:min-h-0 sm:px-3 sm:py-1.5",
                 path === link.href && "text-foreground"
               )}
             >

@@ -29,10 +29,10 @@ function LoginInner() {
       <main
         id="main"
         tabIndex={-1}
-        className="relative flex flex-col justify-center bg-background px-4 py-10 sm:px-8 sm:py-12"
+        className="relative flex flex-col justify-center bg-background px-4 py-10 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-8 sm:py-12"
       >
         <div className="mx-auto w-full max-w-sm">
-          <Link href="/" className="mb-8 inline-block lg:hidden">
+          <Link href="/" className="mb-6 inline-block lg:hidden sm:mb-8">
             <Logo />
           </Link>
 

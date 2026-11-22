@@ -52,7 +52,12 @@ export function WordReveal({
       const outer = requestAnimationFrame(() => {
         requestAnimationFrame(show);
       });
-      return () => cancelAnimationFrame(outer);
+      // Failsafe: never leave hero words invisible if rAF is stalled
+      const failsafe = window.setTimeout(show, 400);
+      return () => {
+        cancelAnimationFrame(outer);
+        window.clearTimeout(failsafe);
+      };
     }
 
     const rect = node.getBoundingClientRect();

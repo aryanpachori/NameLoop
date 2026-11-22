@@ -308,7 +308,7 @@
 
 .heading-hero {
   font-family: var(--font-display), ui-serif, Georgia, serif;
-  font-size: clamp(2.65rem, 7vw, 4.25rem);
+  font-size: clamp(2.15rem, 8.2vw, 4.25rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.08;
@@ -370,6 +370,11 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
 }
 
 /* Subtle paper grain — dedicated overlay, never forces children to position:relative */
@@ -421,15 +426,22 @@ html {
   margin-inline: auto;
   width: 100%;
   max-width: 72rem;
-  padding-inline: 1rem;
+  padding-inline: max(1rem, env(safe-area-inset-left, 0px))
+    max(1rem, env(safe-area-inset-right, 0px));
 }
 @media (width >= 40rem) {
   .marketing-shell {
-    padding-inline: 1.5rem;
+    padding-inline: max(1.5rem, env(safe-area-inset-left, 0px))
+      max(1.5rem, env(safe-area-inset-right, 0px));
   }
 }
 @utility section-pad {
-  padding-block: 5rem;
+  padding-block: 3.5rem;
+}
+@media (width >= 40rem) {
+  .section-pad {
+    padding-block: 5rem;
+  }
 }
 @media (width >= 64rem) {
   .section-pad {

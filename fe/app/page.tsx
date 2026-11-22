@@ -37,7 +37,7 @@ export default function HomePage() {
           {/* Grain behind both columns so left/right share the same surface */}
           <div className="paper-grain-overlay !z-0" aria-hidden="true" />
           <div className="marketing-shell relative z-[1] grid lg:grid-cols-2 lg:items-stretch">
-            <div className="relative z-[1] flex flex-col justify-center bg-transparent py-20 lg:py-24 lg:pr-10">
+            <div className="relative z-[1] flex flex-col justify-center bg-transparent py-12 sm:py-16 lg:py-24 lg:pr-10">
               <Reveal instant>
                 <p className="section-eyebrow">{homeHero.eyebrow}</p>
               </Reveal>
