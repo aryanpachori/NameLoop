@@ -23,6 +23,13 @@ export const metadata: Metadata = {
   },
   description: homeMeta.description,
   applicationName: homeMeta.title,
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     title: homeMeta.absoluteTitle,
     description: homeMeta.description,
