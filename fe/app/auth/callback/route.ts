@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { API_BASE, type MeResponse } from "@/lib/api";
+import { isAllowedEmail } from "@/lib/access";
 import { resolveAuthDestination } from "@/lib/auth-session";
 import { createClient } from "@/lib/supabase/server";
 
@@ -12,6 +13,21 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const email = user?.email ?? "";
+      if (!isAllowedEmail(email)) {
+        await supabase.auth.signOut();
+        const q = new URLSearchParams({
+          waitlisted: "1",
+          error: "waitlist",
+        });
+        if (email) q.set("email", email);
+        return NextResponse.redirect(`${origin}/login?${q.toString()}`);
+      }
+
       let dest = next.startsWith("/") ? next : `/${next}`;
       try {
         const {

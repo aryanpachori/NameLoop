@@ -31,10 +31,16 @@ class Settings(BaseSettings):
     google_oauth_redirect_uri: str | None = None
 
     cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+    # Comma-separated allowlist; empty → default founder email in auth.py
+    allowed_emails: str = "aryanpachori03@gmail.com"
 
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
+    @property
+    def allowed_email_list(self) -> list[str]:
+        return [e.strip().lower() for e in self.allowed_emails.split(",") if e.strip()]
 
     @property
     def sqlalchemy_url(self) -> str:

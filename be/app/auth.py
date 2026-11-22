@@ -125,7 +125,14 @@ def get_or_create_default_tenant(db: Session, profile: Profile) -> Tenant:
 def require_user(
     user: AuthUser = Depends(get_current_user),
     db: Session = Depends(get_db),
+    settings: Settings = Depends(get_settings),
 ) -> tuple[AuthUser, Profile, Tenant]:
+    allowed = settings.allowed_email_list
+    if allowed and user.email not in allowed:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invite only — join the waitlist on nameloop.vercel.app",
+        )
     profile = ensure_profile(db, user)
     tenant = get_or_create_default_tenant(db, profile)
     return user, profile, tenant

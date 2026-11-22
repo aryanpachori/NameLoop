@@ -3,9 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { WaitlistPanel } from "@/components/marketing/waitlist-panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isAllowedEmail } from "@/lib/access";
 import { createClient, supabaseConfigured } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -28,18 +30,23 @@ export function AuthForm({ mode, onModeChange }: Props) {
   const params = useSearchParams();
   const emailRef = useRef<HTMLInputElement>(null);
 
-  const [email, setEmail] = useState("");
+  const waitlistedEmail = params.get("email") ?? "";
+  const forcedWaitlist = params.get("waitlisted") === "1";
+
+  const [email, setEmail] = useState(waitlistedEmail);
   const [busy, setBusy] = useState<"google" | "magic" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [resendIn, setResendIn] = useState(0);
+  const [showWaitlist, setShowWaitlist] = useState(forcedWaitlist);
+  const [waitlistEmail, setWaitlistEmail] = useState(waitlistedEmail);
 
   const productUrl = params.get("url") ?? "";
   const authError = params.get("error");
 
   useEffect(() => {
-    emailRef.current?.focus();
-  }, [mode]);
+    if (!showWaitlist) emailRef.current?.focus();
+  }, [mode, showWaitlist]);
 
   useEffect(() => {
     if (resendIn <= 0) return;
@@ -50,6 +57,14 @@ export function AuthForm({ mode, onModeChange }: Props) {
   function nextPath() {
     const q = productUrl ? `?url=${encodeURIComponent(productUrl)}` : "";
     return mode === "signup" ? `/onboarding${q}` : `/app`;
+  }
+
+  function openWaitlist(forEmail: string) {
+    setWaitlistEmail(forEmail.trim().toLowerCase());
+    setShowWaitlist(true);
+    setSentTo(null);
+    setError(null);
+    setBusy(null);
   }
 
   async function continueGoogle() {
@@ -79,6 +94,11 @@ export function AuthForm({ mode, onModeChange }: Props) {
     const value = email.trim().toLowerCase();
     if (!value) return;
 
+    if (!isAllowedEmail(value)) {
+      openWaitlist(value);
+      return;
+    }
+
     if (!supabaseConfigured()) {
       setError(missingSupabaseEnvMessage());
       return;
@@ -100,6 +120,25 @@ export function AuthForm({ mode, onModeChange }: Props) {
     } finally {
       setBusy(null);
     }
+  }
+
+  if (showWaitlist) {
+    return (
+      <div className="space-y-5">
+        <WaitlistPanel
+          initialEmail={waitlistEmail}
+          onBack={() => {
+            setShowWaitlist(false);
+            setWaitlistEmail("");
+          }}
+        />
+        <p className="text-13 text-muted-foreground">
+          <Link href="/" className="underline underline-offset-4">
+            Home
+          </Link>
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -137,7 +176,10 @@ export function AuthForm({ mode, onModeChange }: Props) {
 
       {(error || authError) && (
         <p className="rounded-[8px] border border-destructive/30 bg-destructive/[0.08] px-3 py-2 text-13 text-destructive">
-          {error ?? "Sign-in didn’t finish. Try again."}
+          {error ??
+            (authError === "waitlist"
+              ? "That Google account isn’t invited yet — join the waitlist below."
+              : "Sign-in didn’t finish. Try again.")}
         </p>
       )}
 
