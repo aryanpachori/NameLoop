@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { STAGE_LABELS, formatDue } from "@/lib/labels";
+import { STAGE_LABELS, TRACKER_LABELS, formatDue } from "@/lib/labels";
 import { useAccount, useWorkspace } from "@/lib/store";
 import { toast } from "sonner";
 
@@ -31,7 +31,8 @@ export default function AccountPage({
   const { id } = use(params);
   const { account, contacts, buyer, signals, touches, drafts, discovery, meeting } =
     useAccount(id);
-  const { takeOver, handBack, pauseAccount, doNotContact, wrongBuyer } = useWorkspace();
+  const { takeOver, handBack, pauseAccount, doNotContact, wrongBuyer, stopLead } =
+    useWorkspace();
   const [note, setNote] = useState("");
 
   if (!account) {
@@ -49,7 +50,15 @@ export default function AccountPage({
           <div className="flex flex-wrap items-center gap-2">
             <OwnerBadge owner={account.owner} />
             <StateBadge state={account.state} />
+            <span className="rounded-[6px] bg-muted px-2 py-0.5 text-12 font-medium">
+              {TRACKER_LABELS[account.trackerStage]}
+            </span>
             <span className="text-13 text-muted-foreground">{STAGE_LABELS[account.stage]}</span>
+            {account.sender ? (
+              <span className="font-mono text-12 capitalize text-muted-foreground">
+                via {account.sender}
+              </span>
+            ) : null}
             <span className="font-mono text-12 tabular-nums text-muted-foreground">Score {account.score}</span>
           </div>
           <p className="text-14 text-muted-foreground">
@@ -58,6 +67,16 @@ export default function AccountPage({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {account.trackerStage !== "replied" ? (
+            <Button
+              onClick={() => {
+                stopLead(account.id, "replied");
+                toast.success("Stopped — you own the reply");
+              }}
+            >
+              Stop · human reply
+            </Button>
+          ) : null}
           <Button onClick={() => { takeOver(account.id); toast.message("You own this account"); }}>
             Take over
           </Button>

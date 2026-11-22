@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChannelChip, channelLabel } from "@/components/channel-mark";
 import { EmptyState } from "@/components/empty-state";
+import { ButtonLink } from "@/components/button-link";
 import { PageHeader } from "@/components/page-header";
 import { SourceChip } from "@/components/source-chip";
 import { Badge } from "@/components/ui/badge";
@@ -66,8 +67,8 @@ export default function ChannelsPage() {
     <div className="space-y-8">
       <PageHeader
         eyebrow="Channels"
-        title="Where to run your sprint"
-        description={`Ranked for ${selectedIcp ? selectedIcp.name : "your ICP"} on a ${MODEL_LABELS[state.tenant.businessModel]} model. Channels are places to run, not pipeline stages.`}
+        title="Where the machine runs"
+        description={`Ranked for ${selectedIcp ? selectedIcp.name : "your ICP"} on a ${MODEL_LABELS[state.tenant.businessModel]} model. Connect senders here; manage caps and pause on Health / Outreach.`}
       />
 
       {recs.length === 0 ? (
@@ -178,7 +179,7 @@ export default function ChannelsPage() {
 
       {email ? (
         <section className="space-y-3">
-          <h2 className="text-20 font-semibold">Email sending</h2>
+          <h2 className="text-20 font-semibold">Email domain</h2>
           <dl className="surface grid gap-4 p-4 sm:grid-cols-4">
             <div>
               <dt className="text-12 text-muted-foreground">Sending domain</dt>
@@ -203,6 +204,42 @@ export default function ChannelsPage() {
           </dl>
         </section>
       ) : null}
+
+      <section className="space-y-3">
+        <div className="flex items-end justify-between gap-3">
+          <h2 className="text-20 font-semibold">Dual senders</h2>
+          <ButtonLink href="/app/health" variant="outline" className="h-8">
+            Open health
+          </ButtonLink>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          {state.gtm.senders.map((sender) => (
+            <div key={sender.id} className="surface space-y-2 p-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="font-medium">{sender.label}</p>
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "rounded-[8px] capitalize text-12",
+                    sender.status === "active" &&
+                      "border-transparent bg-success text-success-foreground",
+                    sender.status === "paused" &&
+                      "border-transparent bg-destructive/[0.12] text-destructive",
+                    sender.status === "warming" && "border-transparent bg-muted"
+                  )}
+                >
+                  {sender.status}
+                </Badge>
+              </div>
+              <p className="font-mono text-13 text-muted-foreground">{sender.email}</p>
+              <p className="text-13 text-muted-foreground">
+                Cap {sender.dailyCap}/day · used {sender.usedToday} · bounce{" "}
+                {(sender.bounceRate * 100).toFixed(1)}%
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

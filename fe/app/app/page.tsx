@@ -15,7 +15,10 @@ const urgencyCopy = {
 };
 
 function needsYouHref(text: string) {
-  return /reply|replies|dm|creator/i.test(text) ? "/app/outreach" : "/app/approvals";
+  if (/reply|replies|northwind|human/i.test(text)) return "/app/pipeline";
+  if (/e1|approve|harborstack|claim/i.test(text)) return "/app/approvals";
+  if (/atlas|icp|dq/i.test(text)) return "/app/pipeline";
+  return "/app/outreach";
 }
 
 function List({ items }: { items: string[] }) {
@@ -33,36 +36,49 @@ function List({ items }: { items: string[] }) {
 
 export default function TodayPage() {
   const { state } = useWorkspace();
-  const { brief, sprint } = state;
+  const { brief, gtm, accounts } = state;
   const pending = state.drafts.filter((draft) => draft.status === "pending").length;
-  const waitingPosts = sprint.posts.filter((p) => p.status === "waiting_approval").length;
+  const ready = accounts.filter((a) => a.trackerStage === "ready_to_send").length;
+  const replied = accounts.filter((a) => a.trackerStage === "replied").length;
   const dueNow = state.queue.filter((item) => item.urgency === "now").length;
+  const nextSlot = gtm.slots.find((s) => s.sent < s.planned) ?? gtm.slots[gtm.slots.length - 1];
+  const capPct = Math.round((gtm.usedToday / gtm.hardDailyCap) * 100);
 
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow={`${state.tenant.name} · morning brief`}
-        title="Good morning. Here is where the loop stands."
+        title="Good morning. Here is where the machine stands."
         description={brief.sprintProgress}
-        actions={<ButtonLink href="/app/sprint" variant="outline">Open sprint</ButtonLink>}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <ButtonLink href="/app/pipeline" variant="outline">
+              Tracker
+            </ButtonLink>
+            <ButtonLink href="/app/outreach" variant="outline">
+              Outreach
+            </ButtonLink>
+          </div>
+        }
       />
 
       <div>
         <div className="h-1.5 overflow-hidden rounded-full bg-muted">
           <div
             className="h-full bg-foreground transition-[width] duration-200 ease-out"
-            style={{ width: `${(sprint.dayOf21 / 21) * 100}%` }}
+            style={{ width: `${capPct}%` }}
           />
         </div>
         <p className="mt-1 font-mono text-12 text-muted-foreground">
-          Day {sprint.dayOf21} of 21
+          {gtm.usedToday}/{gtm.hardDailyCap} sends today · next slot {nextSlot.label}
+          {gtm.paused ? " · PAUSED" : ""}
         </p>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Sprint day" value={`${sprint.dayOf21}/21`} />
+        <Stat label="Ready to send" value={String(ready)} />
         <Stat label="Drafts waiting" value={String(pending)} />
-        <Stat label="Posts waiting approval" value={String(waitingPosts)} />
+        <Stat label="Human replies" value={String(replied)} />
         <Stat label="Due now" value={String(dueNow)} />
       </div>
 
@@ -78,7 +94,7 @@ export default function TodayPage() {
               <li key={item}>
                 <Link
                   href={needsYouHref(item)}
-                  className="group flex items-center justify-between gap-2 rounded-[8px] px-2 py-1.5 -mx-2 hover:bg-muted"
+                  className="group -mx-2 flex items-center justify-between gap-2 rounded-[8px] px-2 py-1.5 hover:bg-muted"
                 >
                   {item}
                   <ArrowUpRight className="size-4 shrink-0 text-muted-foreground" />
@@ -88,8 +104,18 @@ export default function TodayPage() {
           </ul>
         </section>
         <section className="surface space-y-3 p-4">
-          <h2 className="text-16 font-semibold">Today&apos;s posts</h2>
+          <h2 className="text-16 font-semibold">Today&apos;s plan</h2>
           <List items={brief.todayPosts} />
+          <ul className="space-y-1 border-t border-border pt-3 text-13 text-muted-foreground">
+            {gtm.slots.map((slot) => (
+              <li key={slot.id} className="flex justify-between font-mono tabular-nums">
+                <span>{slot.label}</span>
+                <span>
+                  {slot.sent}/{slot.planned}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
 
@@ -98,30 +124,26 @@ export default function TodayPage() {
         {state.queue.length === 0 ? (
           <p className="surface p-4 text-14 text-muted-foreground">Queue is clear.</p>
         ) : (
-          <div className="surface divide-y divide-border">
+          <ul className="surface divide-y divide-border">
             {state.queue.map((item) => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="space-y-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-mono text-12 uppercase text-muted-foreground">
-                      {urgencyCopy[item.urgency]}
-                    </span>
+              <li key={item.id}>
+                <Link
+                  href={item.href}
+                  className="flex flex-col gap-1 px-4 py-3 hover:bg-muted/50 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div>
                     <p className="text-14 font-medium">{item.title}</p>
+                    <p className="text-13 text-muted-foreground">{item.reason}</p>
                   </div>
-                  <p className="text-13 text-muted-foreground text-pretty">{item.reason}</p>
-                  <p className="font-mono text-12 tabular-nums text-muted-foreground">
-                    Due {formatDue(item.dueAt)}
-                  </p>
-                </div>
-                <ButtonLink href={item.href} size="sm">
-                  {item.actionLabel}
-                </ButtonLink>
-              </div>
+                  <div className="flex items-center gap-3 text-12 text-muted-foreground">
+                    <span>{urgencyCopy[item.urgency]}</span>
+                    <span className="font-mono tabular-nums">{formatDue(item.dueAt)}</span>
+                    <span className="text-foreground">{item.actionLabel}</span>
+                  </div>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </section>
     </div>

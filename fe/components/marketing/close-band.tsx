@@ -57,7 +57,7 @@ export function CloseBand() {
               {homeClose.primaryCta}
             </ButtonLink>
             <Link
-              href="/pricing"
+              href="/how-it-works"
               className="inline-flex h-11 items-center px-2 text-14 font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground"
             >
               {homeClose.secondaryCta}

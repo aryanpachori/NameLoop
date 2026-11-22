@@ -168,7 +168,7 @@ export function HomeWelcome() {
             animate={{ opacity: fade ? 0 : line >= 1 ? 1 : 0, y: 0 }}
             transition={{ duration: 0.45, ease: EASE }}
           >
-            Hi — welcome to NameLoop. Your one-stop GTM loop.
+            Grow your product. Outbound that books. Inbound that compounds.
           </motion.p>
         </div>
 

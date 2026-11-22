@@ -1,4 +1,4 @@
-/** Landing copy in one place. Casual, concrete, product-true. */
+/** Landing copy in one place. Talk like a person. No brochure voice. */
 
 export type FaqItem = { q: string; a: string };
 
@@ -14,7 +14,7 @@ export type LoopChapter = {
   title: string;
   kicker: string;
   copy: string;
-  channels: ("linkedin" | "email" | "reddit" | "x" | "meta_ads" | "google_ads")[];
+  channels: ("linkedin" | "email" | "reddit" | "x" | "meta_ads" | "google_ads" | "instagram" | "tiktok")[];
   card: {
     eyebrow: string;
     title: string;
@@ -26,150 +26,186 @@ export type LoopChapter = {
   };
 };
 
+export type EngineCard = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  copy: string;
+  beats: string[];
+};
+
 export const homeMeta = {
   title: "NameLoop",
   titleTemplate: "%s · NameLoop",
   absoluteTitle: "NameLoop",
   description:
-    "Inbound GTM that finds who to sell to, grows where they hang out, and pulls meetings in. Paste your product URL. Nothing goes live until you approve.",
+    "Grow your product. Outbound that books. Inbound that compounds. The growth loop founders run — without a GTM team.",
   pricingTitle: "Pricing",
   pricingDescription:
-    "Simple plans for inbound GTM. Channels, posts, and seats. Ad spend stays on the platforms you already use.",
+    "Pay for channels, emails, posts, and seats. Ads stay on Meta and Google.",
   howTitle: "How it works",
   howDescription:
-    "Paste a URL, pick your model, then run the loop: who to sell to, where to show up, what worked. Inbound first. You approve every draft.",
+    "The growth loop founders run — without a GTM team. Paste a URL, pick who you're selling to, send outreach, schedule posts, check what worked.",
 };
 
-/** Short outcome headline (Ramp / Mercury / Sunset pattern). */
 export const homeHero = {
-  eyebrow: "Early access",
-  line1: "Bring meetings in.",
-  accentWords: ["meetings"],
-  line2: "Without the spammy AI SDR.",
-  body: "Paste your product URL. We sketch who might buy, where to grow organically, and what to post. You approve every draft. Outreach is optional.",
-  micro: "About a minute to start.",
-  pricingLink: "See pricing",
+  eyebrow: "Early access · for founders",
+  line1: "Grow your product.",
+  accentWords: ["product."],
+  line2: "Outbound that books. Inbound that compounds.",
+  body: "The growth loop founders run — without a GTM team. Paste your URL. We sketch who might buy, draft the outreach and the posts, and put daily limits on sends so you don't torch your domain. You approve what goes out. When someone replies, that's your job — we don't fake it.",
+  micro: "Takes about a minute.",
+  pricingLink: "Pricing",
 };
 
-/** Thin proof strip — real product facts, no fake logo wall. */
 export const homeTrust = [
-  "Nothing goes live without you",
-  "Inbound and organic first",
-  "Meetings are the point",
+  "Outbound that books meetings",
+  "Inbound that keeps working",
+  "No GTM team required",
 ] as const;
 
-export const homeVs = {
-  eyebrow: "Not another AI SDR",
-  headline: "Most tools spray outbound. We build inbound.",
+export const homeEngines = {
+  eyebrow: "The growth loop",
+  headline: "Outbound that books. Inbound that compounds.",
   support:
-    "Sharp customer first. Show up where they already are. Book the meeting. Cold send when you want it, not by default.",
+    "Cold email tools only send. Social tools only post. Founders need both — aimed at the same people — without hiring a GTM team to stitch it together.",
+  cards: [
+    {
+      id: "outbound",
+      eyebrow: "Outreach",
+      title: "Find people. Email them carefully.",
+      copy: "We pull leads that fit, skip bad emails, and send a short sequence (first note + follow-ups). Daily caps. Bounce gets loud. If they reply, we stop and hand it to you.",
+      beats: [
+        "Board of who's ready, sent, or replied",
+        "Gmail and Resend, with limits you set",
+        "Pause if bounce looks ugly",
+      ],
+    },
+    {
+      id: "inbound",
+      eyebrow: "Content",
+      title: "Show up where they already are.",
+      copy: "Drafts for LinkedIn, X, Instagram, and the rest — on a calendar. We also dig for angles that are working in your niche. You approve before anything posts. Winners get reused next week.",
+      beats: [
+        "One calendar across channels",
+        "Ideas pulled from what's moving",
+        "Next week starts from what worked",
+      ],
+    },
+  ] satisfies EngineCard[],
+};
+
+export const homeVs = {
+  eyebrow: "Honest compare",
+  headline: "Built for founders — not for replacing a sales floor.",
+  support:
+    "AI SDRs spray. Schedulers only post. NameLoop is the growth loop: outbound that books, inbound that compounds — you keep the brakes.",
   rows: [
     {
       label: "AI SDRs",
-      copy: "Inbox first, questions later. Volume over judgment.",
+      copy: "They optimize for volume. Reputation and weird replies become your problem.",
       tag: "Skip",
       accent: false,
     },
     {
-      label: "Sequencers",
-      copy: "Fine if you already have the list. They just run the cadence.",
+      label: "Schedulers",
+      copy: "Great at posting. Silent on who to email or what to do after a quiet week.",
       tag: "Skip",
       accent: false,
     },
     {
       label: "NameLoop",
-      copy: "Who → where they hang out → posts that pull people in. You approve. Meetings show up.",
-      tag: "This",
+      copy: "Outbound that books. Inbound that compounds. No GTM team required.",
+      tag: "Us",
       accent: true,
     },
   ] satisfies VsRow[],
 };
 
 export const homeLoop = {
-  eyebrow: "How it works",
-  headline: "Three moves. Each pass pulls harder.",
+  eyebrow: "How founders run it",
+  headline: "Three steps. Then next week starts smarter.",
+  support: "Same buyer for email and posts. Nothing ships until you say so.",
   chapters: [
     {
       n: "01",
       title: "Who",
-      kicker: "Your customer",
-      copy: "We read your site and sketch who might buy. Niche over vague. A real reason to talk now.",
+      kicker: "From your site",
+      copy: "We read the site and guess who might buy — what hurts, where they hang out, why they'd care now. You pick one or two. Everything else aims at that.",
       channels: ["linkedin", "email"],
       card: {
-        eyebrow: "ICP · draft",
-        title: "Finance leads at growing SaaS",
-        detail: "Controllers · 40–400 people · hired this month",
-        footerLeft: "82% fit",
-        footerRight: "Waiting on you",
+        eyebrow: "Customer guess",
+        title: "Finance ops at B2B SaaS",
+        detail: "40–400 people · still closing in Sheets · hire or board week",
+        footerLeft: "From your URL",
+        footerRight: "You edit it",
       },
     },
     {
       n: "02",
-      title: "Where",
-      kicker: "Inbound first",
-      copy: "Organic and social ranked for that customer. Drafts wait in one inbox. Cold outbound is optional.",
-      channels: ["linkedin", "x", "reddit", "email"],
+      title: "Do the work",
+      kicker: "Email + posts",
+      copy: "Leads get checked, then emailed in slots so you don't blast all day. Posts sit on a calendar for the channels those people use. Approvals first. Always.",
+      channels: ["email", "linkedin", "instagram", "x"],
       card: {
-        eyebrow: "Ranked for you",
-        title: "",
-        detail: "",
-        scores: [
-          { id: "linkedin", score: 91 },
-          { id: "reddit", score: 74 },
-          { id: "email", score: 52 },
-        ],
+        eyebrow: "This week",
+        title: "47 emails · 9 posts waiting",
+        detail: "Gmail + Resend · LinkedIn and X queued",
+        bigNumber: "Today",
+        footerRight: "One morning brief",
       },
     },
     {
       n: "03",
-      title: "Meetings",
-      kicker: "What worked",
-      copy: "See what pulled people in. Keep that. Book the meetings. Boost winners when it feels real.",
+      title: "Check the tape",
+      kicker: "Then adjust",
+      copy: "See what got replies, saves, meetings. Drop the junk. Keep the angles that worked. Next week's drafts start there — not from a blank page.",
       channels: ["linkedin", "meta_ads", "google_ads"],
       card: {
-        eyebrow: "From a post",
-        title: "Month-end close checklist",
-        detail: "Top organic · LinkedIn → 3 meetings booked",
-        bigNumber: "3 meets",
-        footerRight: "You approve before anything boosts.",
+        eyebrow: "What worked",
+        title: "Hiring emails beat generic pain",
+        detail: "Do more of that. Kill the soft close note. Boost the top post if you want.",
+        footerLeft: "Your call",
+        footerRight: "Accept or edit",
       },
     },
   ] satisfies LoopChapter[],
 };
 
 export const homeFaq = {
-  eyebrow: "Before you start",
-  headline: "Common questions.",
-  support: "Have more? Start with a URL — we'll ask the rest inside.",
+  eyebrow: "Questions",
+  headline: "Ask these first.",
+  support: "Still fuzzy? Paste a URL — we ask the rest inside.",
   items: [
     {
-      q: "Is this mostly cold outbound?",
-      a: "Nope. Inbound first: organic social and content that bring people to you, then meetings. Outreach exists if you need it.",
+      q: "How does this help my product grow?",
+      a: "You talk to the right people (email), show up where they already scroll (posts), and stop doing what didn't work. The score is meetings and real interest — not how many emails left the building.",
     },
     {
-      q: "How is this different from an AI SDR?",
-      a: "Those tools optimize for sending a lot alone. We start with who and where, draft what you post, and nothing goes live until you say so.",
+      q: "Do I have to do outreach and content?",
+      a: "No. Lean on whichever you need. Most founders end up wanting both: email for conversations this month, posts so you're not starting from zero every Monday.",
     },
     {
-      q: "What does the AI actually do?",
-      a: "Reads your site, proposes ICPs, ranks channels, drafts posts and outreach. You stay in the loop.",
+      q: "What do you do vs what do I do?",
+      a: "We find leads, draft, schedule, and flag problems. You pick the customer, set limits, approve drafts, and answer humans. Pause and kill switch are always yours.",
     },
     {
-      q: "Do I need a GTM plan first?",
-      a: "Nope. Paste a URL and start. We ask the rest inside.",
+      q: "Will you spam people or reply for me?",
+      a: "No. Caps are yours. If someone replies, we stop that lead and put it in Needs you. We don't pretend to be you in the inbox.",
     },
   ] satisfies FaqItem[],
 };
 
 export const homeClose = {
   eyebrow: "Early access",
-  headline: "One URL. That's the entry point.",
-  support: "Paste it. We sketch who to reach, where they hang out, and what to say. You approve everything. Meetings are the only goal.",
+  headline: "Grow your product.",
+  support:
+    "Outbound that books. Inbound that compounds. Paste your URL — we'll sketch who to sell to, wire outreach and a content calendar, and show you the board. Limits, approvals, and replies stay with you.",
   primaryCta: "Get started",
-  secondaryCta: "See pricing",
+  secondaryCta: "How it works",
 };
 
 export const homeFooter = {
   blurb:
-    "Inbound GTM that brings meetings in. Not another AI that cold-emails people without you.",
+    "The growth loop founders run — without a GTM team. Outbound that books. Inbound that compounds.",
 };

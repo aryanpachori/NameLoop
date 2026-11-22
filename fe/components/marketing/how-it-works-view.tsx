@@ -15,19 +15,19 @@ const models: { id: BusinessModel; label: string; asks: string; picks: ChannelId
 
 const phases = [
   {
-    label: "Get set",
-    title: "Pick ICP and channels",
-    copy: "Confirm the customer guess, connect a couple channels. First drafts land in your approval inbox, not out in the wild.",
+    label: "Week one",
+    title: "Set it up",
+    copy: "Pick who you're selling to, connect email, set a daily send limit. Drafts wait for you — nothing sneaks out.",
   },
   {
-    label: "Run it",
-    title: "Show up where they are",
-    copy: "Keep sequences on the same thread. Post on the channels you turned on. Weird replies come back to you.",
+    label: "Ongoing",
+    title: "Let it run",
+    copy: "We pull leads, skip bad emails, send in daytime slots. If someone replies, we stop and you take it.",
   },
   {
-    label: "Lean in",
-    title: "Double down on winners",
-    copy: "See what worked by channel. Boost the good stuff when it feels real. Next cycle starts a bit smarter.",
+    label: "Each week",
+    title: "Keep what worked",
+    copy: "If bounce climbs, pause. If a post or email angle worked, do more of that next week.",
   },
 ];
 
@@ -43,14 +43,15 @@ export function HowItWorksView() {
           <h1 className="heading-hero mt-4 max-w-3xl">
             <WordReveal
               instant
-              text="Tell us what you sell. We walk the rest with you."
-              accentWords={["sell."]}
+              text="The growth loop founders run — without a GTM team."
+              accentWords={["founders"]}
             />
           </h1>
           <Reveal instant delay={2}>
             <p className="mt-5 max-w-xl text-17 leading-7 text-muted-foreground text-pretty">
-              First we ask what kind of business you run. That changes who your customer is and where they hang
-              out. Everything else follows from that.
+              Grow your product. Outbound that books. Inbound that compounds. Paste a URL, pick who
+              you&apos;re selling to, email carefully, post where they hang out, then keep what worked.
+              You approve drafts and answer humans — we don&apos;t.
             </p>
           </Reveal>
         </div>
@@ -109,10 +110,10 @@ export function HowItWorksView() {
       <section className="border-t border-border bg-muted/40 section-pad">
         <div className="marketing-shell">
           <Reveal>
-            <h2 className="heading-1 max-w-2xl">Each cycle should feel a bit easier.</h2>
+            <h2 className="heading-1 max-w-2xl">Next week should be easier than this one.</h2>
             <p className="mt-3 max-w-2xl text-16 text-muted-foreground">
-              Some loops are a week. Some are longer. Either way you leave with a clearer customer, fewer
-              channels that matter, and proof of what to push next.
+              Clearer who you're selling to. Email that stops when people reply. Posts that start from what
+              worked — not a blank calendar every Monday.
             </p>
           </Reveal>
           <div className="mt-8 grid gap-5 md:grid-cols-3 md:gap-6">

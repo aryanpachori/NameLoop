@@ -3,9 +3,12 @@ import type {
   BusinessBrain,
   Contact,
   Draft,
+  GtmMachine,
   PipelineStage,
   QueueItem,
   RecordState,
+  SenderId,
+  TrackerStage,
   WorkspaceState,
 } from "@/lib/types";
 
@@ -137,6 +140,9 @@ type SeedAccount = {
   domain: string;
   industry: string;
   stage: PipelineStage;
+  trackerStage?: TrackerStage;
+  sender?: SenderId;
+  qualify?: Account["qualify"];
   score: number;
   owner: "ai" | "human";
   state: RecordState;
@@ -152,6 +158,75 @@ type SeedAccount = {
   rationale: string;
   highValue?: boolean;
   others?: { name: string; title: string }[];
+};
+
+function deriveTracker(
+  stage: PipelineStage,
+  state: RecordState,
+  override?: TrackerStage
+): TrackerStage {
+  if (override) return override;
+  if (state === "paused" && stage === "lost") return "unsubscribed";
+  switch (stage) {
+    case "identified":
+      return "ready_to_send";
+    case "warming":
+      return "sent";
+    case "contacted":
+      return "follow_up_1";
+    case "replied":
+      return "replied";
+    case "discovery":
+    case "meeting":
+    case "won":
+      return "completed";
+    case "lost":
+      return "unsubscribed";
+  }
+}
+
+const ledgerlineGtm: GtmMachine = {
+  hardDailyCap: 150,
+  usedToday: 47,
+  schedule: "mon_sat",
+  timezone: "Asia/Kolkata",
+  bouncePauseAt: 0.03,
+  paused: false,
+  senders: [
+    {
+      id: "gmail",
+      label: "Gmail",
+      email: "marketing@ledgerline.dev",
+      status: "active",
+      dailyCap: 30,
+      usedToday: 18,
+      bounceRate: 0.008,
+      warmup: "ready",
+    },
+    {
+      id: "resend",
+      label: "Resend",
+      email: "outreach@mail.ledgerline.dev",
+      replyTo: "hello@ledgerline.dev",
+      status: "warming",
+      dailyCap: 20,
+      usedToday: 12,
+      bounceRate: 0.015,
+      warmup: "warming",
+    },
+  ],
+  slots: [
+    { id: "slot-10", hourIst: 10, label: "10 AM", planned: 12, sent: 12, role: "source" },
+    { id: "slot-12", hourIst: 12, label: "12 PM", planned: 10, sent: 10, role: "send" },
+    { id: "slot-14", hourIst: 14, label: "2 PM", planned: 10, sent: 10, role: "send" },
+    { id: "slot-16", hourIst: 16, label: "4 PM", planned: 10, sent: 8, role: "send" },
+    { id: "slot-18", hourIst: 18, label: "6 PM", planned: 10, sent: 7, role: "send" },
+  ],
+  source: {
+    mode: "scrape",
+    lastPullAt: hoursFromNow(-2),
+    lastPullCount: 38,
+  },
 };
 
 const rawAccounts: SeedAccount[] = [
@@ -386,6 +461,7 @@ const rawAccounts: SeedAccount[] = [
     domain: "sablecrm.com",
     industry: "CRM",
     stage: "lost",
+    trackerStage: "unsubscribed",
     score: 40,
     owner: "human",
     state: "paused",
@@ -626,6 +702,8 @@ const rawAccounts: SeedAccount[] = [
     domain: "sundownmetrics.com",
     industry: "Analytics",
     stage: "contacted",
+    trackerStage: "follow_up_2",
+    sender: "gmail",
     score: 77,
     owner: "ai",
     state: "waiting_approval",
@@ -646,11 +724,13 @@ const rawAccounts: SeedAccount[] = [
     domain: "atlasclinics.com",
     industry: "Health ops",
     stage: "identified",
+    trackerStage: "no_email",
+    qualify: "no_email",
     score: 55,
     owner: "ai",
     state: "ai_working",
-    reason: "Industry stretch",
-    nextAction: "Confirm clinics stay in ICP",
+    reason: "Industry stretch · no usable company email",
+    nextAction: "Confirm clinics stay in ICP or drop",
     dueHours: 26,
     whyNow: "Hiring for 'payment posting'. adjacent pain.",
     sourceLabel: "Job post",
@@ -674,6 +754,9 @@ function buildAccounts(): { accounts: Account[]; contacts: Contact[] } {
       domain: row.domain,
       industry: row.industry,
       stage: row.stage,
+      trackerStage: deriveTracker(row.stage, row.state, row.trackerStage),
+      sender: row.sender,
+      qualify: row.qualify ?? (row.email ? "ok" : "no_email"),
       score: row.score,
       owner: row.owner,
       state: row.state,
@@ -1203,34 +1286,109 @@ export function createSeedState(): WorkspaceState {
         },
       ],
     },
+    gtm: ledgerlineGtm,
     outreach: [
       {
         id: "out-ll-1",
         name: "Finance ops hire sequence",
         kind: "b2b_sequence",
-        dailyCap: 25,
-        usedToday: 11,
+        dailyCap: 50,
+        usedToday: 30,
         steps: [
-          { id: "os-1", day: 0, channelId: "email", label: "First note", body: "Cite the hire." },
-          { id: "os-2", day: 3, channelId: "email", label: "Bump", body: "Same thread." },
-          { id: "os-3", day: 8, channelId: "linkedin", label: "Soft bump", body: "Comment or DM." },
+          {
+            id: "os-e1",
+            day: 0,
+            channelId: "email",
+            kind: "E1",
+            label: "E1 · Congrats / why now",
+            subject: "Congrats on {Company}",
+            body: "Cite the hire or close-pain trigger. One ask. Opt-out footer.",
+          },
+          {
+            id: "os-fu1",
+            day: 2,
+            channelId: "email",
+            kind: "FU1",
+            label: "FU1 · Same thread bump",
+            body: "Short bump. Same thread. No new pitch.",
+          },
+          {
+            id: "os-fu2",
+            day: 5,
+            channelId: "email",
+            kind: "FU2",
+            label: "FU2 · Proof beat",
+            body: "One proof line from claims library. Same thread.",
+          },
+          {
+            id: "os-fu3",
+            day: 8,
+            channelId: "email",
+            kind: "FU3",
+            label: "FU3 · Soft alternative",
+            body: "Offer a 12-min walkthrough or a teardown.",
+          },
+          {
+            id: "os-fu4",
+            day: 12,
+            channelId: "email",
+            kind: "FU4",
+            label: "FU4 · Break-up tone",
+            body: "Permission to close the loop. Still opt-out.",
+          },
+          {
+            id: "os-fu5",
+            day: 16,
+            channelId: "email",
+            kind: "FU5",
+            label: "FU5 · Last touch",
+            body: "Final note. Then mark completed. Never auto-reply humans.",
+          },
         ],
         prospects: [
           {
             id: "op-1",
+            accountId: "acc-02",
             name: "Maya Chen",
-            title: "Controller",
+            title: "VP Finance",
             company: "Harborstack",
             state: "waiting_approval",
-            nextStep: "Approve first note",
+            trackerStage: "ready_to_send",
+            sender: "gmail",
+            nextStep: "Approve E1",
           },
           {
             id: "op-2",
-            name: "Samir Okonkwo",
-            title: "VP Finance",
-            company: "Northwind",
+            accountId: "acc-01",
+            name: "Priya Shah",
+            title: "Head of Finance Ops",
+            company: "Northwind Finance",
             state: "needs_human",
-            nextStep: "Reply to question",
+            trackerStage: "replied",
+            sender: "gmail",
+            nextStep: "Human reply — do not auto-send",
+          },
+          {
+            id: "op-3",
+            accountId: "acc-24",
+            name: "Renee Walsh",
+            title: "VP Finance",
+            company: "Sundown Metrics",
+            state: "waiting_approval",
+            trackerStage: "follow_up_2",
+            sender: "resend",
+            nextStep: "Approve FU2",
+          },
+          {
+            id: "op-4",
+            accountId: "acc-06",
+            name: "Jonah Reed",
+            title: "Finance Lead",
+            company: "Brightline CRM",
+            state: "waiting_approval",
+            trackerStage: "ready_to_send",
+            sender: "resend",
+            nextStep: "Resolve flagged claim, then E1",
           },
         ],
       },
@@ -1261,10 +1419,18 @@ export function createSeedState(): WorkspaceState {
       ],
     },
     brief: {
-      overnight: ["Drafted 2 LinkedIn posts", "Flagged 1 claim in Brightline email"],
-      needsYou: ["Approve Close mess post", "Reply Northwind"],
-      todayPosts: ["Hiring trigger note (email) scheduled 6pm"],
-      sprintProgress: "Day 7 of 21 · 1 waiting approval",
+      overnight: [
+        "Pulled 38 new leads at 10 AM scrape",
+        "Sent 30 across Gmail + Resend (slots 10–4)",
+        "1 bounce on Resend — still under 3% pause line",
+      ],
+      needsYou: [
+        "Reply Northwind (human — machine stopped)",
+        "Approve Harborstack E1",
+        "Confirm Atlas Clinics ICP or DQ",
+      ],
+      todayPosts: ["6 PM slot: 10 planned · FU backlog"],
+      sprintProgress: "Mon–Sat machine · 47/150 today · next slot 6 PM",
     },
     onboarded: true,
   };

@@ -157,13 +157,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               Domain {state.tenant.domainHealth}
             </span>
             <span className="hidden rounded-[8px] bg-card px-2 py-1 font-mono text-12 tabular-nums ring-1 ring-border sm:inline">
-              {state.tenant.usedSends}/{state.tenant.sendingCap} drafts
+              {state.gtm.usedToday}/{state.gtm.hardDailyCap} sends
             </span>
           </div>
         </header>
-        {state.tenant.paused ? (
+        {state.tenant.paused || state.gtm.paused ? (
           <div className="border-b border-border bg-destructive/15 px-4 py-2 text-14 text-destructive">
-            Kill switch is on. AI will not draft or enqueue anything until you release it.
+            {state.tenant.paused
+              ? "Kill switch is on. Nothing drafts or sends until you release it."
+              : `GTM paused${state.gtm.pausedReason ? `: ${state.gtm.pausedReason}` : ""}.`}
           </div>
         ) : null}
         <Separator className="sr-only" />

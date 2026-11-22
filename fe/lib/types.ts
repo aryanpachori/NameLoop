@@ -38,6 +38,64 @@ export type PipelineStage =
   | "won"
   | "lost";
 
+/** Outbound send-machine stages (Mayson-style tracker). */
+export type TrackerStage =
+  | "ready_to_send"
+  | "sent"
+  | "follow_up_1"
+  | "follow_up_2"
+  | "follow_up_3"
+  | "follow_up_4"
+  | "follow_up_5"
+  | "completed"
+  | "bounced"
+  | "unsubscribed"
+  | "replied"
+  | "no_email"
+  | "disqualified";
+
+export type SenderId = "gmail" | "resend";
+
+export type SequenceKind = "E1" | "FU1" | "FU2" | "FU3" | "FU4" | "FU5";
+
+export type GtmSender = {
+  id: SenderId;
+  label: string;
+  email: string;
+  replyTo?: string;
+  status: "active" | "paused" | "warming";
+  dailyCap: number;
+  usedToday: number;
+  bounceRate: number;
+  warmup: "cold" | "warming" | "ready";
+};
+
+export type GtmSlot = {
+  id: string;
+  hourIst: 10 | 12 | 14 | 16 | 18;
+  label: string;
+  planned: number;
+  sent: number;
+  role: "source" | "send";
+};
+
+export type GtmMachine = {
+  hardDailyCap: number;
+  usedToday: number;
+  schedule: "mon_sat";
+  timezone: "Asia/Kolkata";
+  bouncePauseAt: number;
+  paused: boolean;
+  pausedReason?: string;
+  senders: GtmSender[];
+  slots: GtmSlot[];
+  source: {
+    mode: "scrape" | "apify" | "upload";
+    lastPullAt?: string;
+    lastPullCount?: number;
+  };
+};
+
 export type DraftKind =
   | "email"
   | "linkedin_message"
@@ -141,6 +199,10 @@ export type Account = {
   domain: string;
   industry: string;
   stage: PipelineStage;
+  /** Send-machine stage for the lead board / sequence. */
+  trackerStage: TrackerStage;
+  sender?: SenderId;
+  qualify?: "ok" | "no_email" | "bad_mx" | "agent_mailbox";
   score: number;
   owner: Owner;
   state: RecordState;
@@ -316,8 +378,10 @@ export type OutreachStep = {
   id: string;
   day: number;
   channelId: ChannelId;
+  kind?: SequenceKind;
   label: string;
   body: string;
+  subject?: string;
 };
 
 export type OutreachProspect = {
@@ -325,7 +389,10 @@ export type OutreachProspect = {
   name: string;
   title: string;
   company: string;
+  accountId?: string;
   state: RecordState;
+  trackerStage?: TrackerStage;
+  sender?: SenderId;
   nextStep: string;
 };
 
@@ -386,6 +453,7 @@ export type WorkspaceState = {
   connections: ChannelConnection[];
   sprint: SprintPlan;
   outreach: OutreachSequence[];
+  gtm: GtmMachine;
   ads: AdCampaign[];
   loop: LoopProposal;
   brief: MorningBrief;

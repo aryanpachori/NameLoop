@@ -14,28 +14,43 @@ const tiers = [
   {
     id: "starter",
     name: "Starter",
-    blurb: "One customer. A few channels. First real inbound cycle.",
+    blurb: "One product. Enough to try email and posts.",
     monthly: 49,
     annual: 39,
-    limits: ["3 channels", "30 posts / mo", "1 seat", "Email support"],
+    limits: [
+      "3 channels",
+      "500 emails / mo",
+      "30 posts / mo",
+      "1 seat",
+    ],
     highlight: false,
   },
   {
     id: "growth",
     name: "Growth",
-    blurb: "Two customers. More posts. Autopilot when you trust a channel.",
+    blurb: "More sends, more posts, room for a small team.",
     monthly: 149,
     annual: 119,
-    limits: ["6 channels", "120 posts / mo", "3 seats", "Ad ideas on 2 platforms"],
+    limits: [
+      "6 channels",
+      "2,500 emails / mo",
+      "120 posts / mo",
+      "3 seats · ad ideas",
+    ],
     highlight: true,
   },
   {
     id: "scale",
     name: "Scale",
-    blurb: "Every channel. A few brands. Room for the team.",
+    blurb: "All channels. A few brands. Slack with us.",
     monthly: 449,
     annual: 359,
-    limits: ["All 11 channels", "400 posts / mo", "10 seats", "Shared Slack"],
+    limits: [
+      "All 11 channels",
+      "10,000 emails / mo",
+      "400 posts / mo",
+      "10 seats · Slack",
+    ],
     highlight: false,
   },
 ] as const;
@@ -43,19 +58,19 @@ const tiers = [
 const faq: FaqItem[] = [
   {
     q: "Is ad spend included?",
-    a: "Nope. Ads bill on Meta, Google, etc. We only suggest what to boost and a budget range. You approve each one.",
+    a: "No. Meta and Google bill you directly. We only suggest what to boost and a rough budget. You approve each one.",
   },
   {
-    q: "Is this mostly cold outbound?",
-    a: "Nope. Plans are built around inbound: organic posts and social that pull meetings in. Outreach limits exist if you need them. They aren't the main event.",
+    q: "Do I get outreach and content?",
+    a: "Yes. Email limit is for outreach. Post limit is for the calendar. Same customer profile drives both.",
   },
   {
     q: "Can I change plan or cancel?",
-    a: "Yes. Monthly anytime. Annual is about 20% off, billed once a year.",
+    a: "Yes. Monthly anytime. Annual saves about 20%.",
   },
   {
     q: "Is checkout live?",
-    a: "Not yet. We're onboarding in batches. Sign up and we'll confirm your spot.",
+    a: "Not yet. We're letting people in in batches. Sign up and we'll email you.",
   },
 ];
 
@@ -71,7 +86,7 @@ export function PricingView() {
             <WordReveal instant text="Simple plans. Start small." accentWords={["small."]} />
           </h1>
           <p className="mt-5 text-16 font-medium text-muted-foreground text-pretty">
-            Pay for channels, posts, and seats. Grow inbound. Ad spend stays on the platforms you already use.
+            The growth loop founders run — without a GTM team. Pay for channels, emails, posts, and seats. Ads stay on Meta and Google.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Segmented

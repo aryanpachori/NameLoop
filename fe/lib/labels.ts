@@ -1,4 +1,9 @@
-import type { DraftKind, PipelineStage, RecordState } from "@/lib/types";
+import type {
+  DraftKind,
+  PipelineStage,
+  RecordState,
+  TrackerStage,
+} from "@/lib/types";
 
 export const STAGE_LABELS: Record<PipelineStage, string> = {
   identified: "Identified",
@@ -20,6 +25,50 @@ export const STAGES: PipelineStage[] = [
   "meeting",
   "won",
   "lost",
+];
+
+export const TRACKER_LABELS: Record<TrackerStage, string> = {
+  ready_to_send: "Ready",
+  sent: "Sent (E1)",
+  follow_up_1: "FU1",
+  follow_up_2: "FU2",
+  follow_up_3: "FU3",
+  follow_up_4: "FU4",
+  follow_up_5: "FU5",
+  completed: "Done",
+  bounced: "Bounced",
+  unsubscribed: "Unsub",
+  replied: "Replied",
+  no_email: "No email",
+  disqualified: "DQ",
+};
+
+/** Board columns in send order (terminal stages last). */
+export const TRACKER_STAGES: TrackerStage[] = [
+  "ready_to_send",
+  "sent",
+  "follow_up_1",
+  "follow_up_2",
+  "follow_up_3",
+  "follow_up_4",
+  "follow_up_5",
+  "replied",
+  "bounced",
+  "unsubscribed",
+  "completed",
+  "no_email",
+  "disqualified",
+];
+
+export const BOARD_STAGES: TrackerStage[] = [
+  "ready_to_send",
+  "sent",
+  "follow_up_1",
+  "follow_up_2",
+  "follow_up_3",
+  "follow_up_4",
+  "follow_up_5",
+  "replied",
 ];
 
 export const STATE_LABELS: Record<RecordState, string> = {

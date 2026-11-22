@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChannelMarquee } from "@/components/marketing/channel-marquee";
 import { CloseBand } from "@/components/marketing/close-band";
+import { EnginesStrip } from "@/components/marketing/engines-strip";
 import { Faq } from "@/components/marketing/faq";
 import { HeroField } from "@/components/marketing/hero-field";
 import { HeroUrlForm } from "@/components/marketing/hero-url-form";
@@ -104,6 +105,7 @@ export default function HomePage() {
         </section>
 
         <ChannelMarquee />
+        <EnginesStrip />
         <VsStrip />
         <LoopChapters />
 

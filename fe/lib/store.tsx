@@ -16,8 +16,10 @@ import type {
   Owner,
   PipelineStage,
   RecordState,
+  SenderId,
   SignupDraft,
   SprintPost,
+  TrackerStage,
   WorkspaceState,
 } from "@/lib/types";
 
@@ -37,6 +39,10 @@ type Action =
     }
   | { type: "wrongBuyer"; accountId: string; contactId: string }
   | { type: "moveStage"; accountId: string; stage: PipelineStage }
+  | { type: "moveTracker"; accountId: string; trackerStage: TrackerStage }
+  | { type: "setSenderStatus"; senderId: SenderId; status: "active" | "paused" | "warming" }
+  | { type: "toggleGtmPause"; reason?: string }
+  | { type: "stopLead"; accountId: string; reason: "replied" | "bounced" | "unsubscribed" }
   | { type: "togglePauseTenant" }
   | { type: "updateBrain"; brain: Partial<BusinessBrain> }
   | { type: "setBusinessModel"; model: BusinessModel }
@@ -194,6 +200,82 @@ function reducer(state: MultiWorkspaceState, action: Action): MultiWorkspaceStat
         accounts: ws.accounts.map((account) =>
           account.id === action.accountId ? { ...account, stage: action.stage } : account
         ),
+      }));
+    case "moveTracker":
+      return withActive(state, (ws) => ({
+        ...ws,
+        accounts: ws.accounts.map((account) =>
+          account.id === action.accountId
+            ? { ...account, trackerStage: action.trackerStage }
+            : account
+        ),
+        audit: [
+          stamp(
+            "human",
+            "tracker_moved",
+            `${action.accountId} → ${action.trackerStage}`
+          ),
+          ...ws.audit,
+        ],
+      }));
+    case "setSenderStatus":
+      return withActive(state, (ws) => ({
+        ...ws,
+        gtm: {
+          ...ws.gtm,
+          senders: ws.gtm.senders.map((s) =>
+            s.id === action.senderId ? { ...s, status: action.status } : s
+          ),
+        },
+        audit: [
+          stamp("human", "sender_status", `${action.senderId} → ${action.status}`),
+          ...ws.audit,
+        ],
+      }));
+    case "toggleGtmPause":
+      return withActive(state, (ws) => {
+        const paused = !ws.gtm.paused;
+        return {
+          ...ws,
+          gtm: {
+            ...ws.gtm,
+            paused,
+            pausedReason: paused
+              ? action.reason ?? "Paused by founder"
+              : undefined,
+          },
+          audit: [
+            stamp("human", paused ? "gtm_paused" : "gtm_resumed", action.reason ?? ""),
+            ...ws.audit,
+          ],
+        };
+      });
+    case "stopLead":
+      return withActive(state, (ws) => ({
+        ...ws,
+        accounts: ws.accounts.map((account) =>
+          account.id === action.accountId
+            ? {
+                ...account,
+                trackerStage: action.reason,
+                state:
+                  action.reason === "replied" ? ("needs_human" as const) : ("paused" as const),
+                owner: "human" as const,
+                reason:
+                  action.reason === "replied"
+                    ? "Human reply — machine stopped"
+                    : `Stopped: ${action.reason}`,
+                nextAction:
+                  action.reason === "replied"
+                    ? "You own the reply. Do not auto-send."
+                    : "Stay off the send queue",
+              }
+            : account
+        ),
+        audit: [
+          stamp("human", "lead_stopped", `${action.accountId}: ${action.reason}`),
+          ...ws.audit,
+        ],
       }));
     case "togglePauseTenant":
       return withActive(state, (ws) => ({
@@ -381,6 +463,10 @@ type Store = {
   wrongBuyer: (accountId: string, contactId: string) => void;
   addContact: (contact: Contact) => void;
   moveStage: (accountId: string, stage: PipelineStage) => void;
+  moveTracker: (accountId: string, trackerStage: TrackerStage) => void;
+  setSenderStatus: (senderId: SenderId, status: "active" | "paused" | "warming") => void;
+  toggleGtmPause: (reason?: string) => void;
+  stopLead: (accountId: string, reason: "replied" | "bounced" | "unsubscribed") => void;
   toggleKillSwitch: () => void;
   updateBrain: (brain: Partial<BusinessBrain>) => void;
   setBusinessModel: (model: BusinessModel) => void;
@@ -472,6 +558,12 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "wrongBuyer", accountId, contactId }),
       addContact: () => undefined,
       moveStage: (accountId, stage) => dispatch({ type: "moveStage", accountId, stage }),
+      moveTracker: (accountId, trackerStage) =>
+        dispatch({ type: "moveTracker", accountId, trackerStage }),
+      setSenderStatus: (senderId, status) =>
+        dispatch({ type: "setSenderStatus", senderId, status }),
+      toggleGtmPause: (reason) => dispatch({ type: "toggleGtmPause", reason }),
+      stopLead: (accountId, reason) => dispatch({ type: "stopLead", accountId, reason }),
       toggleKillSwitch: () => dispatch({ type: "togglePauseTenant" }),
       updateBrain: (brain) => dispatch({ type: "updateBrain", brain }),
       setBusinessModel: (model) => dispatch({ type: "setBusinessModel", model }),

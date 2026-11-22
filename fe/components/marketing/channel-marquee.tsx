@@ -36,8 +36,11 @@ function Row() {
 
 export function ChannelMarquee() {
   return (
-    <div className="border-y border-border bg-card/40 py-3.5" aria-hidden="true">
-      <div className="marquee">
+    <div className="border-y border-border bg-card/40 py-3.5">
+      <p className="sr-only">
+        Works across email, LinkedIn, X, Instagram, YouTube, Reddit, TikTok, WhatsApp, Facebook, Google Ads, and Meta Ads.
+      </p>
+      <div className="marquee" aria-hidden="true">
         <div className="marquee__track gap-8 px-4">
           <Row />
           <Row />

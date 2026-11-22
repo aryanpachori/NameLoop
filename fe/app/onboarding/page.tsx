@@ -170,44 +170,54 @@ export default function OnboardingPage() {
   const selectedIcps = icps.filter((icp) => selected.includes(icp.id));
 
   return (
-    <div className="grid min-h-dvh bg-background lg:grid-cols-[280px_minmax(0,1fr)]">
-      <aside className="hidden flex-col gap-8 border-r border-border bg-muted/40 p-6 lg:flex">
-        <Logo />
-        <ol className="space-y-1">
-          {STEPS.map((item, index) => {
-            const done = index < step;
-            const active = index === step;
-            return (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  disabled={index > step}
-                  onClick={() => setStep(index)}
-                  className={cn(
-                    "flex w-full items-center gap-3 rounded-[8px] px-2 py-2 text-left text-14 transition-colors duration-150 ease-out",
-                    active ? "bg-card text-foreground ring-1 ring-border" : "text-muted-foreground",
-                    index <= step && !active && "hover:bg-card"
-                  )}
-                >
-                  <span
+    <div className="grid min-h-dvh bg-background text-foreground lg:grid-cols-[280px_minmax(0,1fr)]">
+      <aside className="relative hidden overflow-hidden border-r border-border lg:flex lg:flex-col">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 20% 10%, color-mix(in oklab, var(--brand) 18%, transparent), transparent 55%), radial-gradient(ellipse 70% 50% at 90% 80%, color-mix(in oklab, var(--brand) 10%, transparent), transparent 50%), var(--muted)",
+          }}
+        />
+        <div className="relative z-10 flex h-full flex-col gap-8 p-6">
+          <Logo />
+          <ol className="space-y-1">
+            {STEPS.map((item, index) => {
+              const done = index < step;
+              const active = index === step;
+              return (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    disabled={index > step}
+                    onClick={() => setStep(index)}
                     className={cn(
-                      "flex size-5 items-center justify-center rounded-full border text-12 tabular-nums",
-                      done && "border-foreground bg-foreground text-background",
-                      active && "border-foreground",
-                      !done && !active && "border-border"
+                      "flex w-full items-center gap-3 rounded-[8px] px-2 py-2 text-left text-14 transition-colors duration-150 ease-out",
+                      active ? "bg-card text-foreground ring-1 ring-border" : "text-muted-foreground",
+                      index <= step && !active && "hover:bg-card/70"
                     )}
                   >
-                    {done ? <Check className="size-3" /> : index + 1}
-                  </span>
-                  {item.label}
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-        <p className="mt-auto font-mono text-12 text-muted-foreground">
-          Enter next · ← back
-        </p>
+                    <span
+                      className={cn(
+                        "flex size-5 items-center justify-center rounded-full border text-12 tabular-nums",
+                        done && "border-foreground bg-foreground text-background",
+                        active && "border-foreground",
+                        !done && !active && "border-border"
+                      )}
+                    >
+                      {done ? <Check className="size-3" /> : index + 1}
+                    </span>
+                    {item.label}
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+          <p className="mt-auto font-mono text-12 text-muted-foreground">
+            Enter next · ← back
+          </p>
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-col">

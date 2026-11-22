@@ -4,7 +4,7 @@ import { ButtonLink } from "@/components/button-link";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex min-h-dvh flex-col bg-background text-foreground">
       <SiteHeader />
       <main id="main" tabIndex={-1} className="flex flex-1 flex-col items-center justify-center px-4 py-24 text-center">
         <h1 className="heading-1">This page is not here.</h1>

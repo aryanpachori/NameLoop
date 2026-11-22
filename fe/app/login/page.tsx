@@ -3,83 +3,21 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Logo } from "@/components/logo";
-import { LoopMark } from "@/components/loop-mark";
-import { WordReveal } from "@/components/marketing/word-reveal";
+import { AuthBrandPanel } from "@/components/marketing/auth-brand-panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-const PATHWAY = [
-  { n: "01", label: "Who might buy" },
-  { n: "02", label: "Where they hang out" },
-  { n: "03", label: "What to post" },
-  { n: "04", label: "Meetings in" },
-] as const;
 
 export default function LoginPage() {
   const router = useRouter();
 
   return (
-    <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-      <aside className="relative hidden overflow-hidden border-r border-border lg:flex lg:flex-col lg:justify-between">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 20% 10%, color-mix(in oklab, var(--brand) 18%, transparent), transparent 55%), radial-gradient(ellipse 70% 50% at 90% 80%, color-mix(in oklab, var(--brand) 10%, transparent), transparent 50%), var(--muted)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="login-orbit pointer-events-none absolute -right-16 top-1/4 size-[28rem] rounded-full border border-border/60"
-        />
-        <div
-          aria-hidden
-          className="login-orbit-slow pointer-events-none absolute -left-24 bottom-8 size-[22rem] rounded-full border border-dashed border-border/50"
-        />
-
-        <div className="relative z-10 p-10">
-          <Link href="/">
-            <Logo />
-          </Link>
-        </div>
-
-        <div className="relative z-10 max-w-md px-10 pb-6">
-          <LoopMark size={56} className="mb-8" />
-          <h1 className="heading-1">
-            <WordReveal
-              text="Your pathway to meetings that show up."
-              accentWords={["meetings"]}
-              instant
-              stagger={0.06}
-            />
-          </h1>
-          <p
-            className="mt-4 text-16 text-muted-foreground text-pretty login-fade"
-            style={{ animationDelay: "0.45s" }}
-          >
-            Inbound first. Open your workspace and pick up the loop where you left it.
-          </p>
-
-          <ol className="mt-10 space-y-3" aria-label="The NameLoop pathway">
-            {PATHWAY.map((step, i) => (
-              <li
-                key={step.n}
-                className="login-fade flex items-baseline gap-4"
-                style={{ animationDelay: `${0.55 + i * 0.08}s` }}
-              >
-                <span className="font-mono text-12 tabular-nums text-brand">{step.n}</span>
-                <span className="text-15 font-medium text-foreground">{step.label}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        <p className="relative z-10 px-10 pb-10 text-13 text-muted-foreground">
-          Nothing goes live until you approve.
-        </p>
-      </aside>
+    <div className="grid min-h-dvh bg-background text-foreground lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+      <AuthBrandPanel
+        headline="Your pathway to meetings that show up."
+        accentWords={["meetings"]}
+        body="Inbound first. Open your workspace and pick up the loop where you left it."
+      />
 
       <main
         id="main"
@@ -91,7 +29,7 @@ export default function LoginPage() {
             <Logo />
           </Link>
 
-          <div className="login-fade" style={{ animationDelay: "0.05s" }}>
+          <div className="auth-form-fade" style={{ animationDelay: "0.05s" }}>
             <p className="text-13 font-medium text-brand">Welcome back</p>
             <h2 className="heading-1 mt-2">Log in to NameLoop</h2>
             <p className="mt-2 text-14 text-muted-foreground">
@@ -100,7 +38,7 @@ export default function LoginPage() {
           </div>
 
           <div
-            className="surface mt-8 space-y-4 p-5 login-fade"
+            className="surface mt-8 space-y-4 p-5 auth-form-fade"
             style={{ animationDelay: "0.15s" }}
           >
             <Button
@@ -169,7 +107,7 @@ export default function LoginPage() {
           </div>
 
           <p
-            className="mt-6 text-14 text-muted-foreground login-fade"
+            className="mt-6 text-14 text-muted-foreground auth-form-fade"
             style={{ animationDelay: "0.28s" }}
           >
             New here?{" "}
@@ -181,27 +119,15 @@ export default function LoginPage() {
       </main>
 
       <style>{`
-        @keyframes login-fade-up {
+        @keyframes auth-form-fade-up {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: none; }
         }
-        @keyframes login-orbit {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .login-fade {
-          animation: login-fade-up 0.55s cubic-bezier(0.2, 0, 0, 1) both;
-        }
-        .login-orbit {
-          animation: login-orbit 48s linear infinite;
-        }
-        .login-orbit-slow {
-          animation: login-orbit 72s linear infinite reverse;
+        .auth-form-fade {
+          animation: auth-form-fade-up 0.55s cubic-bezier(0.2, 0, 0, 1) both;
         }
         @media (prefers-reduced-motion: reduce) {
-          .login-fade,
-          .login-orbit,
-          .login-orbit-slow {
+          .auth-form-fade {
             animation: none !important;
             opacity: 1;
             transform: none;

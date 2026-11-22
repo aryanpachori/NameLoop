@@ -3,14 +3,10 @@
 import { motion } from "motion/react";
 import { ChannelMark, channelLabel } from "@/components/channel-mark";
 import { Reveal } from "@/components/marketing/reveal";
-import { homeLoop } from "@/lib/home-copy";
+import { homeLoop, type LoopChapter } from "@/lib/home-copy";
 import type { ChannelId } from "@/lib/types";
 
-function ChapterCard({
-  card,
-}: {
-  card: (typeof homeLoop.chapters)[number]["card"];
-}) {
+function ChapterCard({ card }: { card: LoopChapter["card"] }) {
   if (card.scores) {
     return (
       <ul className="flex h-full flex-col justify-between rounded-[12px] border border-border bg-card p-5">
@@ -103,6 +99,11 @@ export function LoopChapters() {
           <div className="max-w-2xl">
             <p className="section-eyebrow">{homeLoop.eyebrow}</p>
             <h2 className="heading-1 mt-3">{homeLoop.headline}</h2>
+            {"support" in homeLoop && homeLoop.support ? (
+              <p className="mt-4 text-15 text-muted-foreground text-pretty">
+                {homeLoop.support}
+              </p>
+            ) : null}
           </div>
         </Reveal>
 
