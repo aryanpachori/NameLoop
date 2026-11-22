@@ -10,13 +10,25 @@ import { cn } from "@/lib/utils";
 
 type Billing = "monthly" | "annual";
 
-const tiers = [
+type Tier = {
+  id: string;
+  name: string;
+  blurb: string;
+  monthly: number | null;
+  annual: number | null;
+  limits: string[];
+  highlight: boolean;
+  cta: string;
+  href: string;
+};
+
+const tiers: Tier[] = [
   {
     id: "starter",
     name: "Starter",
-    blurb: "One product. Enough to try email and posts.",
-    monthly: 49,
-    annual: 39,
+    blurb: "One product. Email + posts to prove the loop.",
+    monthly: 10,
+    annual: 8,
     limits: [
       "3 channels",
       "500 emails / mo",
@@ -24,13 +36,15 @@ const tiers = [
       "1 seat",
     ],
     highlight: false,
+    cta: "Get started",
+    href: "/signup?plan=starter",
   },
   {
     id: "growth",
     name: "Growth",
     blurb: "More sends, more posts, room for a small team.",
-    monthly: 149,
-    annual: 119,
+    monthly: 50,
+    annual: 40,
     limits: [
       "6 channels",
       "2,500 emails / mo",
@@ -38,22 +52,26 @@ const tiers = [
       "3 seats · ad ideas",
     ],
     highlight: true,
+    cta: "Get started",
+    href: "/signup?plan=growth",
   },
   {
-    id: "scale",
-    name: "Scale",
-    blurb: "All channels. A few brands. Slack with us.",
-    monthly: 449,
-    annual: 359,
+    id: "enterprise",
+    name: "Enterprise",
+    blurb: "Custom limits, seats, and a dedicated setup.",
+    monthly: null,
+    annual: null,
     limits: [
-      "All 11 channels",
-      "10,000 emails / mo",
-      "400 posts / mo",
-      "10 seats · Slack",
+      "Custom channels & volume",
+      "SSO / security review",
+      "Priority support",
+      "Onboarding with us",
     ],
     highlight: false,
+    cta: "Talk to us",
+    href: "mailto:aryanpachori03@gmail.com?subject=NameLoop%20Enterprise",
   },
-] as const;
+];
 
 const faq: FaqItem[] = [
   {
@@ -66,11 +84,11 @@ const faq: FaqItem[] = [
   },
   {
     q: "Can I change plan or cancel?",
-    a: "Yes. Monthly anytime. Annual saves about 20%.",
+    a: "Yes. Monthly anytime. Annual saves about 20% on Starter and Growth.",
   },
   {
     q: "Is checkout live?",
-    a: "Not yet. We're letting people in in batches. Sign up and we'll email you.",
+    a: "Not yet. We're invite-only. Join the waitlist or sign in if you have access — we'll email you.",
   },
 ];
 
@@ -105,6 +123,7 @@ export function PricingView() {
       <section className="pb-16 lg:pb-24">
         <div className="marketing-shell grid gap-5 md:grid-cols-3 md:gap-6">
           {tiers.map((tier) => {
+            const isCustom = tier.monthly === null;
             const price = billing === "monthly" ? tier.monthly : tier.annual;
             return (
               <article
@@ -126,13 +145,21 @@ export function PricingView() {
                   {tier.blurb}
                 </p>
                 <p className="mt-6 flex items-baseline gap-1.5">
-                  <span className="font-serif-display text-48 tabular-nums">
-                    ${price}
-                  </span>
-                  <span className="text-14 text-muted-foreground">/ mo</span>
+                  {isCustom ? (
+                    <span className="font-serif-display text-40 tracking-tight">Custom</span>
+                  ) : (
+                    <>
+                      <span className="font-serif-display text-48 tabular-nums">${price}</span>
+                      <span className="text-14 text-muted-foreground">/ mo</span>
+                    </>
+                  )}
                 </p>
                 <p className="mt-1 text-13 text-muted-foreground">
-                  {billing === "annual" ? `$${tier.annual * 12} / year` : "Billed monthly"}
+                  {isCustom
+                    ? "Scoped to your volume and team"
+                    : billing === "annual" && tier.annual
+                      ? `$${tier.annual * 12} / year`
+                      : "Billed monthly"}
                 </p>
                 <ul className="mt-6 space-y-2.5 border-t border-border pt-5 text-14">
                   {tier.limits.map((limit) => (
@@ -143,13 +170,13 @@ export function PricingView() {
                   ))}
                 </ul>
                 <ButtonLink
-                  href={`/signup?plan=${tier.id}`}
+                  href={tier.href}
                   size="lg"
                   variant={tier.highlight ? "default" : "outline"}
                   className="mt-8 h-11 w-full"
-                  aria-label={`Get started with ${tier.name}`}
+                  aria-label={`${tier.cta} — ${tier.name}`}
                 >
-                  Get started
+                  {tier.cta}
                 </ButtonLink>
               </article>
             );
