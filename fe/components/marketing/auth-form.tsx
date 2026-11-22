@@ -16,6 +16,14 @@ type Props = {
   onModeChange: (mode: AuthMode) => void;
 };
 
+function missingSupabaseEnvMessage() {
+  const host = typeof window !== "undefined" ? window.location.hostname : "";
+  if (host.includes("vercel.app") || host === "nameloop.vercel.app") {
+    return "Missing NEXT_PUBLIC_SUPABASE_ANON_KEY on Vercel. Add it in Project → Settings → Environment Variables, then Redeploy.";
+  }
+  return "Add NEXT_PUBLIC_SUPABASE_ANON_KEY to fe/.env.local, then restart Next.";
+}
+
 export function AuthForm({ mode, onModeChange }: Props) {
   const params = useSearchParams();
   const emailRef = useRef<HTMLInputElement>(null);
@@ -47,7 +55,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
   async function continueGoogle() {
     setError(null);
     if (!supabaseConfigured()) {
-      setError("Add NEXT_PUBLIC_SUPABASE_ANON_KEY to fe/.env.local, then restart Next.");
+      setError(missingSupabaseEnvMessage());
       return;
     }
     setBusy("google");
@@ -72,7 +80,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
     if (!value) return;
 
     if (!supabaseConfigured()) {
-      setError("Add NEXT_PUBLIC_SUPABASE_ANON_KEY to fe/.env.local, then restart Next.");
+      setError(missingSupabaseEnvMessage());
       return;
     }
 
