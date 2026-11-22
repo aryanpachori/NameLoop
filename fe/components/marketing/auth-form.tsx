@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { createClient, supabaseConfigured } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -49,26 +47,11 @@ function GoogleMark() {
 
 export function AuthForm({ mode, onModeChange }: Props) {
   const params = useSearchParams();
-  const emailRef = useRef<HTMLInputElement>(null);
-
-  const [email, setEmail] = useState("");
-  const [busy, setBusy] = useState<"google" | "magic" | null>(null);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sentTo, setSentTo] = useState<string | null>(null);
-  const [resendIn, setResendIn] = useState(0);
 
   const productUrl = params.get("url");
   const authError = params.get("error");
-
-  useEffect(() => {
-    emailRef.current?.focus();
-  }, [mode]);
-
-  useEffect(() => {
-    if (resendIn <= 0) return;
-    const t = window.setTimeout(() => setResendIn((n) => n - 1), 1000);
-    return () => window.clearTimeout(t);
-  }, [resendIn]);
 
   function nextPath() {
     const q = productUrl ? `?url=${encodeURIComponent(productUrl)}` : "";
@@ -81,7 +64,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
       setError(missingSupabaseEnvMessage());
       return;
     }
-    setBusy("google");
+    setBusy(true);
     try {
       const supabase = createClient();
       const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`;
@@ -92,48 +75,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
       if (err) throw err;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Google sign-in failed");
-      setBusy(null);
-    }
-  }
-
-  async function sendMagicLink(e?: React.FormEvent) {
-    e?.preventDefault();
-    setError(null);
-    const value = email.trim().toLowerCase();
-    if (!value) return;
-
-    if (!supabaseConfigured()) {
-      setError(missingSupabaseEnvMessage());
-      return;
-    }
-
-    setBusy("magic");
-    try {
-      const supabase = createClient();
-      const emailRedirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`;
-      const { error: err } = await supabase.auth.signInWithOtp({
-        email: value,
-        options: { emailRedirectTo, shouldCreateUser: true },
-      });
-      if (err) throw err;
-      setSentTo(value);
-      setResendIn(30);
-    } catch (err) {
-      const raw = err instanceof Error ? err.message : "Could not send link";
-      const lower = raw.toLowerCase();
-      if (lower.includes("rate limit") || lower.includes("over_email")) {
-        setError(
-          "Email limit hit on Supabase’s free mailer (2/hour). Wait ~30–60 min, or use Google for now."
-        );
-      } else if (lower.includes("not authorized")) {
-        setError(
-          "That address can’t get mail from Supabase’s free sender. Use Google, or add custom SMTP."
-        );
-      } else {
-        setError(raw);
-      }
-    } finally {
-      setBusy(null);
+      setBusy(false);
     }
   }
 
@@ -148,7 +90,6 @@ export function AuthForm({ mode, onModeChange }: Props) {
           )}
           onClick={() => {
             onModeChange("signin");
-            setSentTo(null);
             setError(null);
           }}
         >
@@ -162,7 +103,6 @@ export function AuthForm({ mode, onModeChange }: Props) {
           )}
           onClick={() => {
             onModeChange("signup");
-            setSentTo(null);
             setError(null);
           }}
         >
@@ -176,71 +116,18 @@ export function AuthForm({ mode, onModeChange }: Props) {
         </p>
       )}
 
-      {sentTo ? (
-        <div className="surface space-y-3 p-5">
-          <p className="text-14 text-muted-foreground">
-            Link sent to <span className="font-mono text-foreground">{sentTo}</span>
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            disabled={resendIn > 0 || busy === "magic"}
-            onClick={() => sendMagicLink()}
-          >
-            {resendIn > 0 ? `Resend in ${resendIn}s` : busy === "magic" ? "Sending…" : "Resend"}
-          </Button>
-          <button
-            type="button"
-            className="text-13 text-muted-foreground underline underline-offset-4"
-            onClick={() => setSentTo(null)}
-          >
-            Different email
-          </button>
-        </div>
-      ) : (
-        <div className="surface space-y-4 p-5">
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            className="w-full"
-            disabled={busy !== null}
-            onClick={continueGoogle}
-          >
-            <GoogleMark />
-            {busy === "google" ? "Opening Google…" : "Google"}
-          </Button>
-
-          <div className="flex items-center gap-3 text-12 text-muted-foreground">
-            <span aria-hidden className="h-px flex-1 bg-border" />
-            or
-            <span aria-hidden className="h-px flex-1 bg-border" />
-          </div>
-
-          <form className="space-y-3" onSubmit={sendMagicLink}>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                ref={emailRef}
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                inputMode="email"
-                spellCheck={false}
-                placeholder="you@company.com"
-                value={email}
-                onChange={(ev) => setEmail(ev.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" size="lg" className="w-full" disabled={busy !== null}>
-              {busy === "magic" ? "Sending…" : "Email link"}
-            </Button>
-          </form>
-        </div>
-      )}
+      <div className="surface space-y-4 p-5">
+        <Button
+          type="button"
+          size="lg"
+          className="w-full"
+          disabled={busy}
+          onClick={continueGoogle}
+        >
+          <GoogleMark />
+          {busy ? "Opening Google…" : "Continue with Google"}
+        </Button>
+      </div>
 
       <p className="text-13 text-muted-foreground">
         {mode === "signin" ? (
