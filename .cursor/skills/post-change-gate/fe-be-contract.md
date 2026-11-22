@@ -11,11 +11,10 @@
 
 ## Auth
 
-1. FE: Supabase Google OAuth or magic link (`signInWithOAuth` / `signInWithOtp`)
-2. Invite-only: `NEXT_PUBLIC_ALLOWED_EMAILS` / BE `ALLOWED_EMAILS` (default founder). Others → waitlist UI; callback signs them out.
-3. Callback: `/auth/callback` exchanges `code` → session cookies
-4. API calls: `Authorization: Bearer <session.access_token>`
-5. BE: `GET {SUPABASE_URL}/auth/v1/user` with bearer (+ apikey) → upsert `profiles` + default `tenants`/`memberships` (403 if email not allowlisted)
+1. FE: Supabase Google OAuth or magic link (`signInWithOAuth` / `signInWithOtp`, `shouldCreateUser: true`)
+2. Callback: `/auth/callback` exchanges `code` → session cookies
+3. API calls: `Authorization: Bearer <session.access_token>`
+4. BE: `GET {SUPABASE_URL}/auth/v1/user` with bearer (+ apikey) → upsert `profiles` + default `tenants`/`memberships`
 
 ## Key endpoints
 
