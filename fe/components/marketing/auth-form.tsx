@@ -16,6 +16,14 @@ type Props = {
   onModeChange: (mode: AuthMode) => void;
 };
 
+type FieldErrors = {
+  email?: string;
+  password?: string;
+  confirm?: string;
+};
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
 function missingSupabaseEnvMessage() {
   const host = typeof window !== "undefined" ? window.location.hostname : "";
   if (host.includes("vercel.app") || host === "nameloop.vercel.app") {
@@ -47,6 +55,32 @@ function GoogleMark() {
   );
 }
 
+function validateEmail(value: string): string | undefined {
+  const email = value.trim();
+  if (!email) return "Email is required.";
+  if (!EMAIL_RE.test(email)) return "Enter a valid email.";
+  return undefined;
+}
+
+function validatePassword(value: string, mode: AuthMode): string | undefined {
+  if (!value) return "Password is required.";
+  if (value.length < 6) return "At least 6 characters.";
+  if (mode === "signup") {
+    if (value.length < 8) return "At least 8 characters.";
+    if (!/[A-Za-z]/.test(value) || !/[0-9]/.test(value)) {
+      return "Use letters and a number.";
+    }
+  }
+  return undefined;
+}
+
+function validateConfirm(password: string, confirm: string, mode: AuthMode): string | undefined {
+  if (mode !== "signup") return undefined;
+  if (!confirm) return "Confirm your password.";
+  if (confirm !== password) return "Passwords don’t match.";
+  return undefined;
+}
+
 export function AuthForm({ mode, onModeChange }: Props) {
   const router = useRouter();
   const params = useSearchParams();
@@ -54,9 +88,14 @@ export function AuthForm({ mode, onModeChange }: Props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState<"google" | "password" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<{ email?: boolean; password?: boolean; confirm?: boolean }>(
+    {}
+  );
 
   const productUrl = params.get("url");
   const authError = params.get("error");
@@ -68,6 +107,30 @@ export function AuthForm({ mode, onModeChange }: Props) {
   function nextPath() {
     const q = productUrl ? `?url=${encodeURIComponent(productUrl)}` : "";
     return mode === "signup" ? `/onboarding${q}` : `/app`;
+  }
+
+  function clearFieldNoise() {
+    setError(null);
+    setNotice(null);
+    setFieldErrors({});
+    setTouched({});
+  }
+
+  function runFieldValidation(next?: {
+    email?: string;
+    password?: string;
+    confirm?: string;
+  }): FieldErrors {
+    const e = next?.email ?? email;
+    const p = next?.password ?? password;
+    const c = next?.confirm ?? confirm;
+    const errors: FieldErrors = {
+      email: validateEmail(e),
+      password: validatePassword(p, mode),
+      confirm: validateConfirm(p, c, mode),
+    };
+    setFieldErrors(errors);
+    return errors;
   }
 
   async function continueGoogle() {
@@ -96,11 +159,11 @@ export function AuthForm({ mode, onModeChange }: Props) {
     e.preventDefault();
     setError(null);
     setNotice(null);
+    setTouched({ email: true, password: true, confirm: mode === "signup" });
 
-    const value = email.trim().toLowerCase();
-    if (!value || !password) return;
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+    const errors = runFieldValidation();
+    if (errors.email || errors.password || errors.confirm) {
+      if (errors.email) emailRef.current?.focus();
       return;
     }
 
@@ -109,6 +172,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
       return;
     }
 
+    const value = email.trim().toLowerCase();
     setBusy("password");
     try {
       const supabase = createClient();
@@ -116,9 +180,6 @@ export function AuthForm({ mode, onModeChange }: Props) {
         const { data, error: err } = await supabase.auth.signUp({
           email: value,
           password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`,
-          },
         });
         if (err) throw err;
         if (data.session) {
@@ -126,7 +187,8 @@ export function AuthForm({ mode, onModeChange }: Props) {
           router.refresh();
           return;
         }
-        setNotice("Account created. Confirm your email if Supabase asks, then sign in.");
+        setNotice("Account created. Sign in with your email and password.");
+        onModeChange("signin");
       } else {
         const { error: err } = await supabase.auth.signInWithPassword({
           email: value,
@@ -137,11 +199,25 @@ export function AuthForm({ mode, onModeChange }: Props) {
         router.refresh();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not sign in");
+      const raw = err instanceof Error ? err.message : "Could not sign in";
+      const lower = raw.toLowerCase();
+      if (lower.includes("invalid login") || lower.includes("invalid credentials")) {
+        setError("Wrong email or password.");
+      } else if (lower.includes("already registered") || lower.includes("already been registered")) {
+        setFieldErrors((prev) => ({ ...prev, email: "That email already has an account." }));
+      } else if (lower.includes("password")) {
+        setFieldErrors((prev) => ({ ...prev, password: raw }));
+      } else {
+        setError(raw);
+      }
     } finally {
       setBusy(null);
     }
   }
+
+  const emailInvalid = Boolean(touched.email && fieldErrors.email);
+  const passwordInvalid = Boolean(touched.password && fieldErrors.password);
+  const confirmInvalid = Boolean(touched.confirm && fieldErrors.confirm);
 
   return (
     <div className="space-y-5">
@@ -154,8 +230,8 @@ export function AuthForm({ mode, onModeChange }: Props) {
           )}
           onClick={() => {
             onModeChange("signin");
-            setError(null);
-            setNotice(null);
+            clearFieldNoise();
+            setConfirm("");
           }}
         >
           Sign in
@@ -168,8 +244,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
           )}
           onClick={() => {
             onModeChange("signup");
-            setError(null);
-            setNotice(null);
+            clearFieldNoise();
           }}
         >
           Create account
@@ -207,8 +282,8 @@ export function AuthForm({ mode, onModeChange }: Props) {
           <span aria-hidden className="h-px flex-1 bg-border" />
         </div>
 
-        <form className="space-y-3" onSubmit={submitPassword}>
-          <div className="space-y-2">
+        <form className="space-y-3" onSubmit={submitPassword} noValidate>
+          <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>
             <Input
               ref={emailRef}
@@ -220,11 +295,29 @@ export function AuthForm({ mode, onModeChange }: Props) {
               spellCheck={false}
               placeholder="you@company.com"
               value={email}
-              onChange={(ev) => setEmail(ev.target.value)}
+              aria-invalid={emailInvalid || undefined}
+              aria-describedby={emailInvalid ? "email-error" : undefined}
+              onChange={(ev) => {
+                const next = ev.target.value;
+                setEmail(next);
+                if (touched.email) {
+                  setFieldErrors((prev) => ({ ...prev, email: validateEmail(next) }));
+                }
+              }}
+              onBlur={() => {
+                setTouched((t) => ({ ...t, email: true }));
+                setFieldErrors((prev) => ({ ...prev, email: validateEmail(email) }));
+              }}
               required
             />
+            {emailInvalid ? (
+              <p id="email-error" className="text-12 text-destructive">
+                {fieldErrors.email}
+              </p>
+            ) : null}
           </div>
-          <div className="space-y-2">
+
+          <div className="space-y-1.5">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
@@ -233,11 +326,77 @@ export function AuthForm({ mode, onModeChange }: Props) {
               autoComplete={mode === "signup" ? "new-password" : "current-password"}
               placeholder="••••••••"
               value={password}
-              onChange={(ev) => setPassword(ev.target.value)}
+              aria-invalid={passwordInvalid || undefined}
+              aria-describedby={passwordInvalid ? "password-error" : undefined}
+              onChange={(ev) => {
+                const next = ev.target.value;
+                setPassword(next);
+                if (touched.password || touched.confirm) {
+                  setFieldErrors((prev) => ({
+                    ...prev,
+                    password: validatePassword(next, mode),
+                    confirm: validateConfirm(next, confirm, mode),
+                  }));
+                }
+              }}
+              onBlur={() => {
+                setTouched((t) => ({ ...t, password: true }));
+                setFieldErrors((prev) => ({
+                  ...prev,
+                  password: validatePassword(password, mode),
+                }));
+              }}
               required
-              minLength={6}
+              minLength={mode === "signup" ? 8 : 6}
             />
+            {passwordInvalid ? (
+              <p id="password-error" className="text-12 text-destructive">
+                {fieldErrors.password}
+              </p>
+            ) : mode === "signup" && !touched.password ? (
+              <p className="text-12 text-muted-foreground">8+ characters, letters and a number.</p>
+            ) : null}
           </div>
+
+          {mode === "signup" ? (
+            <div className="space-y-1.5">
+              <Label htmlFor="confirm">Confirm password</Label>
+              <Input
+                id="confirm"
+                name="confirm"
+                type="password"
+                autoComplete="new-password"
+                placeholder="••••••••"
+                value={confirm}
+                aria-invalid={confirmInvalid || undefined}
+                aria-describedby={confirmInvalid ? "confirm-error" : undefined}
+                onChange={(ev) => {
+                  const next = ev.target.value;
+                  setConfirm(next);
+                  if (touched.confirm) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      confirm: validateConfirm(password, next, mode),
+                    }));
+                  }
+                }}
+                onBlur={() => {
+                  setTouched((t) => ({ ...t, confirm: true }));
+                  setFieldErrors((prev) => ({
+                    ...prev,
+                    confirm: validateConfirm(password, confirm, mode),
+                  }));
+                }}
+                required
+              />
+              {confirmInvalid ? (
+                <p id="confirm-error" className="text-12 text-destructive">
+                  {fieldErrors.confirm}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+
           <Button type="submit" size="lg" className="w-full" disabled={busy !== null}>
             {busy === "password"
               ? mode === "signup"
@@ -257,7 +416,10 @@ export function AuthForm({ mode, onModeChange }: Props) {
             <button
               type="button"
               className="text-foreground underline underline-offset-4"
-              onClick={() => onModeChange("signup")}
+              onClick={() => {
+                onModeChange("signup");
+                clearFieldNoise();
+              }}
             >
               Create one
             </button>
@@ -268,7 +430,11 @@ export function AuthForm({ mode, onModeChange }: Props) {
             <button
               type="button"
               className="text-foreground underline underline-offset-4"
-              onClick={() => onModeChange("signin")}
+              onClick={() => {
+                onModeChange("signin");
+                clearFieldNoise();
+                setConfirm("");
+              }}
             >
               Sign in
             </button>
