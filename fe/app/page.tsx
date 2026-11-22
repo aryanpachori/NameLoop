@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChannelMarquee } from "@/components/marketing/channel-marquee";
 import { CloseBand } from "@/components/marketing/close-band";
+import { EntityFactsBand } from "@/components/marketing/entity-facts-band";
 import { EnginesStrip } from "@/components/marketing/engines-strip";
 import { Faq } from "@/components/marketing/faq";
 import { HeroField } from "@/components/marketing/hero-field";
@@ -12,26 +13,22 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { VsStrip } from "@/components/marketing/vs-strip";
 import { WordReveal } from "@/components/marketing/word-reveal";
+import { PageFaqJsonLd } from "@/components/marketing/page-faq-json-ld";
 import { homeFaq, homeHero, homeMeta, homeTrust } from "@/lib/home-copy";
+import { marketingPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
-  title: {
-    absolute: homeMeta.absoluteTitle,
-  },
+export const metadata: Metadata = marketingPageMetadata({
+  path: "/",
+  title: { absolute: homeMeta.absoluteTitle },
   description: homeMeta.description,
-  openGraph: {
-    title: homeMeta.absoluteTitle,
-    description: homeMeta.description,
-  },
-  twitter: {
-    title: homeMeta.absoluteTitle,
-    description: homeMeta.description,
-  },
-};
+  openGraphTitle: homeMeta.absoluteTitle,
+  twitterTitle: homeMeta.absoluteTitle,
+});
 
 export default function HomePage() {
   return (
     <div className="relative flex min-h-dvh flex-col bg-background text-foreground">
+      <PageFaqJsonLd items={homeFaq.items} path="/" />
       {/* Page-level ambient glow — consistent across all sections */}
       <div className="hero-atmosphere pointer-events-none fixed inset-0 z-0" aria-hidden="true" />
       <SiteHeader />
@@ -106,6 +103,8 @@ export default function HomePage() {
         <EnginesStrip />
         <VsStrip />
         <LoopChapters />
+
+        <EntityFactsBand />
 
         <section className="section-pad border-t border-border">
           <div className="marketing-shell grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">

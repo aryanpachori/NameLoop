@@ -37,15 +37,18 @@ export type EngineCard = {
 export const homeMeta = {
   title: "NameLoop",
   titleTemplate: "%s · NameLoop",
-  absoluteTitle: "NameLoop",
+  absoluteTitle: "NameLoop — Founder GTM growth loop",
   description:
     "Grow your product. Outbound that books. Inbound that compounds. The growth loop founders run — without a GTM team.",
   pricingTitle: "Pricing",
   pricingDescription:
-    "Pay for channels, emails, posts, and seats. Ads stay on Meta and Google.",
+    "NameLoop pricing for founders: pay for channels, outreach emails, social posts, and seats. Meta and Google ads bill in their consoles.",
   howTitle: "How it works",
   howDescription:
-    "The growth loop founders run — without a GTM team. Paste a URL, pick who you're selling to, send outreach, schedule posts, check what worked.",
+    "How NameLoop works: paste your URL, choose who you sell to, approve outreach and posts, then see what booked meetings and what to run next week.",
+  loginTitle: "Sign in",
+  loginDescription:
+    "Sign in to NameLoop with Google or a magic link. Run outbound that books and inbound that compounds — without a GTM team.",
 };
 
 export const homeHero = {
@@ -179,19 +182,19 @@ export const homeFaq = {
   items: [
     {
       q: "How does this help my product grow?",
-      a: "You talk to the right people (email), show up where they already scroll (posts), and stop doing what didn't work. The score is meetings and real interest — not how many emails left the building.",
+      a: "NameLoop helps your product grow by pairing capped email outreach with a content calendar so you reach the right buyers and show up where they already scroll. You keep what gets replies and meetings, and drop angles that do not — growth is measured in real conversations, not emails sent.",
     },
     {
       q: "Do I have to do outreach and content?",
-      a: "No. Lean on whichever you need. Most founders end up wanting both: email for conversations this month, posts so you're not starting from zero every Monday.",
+      a: "No — you can lean on outreach, content, or both depending on what you need this month. Most founders use email for near-term conversations and posts so inbound compounds instead of restarting from a blank page every Monday.",
     },
     {
       q: "What do you do vs what do I do?",
-      a: "We find leads, draft, schedule, and flag problems. You pick the customer, set limits, approve drafts, and answer humans. Pause and kill switch are always yours.",
+      a: "NameLoop finds leads, drafts outreach and posts, schedules sends, and flags deliverability issues — you choose the customer, set limits, approve every draft, and reply when a human answers. Pause, caps, and kill switches stay in your hands at all times.",
     },
     {
       q: "Will you spam people or reply for me?",
-      a: "No. Caps are yours. If someone replies, we stop that lead and put it in Needs you. We don't pretend to be you in the inbox.",
+      a: "No — NameLoop will not blast past your caps or reply as you in the inbox. When someone responds, we stop that lead and surface it in Needs you so you answer personally; we never pretend to be you.",
     },
   ] satisfies FaqItem[],
 };

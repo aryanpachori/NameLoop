@@ -3,15 +3,13 @@ import { SiteFooter } from "@/components/marketing/site-footer";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { HowItWorksView } from "@/components/marketing/how-it-works-view";
 import { homeMeta } from "@/lib/home-copy";
+import { marketingPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = marketingPageMetadata({
+  path: "/how-it-works",
   title: homeMeta.howTitle,
   description: homeMeta.howDescription,
-  openGraph: {
-    title: `${homeMeta.howTitle} · NameLoop`,
-    description: homeMeta.howDescription,
-  },
-};
+});
 
 export default function HowItWorksPage() {
   return (

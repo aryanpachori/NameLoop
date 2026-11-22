@@ -3,7 +3,9 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Source_Serif_4 } from "next/font/google";
 import { Providers } from "@/components/providers";
+import { SiteJsonLd } from "@/components/marketing/site-json-ld";
 import { homeMeta } from "@/lib/home-copy";
+import { rootSiteMetadata } from "@/lib/page-metadata";
 import "./globals.css";
 
 /* Real medium/semibold cuts — Instrument Serif is 400-only and reads thin on dark. */
@@ -15,32 +17,25 @@ const display = Source_Serif_4({
   display: "swap",
 });
 
+const site = rootSiteMetadata();
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: site.metadataBase,
   title: {
     default: homeMeta.absoluteTitle,
     template: homeMeta.titleTemplate,
   },
   description: homeMeta.description,
   applicationName: homeMeta.title,
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico", sizes: "any" },
-    ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  alternates: {
+    canonical: "/",
   },
-  openGraph: {
-    title: homeMeta.absoluteTitle,
-    description: homeMeta.description,
-    siteName: homeMeta.title,
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: homeMeta.absoluteTitle,
-    description: homeMeta.description,
+  icons: site.icons,
+  openGraph: site.openGraph,
+  twitter: site.twitter,
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -57,6 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className={`${GeistSans.className} flex min-h-full flex-col antialiased`}>
+        <SiteJsonLd />
         <a href="#main" className="skip-link">
           Skip to content
         </a>
