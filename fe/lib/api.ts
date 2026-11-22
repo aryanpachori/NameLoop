@@ -1,4 +1,5 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
+export const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || "http://127.0.0.1:8000";
 
 export type MeResponse = {
   user_id: string;
@@ -29,7 +30,14 @@ async function apiFetch<T>(
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(text || `API ${res.status}`);
+    let message = text || `API ${res.status}`;
+    try {
+      const json = JSON.parse(text) as { detail?: string };
+      if (json.detail) message = json.detail;
+    } catch {
+      /* plain text */
+    }
+    throw new Error(message);
   }
   return res.json() as Promise<T>;
 }
@@ -52,5 +60,3 @@ export function bootstrapWorkspace(
 export function markOnboarded(token: string) {
   return apiFetch<MeResponse>("/api/me/onboarded", { method: "POST", token });
 }
-
-export { API_BASE };

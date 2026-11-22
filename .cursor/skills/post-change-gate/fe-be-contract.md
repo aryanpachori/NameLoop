@@ -3,9 +3,10 @@
 ## Base URLs
 
 - FE prod: `https://nameloop.vercel.app`
-- FE → API: `NEXT_PUBLIC_API_URL` (local default `http://127.0.0.1:8000`)
+- BE prod: `https://nameloop-a58q.onrender.com`
+- FE → API: `NEXT_PUBLIC_API_URL` (prod = Render URL; local default `http://127.0.0.1:8000`)
 - Supabase: `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- BE DB: `DATABASE_URL` (Supabase Postgres, `sslmode=require`)
+- BE DB: `DATABASE_URL` Session pooler on Render (`*.pooler.supabase.com`), `sslmode=require`
 - BE CORS must include `https://nameloop.vercel.app`
 
 ## Auth

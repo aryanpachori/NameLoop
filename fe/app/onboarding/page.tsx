@@ -16,8 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { bootstrapWorkspace, markOnboarded } from "@/lib/api";
 import { MODEL_LABELS } from "@/lib/labels";
 import { icpTemplates, MODEL_OPTIONS, suggestModel } from "@/lib/model-config";
+import { createClient, supabaseConfigured } from "@/lib/supabase/client";
 import { useWorkspace } from "@/lib/store";
 import type { BusinessModel, Claim, IcpCard, ModelFollowUps } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -111,7 +113,7 @@ export default function OnboardingPage() {
     }
   })();
 
-  const finish = useCallback(() => {
+  const finish = useCallback(async () => {
     if (!model) return;
     completeOnboarding(
       {
@@ -129,10 +131,30 @@ export default function OnboardingPage() {
       },
       model
     );
+
+    if (supabaseConfigured()) {
+      try {
+        const supabase = createClient();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        if (session?.access_token) {
+          await bootstrapWorkspace(session.access_token, {
+            product_url: url || undefined,
+            workspace_name: state.tenant.name,
+          });
+          await markOnboarded(session.access_token);
+        }
+      } catch {
+        /* local mock still completes; BE may be cold */
+      }
+    }
+
     router.push("/app/brain");
   }, [
     adBudget, audience, brain.icp, brain.offer, claims, completeOnboarding, followUps,
-    goals, icps, model, offer, prohibited, router, selected, soundsLike, voiceSamples,
+    goals, icps, model, offer, prohibited, router, selected, soundsLike, state.tenant.name,
+    url, voiceSamples,
   ]);
 
   const next = useCallback(() => {

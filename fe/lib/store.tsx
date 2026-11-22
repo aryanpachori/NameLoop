@@ -56,6 +56,12 @@ type Action =
   | { type: "setAdStatus"; id: string; status: "approved" | "launched" | "dismissed" }
   | { type: "startNextLoop" }
   | { type: "applySignup"; signup: SignupDraft }
+  | {
+      type: "hydrateFromApi";
+      tenantName: string;
+      productUrl: string | null;
+      onboarded: boolean;
+    }
   | { type: "completeOnboarding"; brain: Partial<BusinessBrain>; model: BusinessModel };
 
 function stamp(actor: "ai" | "human", action: string, detail: string) {
@@ -421,6 +427,16 @@ function reducer(state: MultiWorkspaceState, action: Action): MultiWorkspaceStat
           },
         },
       }));
+    case "hydrateFromApi":
+      return withActive(state, (ws) => ({
+        ...ws,
+        onboarded: action.onboarded,
+        tenant: {
+          ...ws.tenant,
+          name: action.tenantName || ws.tenant.name,
+          productUrl: action.productUrl || ws.tenant.productUrl,
+        },
+      }));
     case "completeOnboarding":
       return withActive(state, (ws) => ({
         ...ws,
@@ -480,6 +496,11 @@ type Store = {
   setAdStatus: (id: string, status: "approved" | "launched" | "dismissed") => void;
   startNextLoop: () => void;
   applySignup: (signup: SignupDraft) => void;
+  hydrateFromApi: (payload: {
+    tenantName: string;
+    productUrl: string | null;
+    onboarded: boolean;
+  }) => void;
   completeOnboarding: (brain: Partial<BusinessBrain>, model: BusinessModel) => void;
 };
 
@@ -578,6 +599,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       setAdStatus: (id, status) => dispatch({ type: "setAdStatus", id, status }),
       startNextLoop: () => dispatch({ type: "startNextLoop" }),
       applySignup: (signup) => dispatch({ type: "applySignup", signup }),
+      hydrateFromApi: (payload) => dispatch({ type: "hydrateFromApi", ...payload }),
       completeOnboarding: (brain, model) =>
         dispatch({ type: "completeOnboarding", brain, model }),
     }),
