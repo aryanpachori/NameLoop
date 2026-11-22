@@ -2,9 +2,11 @@
 
 ## Base URLs
 
-- FE → API: `NEXT_PUBLIC_API_URL` (default `http://127.0.0.1:8000`)
+- FE prod: `https://nameloop.vercel.app`
+- FE → API: `NEXT_PUBLIC_API_URL` (local default `http://127.0.0.1:8000`)
 - Supabase: `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - BE DB: `DATABASE_URL` (Supabase Postgres, `sslmode=require`)
+- BE CORS must include `https://nameloop.vercel.app`
 
 ## Auth
 
