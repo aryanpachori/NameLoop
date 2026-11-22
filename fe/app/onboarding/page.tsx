@@ -46,7 +46,13 @@ export default function OnboardingPage() {
   const brain = state.brain;
 
   const [step, setStep] = useState(0);
-  const [url, setUrl] = useState(state.tenant.productUrl);
+  const [url, setUrl] = useState(() => {
+    if (typeof window !== "undefined") {
+      const fromQuery = new URLSearchParams(window.location.search).get("url");
+      if (fromQuery) return fromQuery;
+    }
+    return state.tenant.productUrl;
+  });
   const [scanProgress, setScanProgress] = useState(-1);
   const [offer, setOffer] = useState(brain.offer.value);
   const [audience, setAudience] = useState(brain.icp.value);

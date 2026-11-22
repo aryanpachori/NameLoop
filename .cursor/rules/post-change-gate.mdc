@@ -1,0 +1,14 @@
+---
+description: After any code change, run the post-change-gate skill before finishing.
+alwaysApply: true
+---
+
+# Post-change gate (mandatory)
+
+When this turn created or edited code under `fe/` or `be/` (or shared contracts), **before** the final user reply:
+
+1. Read and follow `.cursor/skills/post-change-gate/SKILL.md`
+2. Complete review → FE↔BE sync → tests → commit + push (unless user forbade push)
+3. End with the short gate report from that skill
+
+Do not skip because the change “looks small.” Skip push only if the skill’s “When NOT to push” applies.

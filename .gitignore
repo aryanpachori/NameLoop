@@ -1,6 +1,8 @@
 .DS_Store
 .env
 .env.*
+!.env.example
+!**/.env.example
 be/.venv/
 be/__pycache__/
 be/**/__pycache__/

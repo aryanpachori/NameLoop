@@ -1,22 +1,31 @@
 "use client";
 
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Logo } from "@/components/logo";
 import { AuthBrandPanel } from "@/components/marketing/auth-brand-panel";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { AuthForm, type AuthMode } from "@/components/marketing/auth-form";
 
-export default function LoginPage() {
-  const router = useRouter();
+function LoginInner() {
+  const params = useSearchParams();
+  const initial: AuthMode = params.get("mode") === "signup" ? "signup" : "signin";
+  const [mode, setMode] = useState<AuthMode>(initial);
 
   return (
     <div className="grid min-h-dvh bg-background text-foreground lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
       <AuthBrandPanel
-        headline="Your pathway to meetings that show up."
-        accentWords={["meetings"]}
-        body="Inbound first. Open your workspace and pick up the loop where you left it."
+        headline={
+          mode === "signup"
+            ? "Grow your product. Start with a URL."
+            : "Welcome back. Pick up the growth loop."
+        }
+        accentWords={mode === "signup" ? ["product."] : ["loop."]}
+        body={
+          mode === "signup"
+            ? "Continue with Google or a magic link. Then paste your site — we sketch who to sell to."
+            : "Outbound that books. Inbound that compounds. No GTM team required."
+        }
       />
 
       <main
@@ -30,91 +39,20 @@ export default function LoginPage() {
           </Link>
 
           <div className="auth-form-fade" style={{ animationDelay: "0.05s" }}>
-            <p className="text-13 font-medium text-brand">Welcome back</p>
-            <h2 className="heading-1 mt-2">Log in to NameLoop</h2>
+            <p className="text-13 font-medium text-brand">
+              {mode === "signup" ? "Get started" : "Welcome back"}
+            </p>
+            <h2 className="heading-1 mt-2">
+              {mode === "signup" ? "Create your account" : "Sign in to NameLoop"}
+            </h2>
             <p className="mt-2 text-14 text-muted-foreground">
-              Demo: any email opens the sample workspace.
+              Google first. Or email a magic link — no password.
             </p>
           </div>
 
-          <div
-            className="surface mt-8 space-y-4 p-5 auth-form-fade"
-            style={{ animationDelay: "0.15s" }}
-          >
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="w-full"
-              onClick={() => router.push("/app")}
-            >
-              <span
-                aria-hidden
-                className="flex size-4 items-center justify-center rounded-full border border-current font-mono text-[10px] leading-none"
-              >
-                G
-              </span>
-              Continue with Google
-            </Button>
-            <p className="text-center text-12 text-muted-foreground">
-              Demo only. No real sign-in happens.
-            </p>
-
-            <div className="flex items-center gap-3 text-12 text-muted-foreground">
-              <span aria-hidden className="h-px flex-1 bg-border" />
-              or
-              <span aria-hidden className="h-px flex-1 bg-border" />
-            </div>
-
-            <form
-              className="space-y-4"
-              onSubmit={(event) => {
-                event.preventDefault();
-                router.push("/app");
-              }}
-            >
-              <div className="space-y-2">
-                <Label htmlFor="email">Work email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  inputMode="email"
-                  spellCheck={false}
-                  defaultValue="maya@ledgerline.dev"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-3">
-                  <Label htmlFor="password">Password</Label>
-                  <span className="text-12 text-muted-foreground">Demo password filled</span>
-                </div>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  defaultValue="demo-password"
-                  required
-                />
-              </div>
-              <Button className="w-full" size="lg" type="submit">
-                Continue to workspace
-              </Button>
-            </form>
+          <div className="mt-8 auth-form-fade" style={{ animationDelay: "0.15s" }}>
+            <AuthForm mode={mode} onModeChange={setMode} />
           </div>
-
-          <p
-            className="mt-6 text-14 text-muted-foreground auth-form-fade"
-            style={{ animationDelay: "0.28s" }}
-          >
-            New here?{" "}
-            <Link href="/signup" className="text-foreground underline underline-offset-4">
-              Get started
-            </Link>
-          </p>
         </div>
       </main>
 
@@ -135,5 +73,13 @@ export default function LoginPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginInner />
+    </Suspense>
   );
 }
