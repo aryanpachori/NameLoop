@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/button-link";
 import { ChannelChip } from "@/components/channel-mark";
+import { EntityFactsBand } from "@/components/marketing/entity-facts-band";
 import { LOOP_STEPS } from "@/components/marketing/loop-steps";
 import { Reveal } from "@/components/marketing/reveal";
 import { WordReveal } from "@/components/marketing/word-reveal";
@@ -48,14 +49,20 @@ export function HowItWorksView() {
             />
           </h1>
           <Reveal instant delay={2}>
-            <p className="mt-5 max-w-xl text-17 leading-7 text-muted-foreground text-pretty">
-              Grow your product. Outbound that books. Inbound that compounds. Paste a URL, pick who
-              you&apos;re selling to, email carefully, post where they hang out, then keep what worked.
-              You approve drafts and answer humans — we don&apos;t.
+            <h2 className="mt-8 text-20 font-semibold tracking-tight text-foreground">
+              How does NameLoop work?
+            </h2>
+            <p className="mt-3 max-w-xl text-17 leading-7 text-muted-foreground text-pretty">
+              NameLoop is a growth loop for founders: paste your product URL, pick who you&apos;re selling
+              to, run capped email outreach and a shared content calendar, then keep what gets replies
+              and meetings. You approve every draft and answer humans when they write back — we
+              don&apos;t send past your limits or reply for you.
             </p>
           </Reveal>
         </div>
       </section>
+
+      <EntityFactsBand />
 
       {/* Model first */}
       <section className="border-t border-border bg-muted/40 section-pad">
@@ -88,7 +95,11 @@ export function HowItWorksView() {
       <section id="steps" className="scroll-mt-28 border-t border-border section-pad">
         <div className="marketing-shell">
           <Reveal>
-            <h2 className="heading-1 max-w-2xl">Then six steps, on repeat.</h2>
+            <h2 className="heading-1 max-w-2xl">What are the six steps in the NameLoop loop?</h2>
+            <p className="mt-3 max-w-2xl text-16 text-muted-foreground">
+              Each cycle runs the same sequence — understand your site, pick customers, wire channels,
+              send and post, measure, then plan next week from what worked.
+            </p>
           </Reveal>
           <ol className="mt-10 divide-y divide-border border-y border-border">
             {LOOP_STEPS.map((step) => (
@@ -96,7 +107,9 @@ export function HowItWorksView() {
                 <Reveal className="grid gap-6 py-8 md:grid-cols-[1fr_320px] md:items-start md:gap-12">
                   <div>
                     <p className="font-mono text-12 text-muted-foreground">Step {step.n}</p>
-                    <h3 className="mt-1 font-serif-display text-28 leading-8 tracking-tight">{step.title}</h3>
+                    <h3 className="mt-1 font-serif-display text-28 leading-8 tracking-tight">
+                      {step.heading}
+                    </h3>
                     <p className="mt-3 max-w-xl text-16 text-muted-foreground">{step.long}</p>
                   </div>
                   <div>{step.fragment}</div>

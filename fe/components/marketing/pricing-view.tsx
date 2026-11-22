@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { ButtonLink } from "@/components/button-link";
-import { Faq, type FaqItem } from "@/components/marketing/faq";
+import { Faq } from "@/components/marketing/faq";
+import { pricingFaq } from "@/lib/pricing-copy";
 import { WordReveal } from "@/components/marketing/word-reveal";
 import { Segmented } from "@/components/ui/segmented";
 import { cn } from "@/lib/utils";
@@ -70,25 +71,6 @@ const tiers: Tier[] = [
     highlight: false,
     cta: "Talk to us",
     href: "mailto:aryanpachori03@gmail.com?subject=NameLoop%20Enterprise",
-  },
-];
-
-const faq: FaqItem[] = [
-  {
-    q: "Is ad spend included?",
-    a: "No. Meta and Google bill you directly. We only suggest what to boost and a rough budget. You approve each one.",
-  },
-  {
-    q: "Do I get outreach and content?",
-    a: "Yes. Email limit is for outreach. Post limit is for the calendar. Same customer profile drives both.",
-  },
-  {
-    q: "Can I change plan or cancel?",
-    a: "Yes. Monthly anytime. Annual saves about 20% on Starter and Growth.",
-  },
-  {
-    q: "Is checkout live?",
-    a: "Not yet. We're invite-only. Join the waitlist or sign in if you have access — we'll email you.",
   },
 ];
 
@@ -193,7 +175,7 @@ export function PricingView() {
             <p className="section-eyebrow">FAQ</p>
             <h2 className="heading-1 mt-3">Quick answers.</h2>
           </div>
-          <Faq items={faq} />
+          <Faq items={pricingFaq} />
         </div>
       </section>
     </main>

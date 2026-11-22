@@ -29,6 +29,9 @@ export const metadata: Metadata = {
   applicationName: homeMeta.title,
   alternates: {
     canonical: "/",
+    types: {
+      "text/plain": [{ url: "/llms.txt", title: "NameLoop for LLMs" }],
+    },
   },
   icons: site.icons,
   openGraph: site.openGraph,

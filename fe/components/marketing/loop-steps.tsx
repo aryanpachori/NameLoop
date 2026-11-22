@@ -176,6 +176,8 @@ function BoostFragment() {
 export type LoopStep = {
   n: string;
   title: string;
+  /** Question-style H3 for SEO / featured snippets */
+  heading: string;
   short: string;
   long: string;
   fragment: React.ReactNode;
@@ -185,6 +187,7 @@ export const LOOP_STEPS: LoopStep[] = [
   {
     n: "01",
     title: "Read your site",
+    heading: "How does NameLoop read your site?",
     short: "Paste a URL. We figure out what you sell.",
     long: "We pull pricing, customer stories, and claims you can actually stand behind. You edit the summary, then tell us what kind of business this is — that changes who we look for.",
     fragment: <UnderstandFragment />,
@@ -192,6 +195,7 @@ export const LOOP_STEPS: LoopStep[] = [
   {
     n: "02",
     title: "Pick who to sell to",
+    heading: "How do you pick who to sell to?",
     short: "A couple customer cards. Then we find leads.",
     long: "You get two or three guesses: who they are, what hurts, where they hang out. Pick one or two. We pull companies that fit, skip ones you've already hit, and park rows with no usable email.",
     fragment: <IcpFragment />,
@@ -199,6 +203,7 @@ export const LOOP_STEPS: LoopStep[] = [
   {
     n: "03",
     title: "Connect email (and channels)",
+    heading: "How do you connect email and channels?",
     short: "Gmail, Resend, LinkedIn — whatever you'll actually use.",
     long: "Each sender has its own daily limit and bounce view. You can pause one without killing everything. Content channels get ranked for the customer you picked — email is for outreach.",
     fragment: <ChannelsFragment />,
@@ -206,6 +211,7 @@ export const LOOP_STEPS: LoopStep[] = [
   {
     n: "04",
     title: "Send and post",
+    heading: "How does NameLoop send outreach and schedule posts?",
     short: "Daytime email slots. Posts on a calendar. You approve.",
     long: "Outreach is a first note plus follow-ups, sent in slots so you don't dump everything at once. Posts land on a shared calendar. Nothing goes live until you approve. If someone replies, we stop — we don't answer for you.",
     fragment: <SprintFragment />,
@@ -213,6 +219,7 @@ export const LOOP_STEPS: LoopStep[] = [
   {
     n: "05",
     title: "See what worked",
+    heading: "How do you see what worked in NameLoop?",
     short: "Replies, saves, meetings. By channel.",
     long: "One report for email health and post performance. If we're guessing, we say so. You can tell which follow-up or post actually did something.",
     fragment: <MeasureFragment />,
@@ -220,6 +227,7 @@ export const LOOP_STEPS: LoopStep[] = [
   {
     n: "06",
     title: "Plan next week from that",
+    heading: "How does NameLoop plan your next week?",
     short: "Keep the winners. Drop the rest. Ads if you want.",
     long: "We suggest what to keep, kill, or try next — including angles that are moving in your niche. You accept or edit. Optional: boost a post that already proved itself. Spend stays on Meta or Google.",
     fragment: <BoostFragment />,

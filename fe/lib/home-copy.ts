@@ -212,3 +212,18 @@ export const homeFooter = {
   blurb:
     "The growth loop founders run — without a GTM team. Outbound that books. Inbound that compounds.",
 };
+
+/** Declarative entity facts for humans and GEO crawlers — plain sentences, no vanity metrics. */
+export const homeEntityFacts = {
+  eyebrow: "What NameLoop is",
+  headline: "The growth loop, in plain terms.",
+  facts: [
+    "NameLoop is a founder growth platform that combines outbound email and inbound social content in one weekly loop.",
+    "NameLoop helps founders book conversations through careful email outreach and stay visible through scheduled posts — without hiring a GTM team.",
+    "NameLoop is for solo founders and small teams selling B2B, B2C, D2C, marketplace, or B2B2C products who want both outbound and inbound working toward the same buyer.",
+    "NameLoop finds leads that fit, drafts email sequences with daily send caps, flags bounces, and stops outreach when someone replies.",
+    "NameLoop drafts social posts for channels such as LinkedIn, X, and Instagram on a calendar; nothing sends or posts until the founder approves.",
+    "NameLoop connects to Gmail and Resend for email. Paid ads on Meta and Google are billed by those platforms; NameLoop suggests boosts and budgets for founder approval.",
+    "NameLoop is available at https://nameloop.vercel.app with Starter at $10/month, Growth at $50/month, and Enterprise on custom terms.",
+  ],
+} as const;

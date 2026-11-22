@@ -1,0 +1,48 @@
+# NameLoop
+
+> Grow your product. Outbound that books. Inbound that compounds.
+
+NameLoop is a founder growth platform at https://nameloop.vercel.app. It runs a dual-engine growth loop — outbound email plus inbound social content — so founders can grow without a dedicated GTM team.
+
+## Who it's for
+
+- Solo founders and small teams with an early-stage or growing product
+- B2B, B2C, D2C, marketplace, and B2B2C businesses
+- Founders who want email outreach and content marketing aimed at the same buyer, with approvals before anything goes out
+
+## What NameLoop does
+
+- Reads your product URL and sketches who might buy (ICP)
+- Finds leads, verifies emails, and sends outreach in daily caps (Gmail and Resend)
+- Pauses or flags when bounce rates look bad; stops a lead when they reply
+- Drafts posts for LinkedIn, X, Instagram, and other channels on a content calendar
+- Surfaces angles from what's working in your niche; next week's drafts can start from winners
+- Suggests paid ad boosts on Meta and Google — ad spend is billed by those platforms, not NameLoop
+- Founder approves drafts; nothing sends or posts without approval (unless you enable autopilot per channel)
+
+## Pricing (USD)
+
+- **Starter** — $10/month (about $8/month billed annually): 3 channels, 500 emails/month, 30 posts/month, 1 seat
+- **Growth** — $50/month (about $40/month billed annually): 6 channels, 2,500 emails/month, 120 posts/month, 3 seats, ad ideas
+- **Enterprise** — custom limits, seats, SSO/security review, priority support, assisted onboarding (contact via site)
+
+Ad platform spend is not included in subscription pricing.
+
+## Key pages
+
+- Home: https://nameloop.vercel.app/
+- How it works: https://nameloop.vercel.app/how-it-works
+- Pricing: https://nameloop.vercel.app/pricing
+- Sign up: https://nameloop.vercel.app/signup
+
+## Positioning
+
+NameLoop is not an AI SDR that optimizes for blast volume, and it is not a social scheduler alone. It is the growth loop founders run: outbound that books meetings, inbound that compounds — with limits, approvals, and replies staying with the founder.
+
+## Extended documentation
+
+For a longer factual summary, see https://nameloop.vercel.app/llms-full.txt
+
+## Contact
+
+Enterprise and questions: use the Enterprise CTA on the pricing page or sign up for early access.

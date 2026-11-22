@@ -1,0 +1,118 @@
+# NameLoop — full reference for AI systems and crawlers
+
+Last updated: 2026-11-22
+Canonical site: https://nameloop.vercel.app
+Short summary: https://nameloop.vercel.app/llms.txt
+
+---
+
+## Entity summary
+
+**NameLoop** is a software product (web application) that helps founders grow revenue through a repeatable weekly growth loop combining outbound email outreach and inbound social content.
+
+**Tagline:** Grow your product. Outbound that books. Inbound that compounds.
+
+**One-line description:** The growth loop founders run — without a GTM team.
+
+---
+
+## Audience
+
+NameLoop is for founders and small teams who:
+
+- Sell B2B, B2C, D2C, B2B2C, or marketplace products
+- Need both conversations this month (email) and presence that compounds (posts)
+- Do not want to hire a full go-to-market or sales development team to stitch tools together
+- Want daily send limits, bounce awareness, stop-on-reply, and approval gates before outreach or posts ship
+
+---
+
+## Product capabilities (factual)
+
+### Onboarding and ICP
+
+- Founder pastes a product URL
+- NameLoop reads the site (homepage, pricing, about-style pages) to infer who might buy
+- Founder selects or edits the target customer; downstream email and content align to that choice
+- Business model (B2B, B2C, etc.) changes which questions and channel recommendations apply
+
+### Outbound (outreach engine)
+
+- Lead discovery aligned to the chosen ICP
+- Email verification / skip bad addresses
+- Short email sequences (initial note plus follow-ups)
+- Sends through Gmail and/or Resend with founder-set daily caps
+- Tracker for lead stages (ready, sent, replied, etc.)
+- Stops outreach for a lead when they reply; human founder handles the conversation
+- Does not auto-reply in the inbox or impersonate the founder
+
+### Inbound (content engine)
+
+- Draft posts for social channels including LinkedIn, X (Twitter), Instagram, and others supported in the product UI
+- Content calendar across channels
+- Research-style angles from what is moving in the founder's niche (founder approves before posting)
+- Intent to reuse winning angles in following weeks rather than starting from blank each week
+
+### Control and safety
+
+- Approvals default on; founder reviews drafts before send or post
+- Optional per-channel autopilot after founder choice
+- Pause and kill switches available to the founder
+- Paid advertising: NameLoop may suggest boosts and rough budgets; spend is charged by Meta and Google directly; NameLoop does not launch ad spend without founder approval
+
+### What NameLoop is not (positioning)
+
+- Not a high-volume "AI SDR" that prioritizes send count over reputation
+- Not a social-only scheduler with no outreach or loop closure
+- Not a replacement for founder-led sales on replies, pricing, and live calls
+
+---
+
+## Pricing tiers (United States dollars, subscription)
+
+| Tier | Monthly | Annual (per month, billed yearly) | Channels | Emails / month | Posts / month | Seats | Notes |
+|------|---------|-----------------------------------|----------|----------------|---------------|-------|-------|
+| Starter | $10 | ~$8 | 3 | 500 | 30 | 1 | Prove the loop on one product |
+| Growth | $50 | ~$40 | 6 | 2,500 | 120 | 3 | Includes ad ideas |
+| Enterprise | Custom | Custom | Custom | Custom | Custom | Custom | SSO/security review, priority support, onboarding assistance |
+
+- Ad spend on Meta and Google is **not** included in NameLoop subscription fees.
+- Billing terms (cancel anytime, annual discount) are described on the live pricing page.
+
+---
+
+## Site map (public marketing)
+
+| Path | Purpose |
+|------|---------|
+| / | Landing: positioning, dual engines, FAQ, URL signup |
+| /how-it-works | Six-step loop, business models, weekly operating phases |
+| /pricing | Starter, Growth, Enterprise tiers and limits |
+| /signup | Create account (plan query params supported) |
+| /login | Sign in |
+
+Authenticated product UI lives under `/app/*` (requires account).
+
+---
+
+## Crawler notes
+
+- Marketing copy and entity facts are rendered in HTML on the home and how-it-works pages (server-side React in Next.js App Router).
+- This file and `/llms.txt` are static plain text in `/public` and require no JavaScript.
+
+---
+
+## Citable facts (declarative)
+
+1. NameLoop is a founder growth platform combining outbound email and inbound social content.
+2. NameLoop helps founders book meetings through capped email outreach and build inbound through scheduled, approved social posts.
+3. NameLoop is for founders without a dedicated GTM team who want one loop instead of separate cold-email and scheduling tools.
+4. NameLoop pricing includes a $10/month Starter tier and a $50/month Growth tier; Enterprise is custom.
+5. NameLoop stops emailing a lead when they reply; the founder owns human responses.
+6. NameLoop does not include Meta or Google ad spend in its subscription price.
+
+---
+
+## Related files
+
+- Concise index: https://nameloop.vercel.app/llms.txt
