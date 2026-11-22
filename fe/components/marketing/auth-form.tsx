@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { createClient, supabaseConfigured } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -46,12 +48,22 @@ function GoogleMark() {
 }
 
 export function AuthForm({ mode, onModeChange }: Props) {
+  const router = useRouter();
   const params = useSearchParams();
-  const [busy, setBusy] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState<"google" | "password" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const productUrl = params.get("url");
   const authError = params.get("error");
+
+  useEffect(() => {
+    emailRef.current?.focus();
+  }, [mode]);
 
   function nextPath() {
     const q = productUrl ? `?url=${encodeURIComponent(productUrl)}` : "";
@@ -60,11 +72,12 @@ export function AuthForm({ mode, onModeChange }: Props) {
 
   async function continueGoogle() {
     setError(null);
+    setNotice(null);
     if (!supabaseConfigured()) {
       setError(missingSupabaseEnvMessage());
       return;
     }
-    setBusy(true);
+    setBusy("google");
     try {
       const supabase = createClient();
       const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`;
@@ -75,7 +88,58 @@ export function AuthForm({ mode, onModeChange }: Props) {
       if (err) throw err;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Google sign-in failed");
-      setBusy(false);
+      setBusy(null);
+    }
+  }
+
+  async function submitPassword(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setNotice(null);
+
+    const value = email.trim().toLowerCase();
+    if (!value || !password) return;
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (!supabaseConfigured()) {
+      setError(missingSupabaseEnvMessage());
+      return;
+    }
+
+    setBusy("password");
+    try {
+      const supabase = createClient();
+      if (mode === "signup") {
+        const { data, error: err } = await supabase.auth.signUp({
+          email: value,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath())}`,
+          },
+        });
+        if (err) throw err;
+        if (data.session) {
+          router.push(nextPath());
+          router.refresh();
+          return;
+        }
+        setNotice("Account created. Confirm your email if Supabase asks, then sign in.");
+      } else {
+        const { error: err } = await supabase.auth.signInWithPassword({
+          email: value,
+          password,
+        });
+        if (err) throw err;
+        router.push(nextPath());
+        router.refresh();
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not sign in");
+    } finally {
+      setBusy(null);
     }
   }
 
@@ -91,6 +155,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
           onClick={() => {
             onModeChange("signin");
             setError(null);
+            setNotice(null);
           }}
         >
           Sign in
@@ -104,6 +169,7 @@ export function AuthForm({ mode, onModeChange }: Props) {
           onClick={() => {
             onModeChange("signup");
             setError(null);
+            setNotice(null);
           }}
         >
           Create account
@@ -116,17 +182,72 @@ export function AuthForm({ mode, onModeChange }: Props) {
         </p>
       )}
 
+      {notice ? (
+        <p className="rounded-[8px] border border-border bg-muted/40 px-3 py-2 text-13 text-muted-foreground">
+          {notice}
+        </p>
+      ) : null}
+
       <div className="surface space-y-4 p-5">
         <Button
           type="button"
+          variant="outline"
           size="lg"
           className="w-full"
-          disabled={busy}
+          disabled={busy !== null}
           onClick={continueGoogle}
         >
           <GoogleMark />
-          {busy ? "Opening Google…" : "Continue with Google"}
+          {busy === "google" ? "Opening Google…" : "Continue with Google"}
         </Button>
+
+        <div className="flex items-center gap-3 text-12 text-muted-foreground">
+          <span aria-hidden className="h-px flex-1 bg-border" />
+          or
+          <span aria-hidden className="h-px flex-1 bg-border" />
+        </div>
+
+        <form className="space-y-3" onSubmit={submitPassword}>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              ref={emailRef}
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              spellCheck={false}
+              placeholder="you@company.com"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              placeholder="••••••••"
+              value={password}
+              onChange={(ev) => setPassword(ev.target.value)}
+              required
+              minLength={6}
+            />
+          </div>
+          <Button type="submit" size="lg" className="w-full" disabled={busy !== null}>
+            {busy === "password"
+              ? mode === "signup"
+                ? "Creating…"
+                : "Signing in…"
+              : mode === "signup"
+                ? "Create account"
+                : "Sign in"}
+          </Button>
+        </form>
       </div>
 
       <p className="text-13 text-muted-foreground">

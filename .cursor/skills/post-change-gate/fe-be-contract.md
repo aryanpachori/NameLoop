@@ -11,8 +11,8 @@
 
 ## Auth
 
-1. FE: Supabase Google OAuth only (`signInWithOAuth`)
-2. Callback: `/auth/callback` exchanges `code` → session cookies
+1. FE: Supabase Google OAuth (`signInWithOAuth`) or email/password (`signInWithPassword` / `signUp`)
+2. Google callback: `/auth/callback` exchanges `code` → session cookies; password auth redirects client-side
 3. API calls: `Authorization: Bearer <session.access_token>`
 4. BE: `GET {SUPABASE_URL}/auth/v1/user` with bearer (+ apikey) → upsert `profiles` + default `tenants`/`memberships`
 
